@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.MainActivity">
+
+    <TextView
+        android:id="@+id/textViewHaveAnAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="@string/have_account_text"
+        android:textColor="#72E470"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_goLogIn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/btn_goLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/login_text"
+        android:textColor="@color/green_dark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/textViewHaveAnAccount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textViewHaveAnAccount"
+        app:layout_constraintTop_toTopOf="@id/textViewHaveAnAccount"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textViewPolicy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:text="@string/policy_text"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/textViewHaveAnAccount"
+        app:layout_constraintTop_toBottomOf="@id/buttonGuest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/imageViewBackgroundSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/backgroundsignup"
+        app:cardCornerRadius="40dp"
+        android:layout_marginTop="-35dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:orientation="vertical"
+            android:weightSum="3"
+            android:background="@drawable/backgroundsignup">
+            <TextView
+                android:id="@+id/textViewSignUpNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#33000000"
+                android:text="@string/sign_up_now_text"
+                android:textColor="#CCFFFFFF"
+                android:layout_marginTop="40dp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:layout_gravity="center"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageViewLogo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/cafe_icon"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toBottomOf="@id/imageViewBackgroundSignUp"
+                app:layout_constraintEnd_toEndOf="@id/imageViewBackgroundSignUp"
+                app:layout_constraintStart_toStartOf="@id/imageViewBackgroundSignUp"
+                app:layout_constraintTop_toTopOf="@id/imageViewBackgroundSignUp" />
+
+
+            <TextView
+                android:id="@+id/textViewSlogan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:text="@string/slogan_text"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textColor="#CCFFFFFF"
+                android:layout_weight="1"
+                android:layout_gravity="center" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:id="@+id/buttonEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/text_button_email"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        android:drawableLeft="@drawable/ic_baseline_alternate_email_24"
+        app:layout_constraintTop_toBottomOf="@id/imageViewBackgroundSignUp" />
+
+    <Button
+        android:id="@+id/btn_google_signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/white"
+        android:drawableLeft="@drawable/_534129544"
+        android:text="@string/text_button_google"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonGuest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonEmail" />
+
+    <Button
+        android:id="@+id/buttonGuest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/black"
+        android:drawableLeft="@drawable/ic_baseline_login_24"
+        android:text="@string/text_button_guest"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_google_signup" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

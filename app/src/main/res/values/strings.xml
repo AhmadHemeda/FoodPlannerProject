@@ -20,4 +20,6 @@
     <string name="login_background">Login Background</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="keep_me_logged_in">Keep me Logged in</string>
+    <string name="enter_name">Enter Name</string>
 </resources>
