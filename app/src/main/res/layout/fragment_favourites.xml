@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FavouritesFragment">
+    tools:context=".view.MainActivity">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -15,7 +15,7 @@
         android:layout_height="320dp"
         android:layout_marginTop="-180dp"
         android:src="@drawable/background_signup"
-        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewFavouriteMeals"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/favourites_tv"
-        android:textColor="#34B232"
+        android:textColor="@color/green_dark"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/imageViewBackgroundFavourite"
@@ -56,9 +56,10 @@
         app:layout_constraintTop_toTopOf="@id/textViewFavourite" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerViewFavouriteMeals"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

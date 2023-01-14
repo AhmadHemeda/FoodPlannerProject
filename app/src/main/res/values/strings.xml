@@ -19,7 +19,15 @@
     <string name="textview_login_to_account">Login your account to continue with foodie to achieve your goals</string>
     <string name="login_background">Login Background</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="textview_title">Fresh Corn Omelet</string>
-    <string name="textview_description">The first bite of creamy filling lets you know this isn\'t any old omelet. Make it once, and we suspect</string>
     <string name="favourites_tv">Favourites</string>
+    <string name="title_tv">Title</string>
+    <string name="description_tv">Description</string>
+    <string name="my_plans_tv">My Plans</string>
+    <string name="saturday_tv">Saturday</string>
+    <string name="sunday_tv">Sunday</string>
+    <string name="monday_tv">Monday</string>
+    <string name="tuesday_tv">Tuesday</string>
+    <string name="wednesday_tv">Wednesday</string>
+    <string name="thursday_tv">Thursday</string>
+    <string name="friday_tv">Friday</string>
 </resources>

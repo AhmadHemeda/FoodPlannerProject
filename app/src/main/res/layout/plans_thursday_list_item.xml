@@ -3,20 +3,21 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewThursday"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:elevation="80dp"
+    android:elevation="25dp"
     app:cardCornerRadius="25dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_fav_meals"
+        android:id="@+id/constraint_plans_thursday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp">
 
         <ImageView
-            android:id="@+id/iv_saturday_meal"
+            android:id="@+id/iv_thursday_meal"
             android:layout_width="120dp"
             android:layout_height="190dp"
             android:layout_marginEnd="16dp"
@@ -26,7 +27,7 @@
             app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <TextView
-            android:id="@+id/tv_saturday_meal_name"
+            android:id="@+id/tv_thursday_meal_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -37,11 +38,11 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_saturday_meal"
-            app:layout_constraintTop_toTopOf="@+id/iv_saturday_meal" />
+            app:layout_constraintStart_toEndOf="@+id/iv_thursday_meal"
+            app:layout_constraintTop_toTopOf="@+id/iv_thursday_meal" />
 
         <TextView
-            android:id="@+id/tv_saturday_description"
+            android:id="@+id/tv_thursday_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -49,9 +50,9 @@
             android:textColor="@color/green_light"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/tv_saturday_meal_name"
-            app:layout_constraintStart_toStartOf="@+id/tv_saturday_meal_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_saturday_meal_name" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_thursday_meal_name"
+            app:layout_constraintStart_toStartOf="@+id/tv_thursday_meal_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_thursday_meal_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

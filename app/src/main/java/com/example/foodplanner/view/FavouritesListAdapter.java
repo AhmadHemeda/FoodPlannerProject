@@ -18,7 +18,10 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
     @NonNull
     @Override
     public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MealViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.favourites_list_item, parent));
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View view = layoutInflater.inflate(R.layout.favourites_list_item, parent, false);
+        MealViewHolder mealViewHolder = new MealViewHolder(view);
+        return mealViewHolder;
     }
 
     @Override
@@ -34,16 +37,16 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
 
     // TODO setList method
 
-    public class MealViewHolder extends RecyclerView.ViewHolder {
+    public static class MealViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewMeal;
         TextView textViewMealName, textViewMealDescription;
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageViewMeal = itemView.findViewById(R.id.iv_fav_meal);
-            textViewMealName = itemView.findViewById(R.id.tv_fav_meal_name);
-            textViewMealDescription = itemView.findViewById(R.id.tv_fav_description);
+            imageViewMeal = itemView.findViewById(R.id.iv_saturday_meal);
+            textViewMealName = itemView.findViewById(R.id.tv_saturday_meal_name);
+            textViewMealDescription = itemView.findViewById(R.id.tv_saturday_description);
         }
     }
 }
