@@ -3,8 +3,9 @@ package com.example.foodplanner.model;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.randommeal.network.NetworkCallBack;
-import com.example.randommeal.network.RemoteSource;
+import com.example.foodplanner.network.NetworkCallBack;
+import com.example.foodplanner.network.RemoteSource;
+
 
 public class Repository implements RepositoryInterface{
     Context context;

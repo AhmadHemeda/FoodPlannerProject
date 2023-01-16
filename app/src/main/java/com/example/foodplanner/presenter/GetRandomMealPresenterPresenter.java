@@ -2,11 +2,12 @@ package com.example.foodplanner.presenter;
 
 import android.util.Log;
 
-import com.example.randommeal.model.MealsItem;
-import com.example.randommeal.model.RandomMeal;
-import com.example.randommeal.model.RepositoryInterface;
-import com.example.randommeal.network.NetworkCallBack;
-import com.example.randommeal.view.RandomMealViewInterface;
+
+import com.example.foodplanner.model.MealsItem;
+import com.example.foodplanner.model.RandomMeal;
+import com.example.foodplanner.model.RepositoryInterface;
+import com.example.foodplanner.network.NetworkCallBack;
+import com.example.foodplanner.view.RandomMealViewInterface;
 
 import java.util.List;
 

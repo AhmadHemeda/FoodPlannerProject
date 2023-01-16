@@ -1,6 +1,6 @@
 package com.example.foodplanner.presenter;
 
-import com.example.randommeal.model.RandomMeal;
+import com.example.foodplanner.model.RandomMeal;
 
 public interface GetRandomMealInterfacePresenter {
     public void getRandomMeal();
