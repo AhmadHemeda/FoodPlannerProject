@@ -72,7 +72,7 @@ public class LoginFragment extends Fragment {
                                 ).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getContext(),"Login Failed",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(),e.toString(),Toast.LENGTH_LONG).show();
 
                                     }
                                 });
@@ -81,7 +81,7 @@ public class LoginFragment extends Fragment {
                     }
                 }
                 else if (email.isEmpty()){
-                    logInEmail.setError("Password can't be empty");
+                    logInEmail.setError("email can't be empty");
                 }
                 else {
                     logInEmail.setError("Please Enter Valid Email");

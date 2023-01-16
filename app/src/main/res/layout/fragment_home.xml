@@ -9,12 +9,11 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-
     <ImageView
         android:id="@+id/imageViewBackgroundFavourite"
         android:layout_width="wrap_content"
-        android:layout_height="320dp"
-        android:layout_marginTop="-180dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="-220dp"
         android:src="@drawable/background_signup"
         app:layout_constraintBottom_toTopOf="@id/recyclerViewFavouriteMeals"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +25,7 @@
         android:id="@+id/textViewFavourite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/favourites_tv"
+        android:text="@string/home"
         android:textColor="@color/green_dark"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -58,12 +57,45 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFavouriteMeals"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewBackgroundFavourite" />
+        app:layout_constraintTop_toBottomOf="@id/imageViewBackgroundFavourite"
+        tools:listitem="@layout/meal_item" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="31dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="381dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="250dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        tools:listitem="@layout/meal_item"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline2"
+        tools:ignore="SpeakableTextPresentCheck">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

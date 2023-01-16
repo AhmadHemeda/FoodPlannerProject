@@ -32,4 +32,6 @@
     <string name="wednesday_tv">Wednesday</string>
     <string name="thursday_tv">Thursday</string>
     <string name="friday_tv">Friday</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
 </resources>
