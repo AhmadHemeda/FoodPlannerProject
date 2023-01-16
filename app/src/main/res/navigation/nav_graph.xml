@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/chooserFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.foodplanner.view.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/chooserFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUp"
+            app:destination="@id/signUp" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooserFragment"
+        android:name="com.example.foodplanner.view.SignUpChooserFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/fragment_sign_up_chooser">
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            />
+        <action
+            android:id="@+id/action_signUpFragment_to_signUp"
+            app:destination="@id/signUp" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUp"
+        android:name="com.example.foodplanner.view.SignUp"
+        android:label="SignUp"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/action_signUp_to_signUpFragment"
+            app:destination="@id/chooserFragment" />
+        <action
+            android:id="@+id/action_signUp_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+</navigation>
