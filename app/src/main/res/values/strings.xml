@@ -45,4 +45,16 @@
     <string name="search_nav">Search</string>
     <string name="favourite">Favourite</string>
     <string name="plan">Plan</string>
+    <string name="text_meal_name">Meal Name</string>
+    <string name="text_favourite">Favourite</string>
+    <string name="text_steps">Steps</string>
+    <string name="text_ingredients">Ingredients</string>
+    <string name="text_instructions">Instructions</string>
+    <string name="text_ingredient">Ingredient</string>
+    <string name="text_measure">Measure</string>
+    <string name="text_search">Search</string>
+    <string name="hint_search">Search for your meal</string>
+    <string name="text_category">Category</string>
+    <string name="text_area">Area</string>
+    <string name="text_list">List</string>
 </resources>
