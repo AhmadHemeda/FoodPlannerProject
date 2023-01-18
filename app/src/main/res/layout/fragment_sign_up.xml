@@ -48,9 +48,11 @@
                 android:drawableLeft="@drawable/ic_baseline_account_circle_24"
                 android:drawablePadding="10dp"
                 android:ems="10"
+                android:fontFamily="@font/merienda_one"
                 android:hint="@string/enter_name"
                 android:inputType="textEmailAddress"
                 tools:ignore="TouchTargetSizeCheck" />
+
             <EditText
                 android:id="@+id/et_SignupEmail"
                 android:layout_width="match_parent"
@@ -60,6 +62,7 @@
                 android:drawableLeft="@drawable/ic_baseline_email_24"
                 android:drawablePadding="10dp"
                 android:ems="10"
+                android:fontFamily="@font/merienda_one"
                 android:hint="@string/hint_enter_email_address"
                 android:inputType="textEmailAddress"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -73,9 +76,11 @@
                 android:drawableLeft="@drawable/ic_baseline_lock_24"
                 android:drawablePadding="10dp"
                 android:ems="10"
+                android:fontFamily="@font/merienda_one"
                 android:hint="@string/hint_enter_password"
                 android:inputType="textPassword"
                 tools:ignore="TouchTargetSizeCheck" />
+
             <EditText
                 android:id="@+id/et_passwordAgain"
                 android:layout_width="match_parent"
@@ -85,25 +90,26 @@
                 android:drawableLeft="@drawable/ic_baseline_lock_24"
                 android:drawablePadding="10dp"
                 android:ems="10"
+                android:fontFamily="@font/merienda_one"
                 android:hint="Enter Password Again"
                 android:inputType="textPassword"
                 tools:ignore="TouchTargetSizeCheck" />
 
 
-            <Button
-                android:layout_marginTop="20dp"
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_signup"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginHorizontal="50dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/green_dark"
+                android:background="@drawable/button_design"
+                android:fontFamily="@font/merienda_one"
                 android:text="@string/sign_up_text"
                 android:textAllCaps="false"
-                android:textSize="20sp"
-                app:cornerRadius="10dp" />
-
-
+                android:textColor="@color/white"
+                android:textSize="25sp" />
 
 
         </LinearLayout>

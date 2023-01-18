@@ -4,12 +4,14 @@ package com.example.foodplanner.view;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,16 +22,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.model.MealsItem;
+import com.example.foodplanner.model.Repository;
+import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.presenter.GetRandomMealInterfacePresenter;
+import com.example.foodplanner.presenter.GetRandomMealPresenterPresenter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginFragment extends Fragment {
+import java.util.List;
 
+public class LoginFragment extends Fragment{
+
+    private static final String TAG = "LoginFragment";
     private FirebaseAuth auth;
     private EditText logInEmail,logInPassword;
-    private Button logInBtn;
+    private AppCompatButton logInBtn;
     TextView signupBtn;
     public LoginFragment() {
         // Required empty public constructor
@@ -37,6 +47,7 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -53,6 +64,7 @@ public class LoginFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         logInEmail = view.findViewById(R.id.et_email);
         logInPassword = view.findViewById(R.id.et_password);
+
         logInBtn = view.findViewById(R.id.btn_login);
         signupBtn = view.findViewById(R.id.btn_goSignUp);
         logInBtn.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +79,8 @@ public class LoginFragment extends Fragment {
                                     @Override
                                     public void onSuccess(AuthResult authResult) {
                                         Toast.makeText(getContext(),"Login Successful",Toast.LENGTH_LONG).show();
+                                        Navigation.findNavController(view).navigate(LoginFragmentDirections.actionLoginFragmentToLoaderFragment());
+
                                     }
                                 }
                                 ).addOnFailureListener(new OnFailureListener() {
@@ -95,6 +109,8 @@ public class LoginFragment extends Fragment {
         });
 
     }
+
+
 }
 //.addOnCompleteListener(getContext(), new OnCompleteListener<AuthResult>() {
 //@Override

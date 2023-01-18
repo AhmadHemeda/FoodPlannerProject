@@ -34,4 +34,15 @@
     <string name="friday_tv">Friday</string>
     <string name="home">Home</string>
     <string name="search">Search</string>
+    <string name="title">Title</string>
+    <string name="more_you_might_like">More You Might Like...</string>
+    <string name="txt1">Make Your Every Day Recipe</string>
+    <string name="txt2">Preparing Meals in Advance</string>
+    <string name="txt3">Show The Different Types of food</string>
+    <string name="get_started">Get Started</string>
+    <string name="create_your_plan">Create Your Plan</string>
+    <string name="homenav">Home</string>
+    <string name="search_nav">Search</string>
+    <string name="favourite">Favourite</string>
+    <string name="plan">Plan</string>
 </resources>

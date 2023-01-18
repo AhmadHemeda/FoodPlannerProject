@@ -16,7 +16,7 @@
         android:layout_height="320dp"
         android:layout_marginTop="-180dp"
         android:src="@drawable/background_signup"
-        app:layout_constraintBottom_toTopOf="@id/recyclerViewFavouriteMeals"
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toTopOf="@id/textViewFavourite" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewFavouriteMeals"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"

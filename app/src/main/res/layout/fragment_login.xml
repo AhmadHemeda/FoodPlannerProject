@@ -48,6 +48,8 @@
                 android:drawableLeft="@drawable/ic_baseline_email_24"
                 android:drawablePadding="10dp"
                 android:ems="10"
+                android:fontFamily="@font/merienda_one"
+                android:textSize="16sp"
                 android:hint="@string/hint_enter_email_address"
                 android:inputType="textEmailAddress"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -60,6 +62,8 @@
                 android:layout_marginBottom="5dp"
                 android:drawableLeft="@drawable/ic_baseline_lock_24"
                 android:drawablePadding="10dp"
+                android:fontFamily="@font/merienda_one"
+                android:textSize="16sp"
                 android:ems="10"
                 android:hint="@string/hint_enter_password"
                 android:inputType="textPassword"
@@ -75,18 +79,22 @@
                 android:layout_marginBottom="10dp"
                 android:padding="5dp"
                 android:text="@string/keep_me_logged_in"
-                android:textColor="@color/green_dark"
+                android:textColor="#4CAF50"
+                android:fontFamily="@font/merienda_one"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_login"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="50dp"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/green_dark"
+                android:background="@drawable/button_design"
                 android:text="@string/text_login"
+                android:fontFamily="@font/merienda_one"
+                android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:textSize="20sp"
                 app:cornerRadius="10dp" />
@@ -98,8 +106,9 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="@string/text_connect"
-                android:textColor="#72E470"
-                android:textSize="18sp"
+                android:textColor="#4CAF50"
+                android:fontFamily="@font/merienda_one"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -127,9 +136,9 @@
                     android:padding="5dp"
                     android:paddingStart="15dp"
                     android:text="@string/text_have_not_an_account"
-                    android:textColor="#72E470"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:textColor="#4CAF50"
+                    android:fontFamily="@font/merienda_one"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/btn_goSignUp"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -141,7 +150,8 @@
                     android:layout_margin="5dp"
                     android:text="@string/sign_up_text"
                     android:textColor="@color/green_dark"
-                    android:textSize="20sp"
+                    android:fontFamily="@font/merienda_one"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/textViewHaveNotAnAccount"
                     app:layout_constraintEnd_toEndOf="parent"

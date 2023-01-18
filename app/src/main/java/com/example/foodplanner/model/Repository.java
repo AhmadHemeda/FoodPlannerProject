@@ -3,33 +3,60 @@ package com.example.foodplanner.model;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.network.ApiServer;
 import com.example.foodplanner.network.NetworkCallBack;
-import com.example.foodplanner.network.RemoteSource;
+
+import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
-public class Repository implements RepositoryInterface{
-    Context context;
-    RemoteSource remoteSource;
+public class Repository{
     private static Repository repo = null;
+    private ApiServer apiServer;
 
-    public static Repository getInstance(RemoteSource remoteSource, Context context) {
+    public static Repository getInstance(Context context) {
         if (repo == null) {
-            repo = new Repository(context,remoteSource);
-            Log.i("ApiClient", "getInstance: ");
+            repo = new Repository(context);
         }
         return repo;
     }
 
-    public Repository(Context context, RemoteSource remoteSource) {
-        this.context = context;
-        this.remoteSource = remoteSource;
-        Log.i("ApiClient", "Repository: ");
-
+    private Repository(Context context) {
+        apiServer = ApiClient.getInstance();
     }
 
-    @Override
-    public void getRandomMeal(NetworkCallBack networkCallBack) {
-        remoteSource.enqueueCall(networkCallBack);
+    public void getMealByCategory(String area,NetworkCallBack<List<MealsItem>> networkCallBack) {
+
+
+            Single<RandomMeal> singleObservable = apiServer.getMealByCategory(area);
+            singleObservable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<RandomMeal>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(@NonNull RandomMeal randomMeal) {
+                            networkCallBack.onSuccessResult(randomMeal.getMeals());
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            networkCallBack.onFailureResult(e.getMessage());
+                        }
+                    }
+            );
+
         Log.i("ApiClient", "Repository getRandomMeal: ");
 
     }

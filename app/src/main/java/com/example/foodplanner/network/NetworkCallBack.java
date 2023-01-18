@@ -4,7 +4,7 @@ import com.example.foodplanner.model.MealsItem;
 
 import java.util.List;
 
-public interface NetworkCallBack {
-    public void onSuccessResult(List<MealsItem> randomMeal);
+public interface NetworkCallBack<T> {
+    public void onSuccessResult(T randomMeal);
     public void onFailureResult(String errorMsg);
 }

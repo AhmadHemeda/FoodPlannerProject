@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignUp extends Fragment {
     FirebaseAuth auth;
     private EditText signupEmail, signupName, signupPassword, signupPasswordAgain;
-    private Button signUpBtn;
+    private AppCompatButton signUpBtn;
     public SignUp() {
         // Required empty public constructor
     }
@@ -65,6 +67,7 @@ public class SignUp extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
+                                        Navigation.findNavController(view).navigate(SignUpDirections.actionSignUpToLoaderFragment());
                                         Toast.makeText(getContext(),"SignUp Successful",Toast.LENGTH_LONG).show();
                                     }else {
                                         Toast.makeText(getContext(),"SignUp Failed "+task.getException().getMessage(),Toast.LENGTH_LONG).show();

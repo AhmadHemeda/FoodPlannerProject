@@ -33,10 +33,12 @@ public class SignUpChooserFragment extends Fragment {
     private static final Integer RC_SIGN_UP = 1;
     TextView logInBtn;
     Button googleSignUp;
+    Button guestBtn;
     Button gotoSignup;
     private FirebaseAuth auth;
     GoogleSignInOptions googleSignInOptions;
     GoogleSignInClient googleSignInClient;
+    View _view;
     ActivityResultLauncher<Intent> registerGoogleForActivityResult;
     public SignUpChooserFragment() {
         // Required empty public constructor
@@ -69,6 +71,7 @@ public class SignUpChooserFragment extends Fragment {
                 else {
                     //success
                     Toast.makeText(requireContext(), "done", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
                     FirebaseAuth.getInstance().signInWithCredential(GoogleAuthProvider.getCredential(result.getResult().getIdToken(),null));
                 }
             }
@@ -80,6 +83,13 @@ public class SignUpChooserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         logInBtn = view.findViewById(R.id.btn_goLogIn);
         gotoSignup = view.findViewById(R.id.buttonEmail);
+        guestBtn = view.findViewById(R.id.buttonGuest);
+        guestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
+            }
+        });
 //        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 //                .requestIdToken(getString(R.string.default_web_client_id))
 //                .requestEmail()
@@ -105,16 +115,17 @@ public class SignUpChooserFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_sign_up_chooser, container, false);
-        googleSignUp = view.findViewById(R.id.btn_google_signup);
+        _view =inflater.inflate(R.layout.fragment_sign_up_chooser, container, false);
+        googleSignUp = _view.findViewById(R.id.btn_google_signup);
         googleSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 registration();
+
             }
         });
 
-        return view;
+        return _view;
     }
     private void registration(){
 //        Intent intent = googleSignInClient.getSignInIntent();
@@ -122,6 +133,8 @@ public class SignUpChooserFragment extends Fragment {
         //register method
         registerGoogleForActivityResult.launch(GoogleSignIn.getClient(requireContext(),new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()).getSignInIntent());
+
+
     }
 //
 //    @Override

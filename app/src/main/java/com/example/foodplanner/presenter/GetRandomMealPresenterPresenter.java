@@ -5,21 +5,21 @@ import android.util.Log;
 
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.RandomMeal;
-import com.example.foodplanner.model.RepositoryInterface;
+import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.network.NetworkCallBack;
 import com.example.foodplanner.view.RandomMealViewInterface;
 
 import java.util.List;
 
-public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePresenter, NetworkCallBack {
+public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePresenter ,NetworkCallBack<List<MealsItem>>{
 
     private final RandomMealViewInterface _view;
-    private final RepositoryInterface _repo;
+    private final Repository _repo;
 
-    public GetRandomMealPresenterPresenter(RandomMealViewInterface _view, RepositoryInterface _repo) {
+    public GetRandomMealPresenterPresenter(RandomMealViewInterface _view, Repository _repo) {
         this._view = _view;
         this._repo = _repo;
-        _repo.getRandomMeal(this);
+        _repo.getMealByCategory("American",this);
         Log.i("ApiClient", "GetRandomMealPresenterPresenter: ");
     }
 
@@ -36,7 +36,7 @@ public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePr
 
     @Override
     public void getRandomMeal() {
-        _repo.getRandomMeal(this);
+        _repo.getMealByCategory("American",this);
         Log.i("ApiClient", "getRandomMeal: ");
     }
 

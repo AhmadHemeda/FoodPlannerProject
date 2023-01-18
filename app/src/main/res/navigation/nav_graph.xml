@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/chooserFragment">
+    app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.foodplanner.view.LoginFragment"
@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_loginFragment_to_signUp"
             app:destination="@id/signUp" />
+        <action
+            android:id="@+id/action_loginFragment_to_loaderFragment"
+            app:destination="@id/loaderFragment" />
     </fragment>
     <fragment
         android:id="@+id/chooserFragment"
@@ -28,6 +31,9 @@
         <action
             android:id="@+id/action_signUpFragment_to_signUp"
             app:destination="@id/signUp" />
+        <action
+            android:id="@+id/action_chooserFragment_to_loaderFragment"
+            app:destination="@id/loaderFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUp"
@@ -40,5 +46,47 @@
         <action
             android:id="@+id/action_signUp_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_signUp_to_loaderFragment"
+            app:destination="@id/loaderFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        tools:layout="@layout/fragment_home"
+        android:name="com.example.foodplanner.view.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/loaderFragment"
+        android:name="com.example.foodplanner.view.LoaderFragment"
+        android:label="fragment_loader"
+        tools:layout="@layout/fragment_loader" >
+        <action
+            android:id="@+id/action_loaderFragment_to_homeDataActivity"
+            app:destination="@id/homeDataActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.example.foodplanner.view.OnboardingFragment"
+        android:label="fragment_onboarding"
+        tools:layout="@layout/fragment_onboarding" >
+        <action
+            android:id="@+id/action_onboardingFragment_to_chooserFragment"
+            app:destination="@id/chooserFragment"
+            app:popUpTo="@id/nav_graph" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.foodplanner.view.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment"
+            app:popUpTo="@id/nav_graph" />
+    </fragment>
+    <activity
+        android:id="@+id/homeDataActivity"
+        android:name="com.example.foodplanner.HomeDataActivity"
+        android:label="activity_home_data"
+        tools:layout="@layout/activity_home_data" />
 </navigation>
