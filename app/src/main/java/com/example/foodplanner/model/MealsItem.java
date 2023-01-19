@@ -2,7 +2,9 @@ package com.example.foodplanner.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MealsItem{
+import java.io.Serializable;
+
+public class MealsItem implements Serializable {
 
 	@SerializedName("strImageSource")
 	private Object strImageSource;
@@ -90,6 +92,7 @@ public class MealsItem{
 
 	@SerializedName("strMeasure20")
 	private String strMeasure20;
+
 
 	@SerializedName("strYoutube")
 	private String strYoutube;

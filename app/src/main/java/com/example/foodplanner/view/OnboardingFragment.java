@@ -46,6 +46,7 @@ public class OnboardingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         //hide ActionBar
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 

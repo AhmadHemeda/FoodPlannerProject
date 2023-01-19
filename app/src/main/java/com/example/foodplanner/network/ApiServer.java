@@ -17,9 +17,10 @@ public interface ApiServer {
 //
     @GET("filter.php")
     Single<RandomMeal> getMealByCategory(@Query("a")String category);
-    // https://www.themealdb.com/api/json/v1/1/filter.php?a=britin/
+
+    //search.php?s=Arrabiata
 //
 //
-//    @GET("search.php")
-//    Call<RandomMeal> getMealByName(@Query("s")String mealName);
+    @GET("search.php")
+    Single<RandomMeal> getMealByName(@Query("s")String mealName);
 }

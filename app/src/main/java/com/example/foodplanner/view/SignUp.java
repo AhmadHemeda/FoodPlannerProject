@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -44,6 +45,7 @@ public class SignUp extends Fragment {
         signupPassword = view.findViewById(R.id.et_SignupPassword);
         signupPasswordAgain = view.findViewById(R.id.et_passwordAgain);
         signUpBtn = view.findViewById(R.id.btn_signup);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         auth = FirebaseAuth.getInstance();
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override

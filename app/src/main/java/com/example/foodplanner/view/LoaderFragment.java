@@ -2,6 +2,9 @@ package com.example.foodplanner.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.navigation.Navigation;
 
@@ -36,10 +39,17 @@ public class LoaderFragment extends DialogFragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Navigation.findNavController(_view).navigate(LoaderFragmentDirections.actionLoaderFragmentToHomeDataActivity());
+                Navigation.findNavController(_view).navigate(LoaderFragmentDirections.actionLoaderFragmentToHomeFragment());
             }
-        },5000);
+        },3000);
         // Inflate the layout for this fragment
         return _view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
     }
 }

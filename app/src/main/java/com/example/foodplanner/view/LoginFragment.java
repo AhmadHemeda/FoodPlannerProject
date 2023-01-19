@@ -10,6 +10,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -67,6 +69,9 @@ public class LoginFragment extends Fragment{
 
         logInBtn = view.findViewById(R.id.btn_login);
         signupBtn = view.findViewById(R.id.btn_goSignUp);
+        SharedPreferences sharedPref = requireContext().getSharedPreferences(
+                "setting", Context.MODE_PRIVATE);
+        sharedPref.edit().putBoolean("first_look", true).apply();
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,6 +114,7 @@ public class LoginFragment extends Fragment{
         });
 
     }
+
 
 
 }

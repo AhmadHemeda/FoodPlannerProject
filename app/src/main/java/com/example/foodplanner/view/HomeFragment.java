@@ -44,9 +44,8 @@ public class HomeFragment extends Fragment implements RandomMealViewInterface{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        linearLayout = new GridLayoutManager(getContext(),2);
+        linearLayout = new GridLayoutManager(requireContext(),2);
         mealAdapter = new MealAdapter(requireContext());
-
         getRandomMealInterfacePresenter =  new GetRandomMealPresenterPresenter(this, Repository.getInstance(requireContext()));
 
 
@@ -57,7 +56,6 @@ public class HomeFragment extends Fragment implements RandomMealViewInterface{
         super.onViewCreated(view, savedInstanceState);
         allRecyclerView = view.findViewById(R.id.recyclerView);
         allRecyclerView.setLayoutManager(linearLayout);
-
         getRandomMealInterfacePresenter.getRandomMeal();
 
     }

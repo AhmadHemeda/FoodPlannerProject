@@ -1,38 +1,78 @@
 package com.example.foodplanner.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.View;
 
 import com.example.foodplanner.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
+    BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        Fragment loginFragment = new LoginFragment();
-//        Fragment signupFragment = new SignUp();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.mainActivity,loginFragment).commit();
-        getSupportActionBar().hide();
         navController= Navigation.findNavController(this,R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this,navController);
+        getSupportActionBar().hide();
+        navigationView = findViewById(R.id.bottom_nav_bar);
+        navigationView.setSelectedItemId(R.id.nav_home);
+        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment = null;
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        Navigation.findNavController(MainActivity.this,R.id.nav_host_fragment).navigate(R.id.homeFragment);
+                        return true;
+                    case R.id.nav_search:
+                        Navigation.findNavController(MainActivity.this,R.id.nav_host_fragment).navigate(R.id.searchFragment);
+                        return true;
+                    case R.id.nav_fav:
+                        Navigation.findNavController(MainActivity.this,R.id.nav_host_fragment).navigate(R.id.favouritesFragment);
+                        return true;
+                    case R.id.nav_plane:
+                        Navigation.findNavController(MainActivity.this,R.id.nav_host_fragment).navigate(R.id.plansFragment);
+                        return true;
+
+                }
+//                getSupportFragmentManager().beginTransaction().replace(R.id.mainActivity,fragment).commit();
+                return false;
+            }
+
+        });
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                switch (destination.getId()){
+                    case R.id.splashFragment:
+                    case R.id.chooserFragment:
+                    case R.id.onboardingFragment:
+                    case R.id.loginFragment:
+                    case R.id.signUp:
+                    case R.id.loaderFragment:
+                        navigationView.setVisibility(View.GONE);
+                        break;
+                    default:
+                        navigationView.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
+
+
     }
     @Override
     public boolean onSupportNavigateUp() {

@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -84,6 +85,7 @@ public class SignUpChooserFragment extends Fragment {
         logInBtn = view.findViewById(R.id.btn_goLogIn);
         gotoSignup = view.findViewById(R.id.buttonEmail);
         guestBtn = view.findViewById(R.id.buttonGuest);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         guestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,6 +102,8 @@ public class SignUpChooserFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToSignUp());
+//                Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToHomeFragment());
+
             }
         });
         logInBtn.setOnClickListener(new View.OnClickListener() {
@@ -136,51 +140,7 @@ public class SignUpChooserFragment extends Fragment {
 
 
     }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == RC_SIGN_UP){
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            try {
-//                GoogleSignInAccount account = null;
-//                account = task.getResult(ApiException.class);
-//                fireBaseAuthWithGoogle(account.getIdToken());
-//            } catch (ApiException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//    }
-//
-//    private void fireBaseAuthWithGoogle (String idToken){
-//        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
-//        auth.signInWithCredential(credential).addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
-//            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                if(task.isSuccessful()){
-//                    FirebaseUser user = auth.getCurrentUser();
-//                    //updateUI(user);
-//                    Toast.makeText(getContext(),"Login Successful",Toast.LENGTH_LONG).show();
-//
-//                }else {
-//                    Toast.makeText(getContext(),"Login Failed",Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
-//
-//      BeginSignInRequest  signInRequest = BeginSignInRequest.builder()
-//                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-//                        .setSupported(true)
-//                        // Your server's client ID, not your Android client ID.
-//                        .setServerClientId(getString(R.string.default_web_client_id))
-//                        // Only show accounts previously used to sign in.
-//                        .setFilterByAuthorizedAccounts(true)
-//                        .build())
-//                .build();
-//
-//
-//    }
+
 
 
 }

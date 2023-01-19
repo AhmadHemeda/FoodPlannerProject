@@ -71,4 +71,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:$lottieVersion"
     // Rx Java Retrofit
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    // youtube video
+        implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0'
+
 }

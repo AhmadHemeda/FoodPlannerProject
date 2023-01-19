@@ -54,15 +54,20 @@
         android:id="@+id/homeFragment"
         tools:layout="@layout/fragment_home"
         android:name="com.example.foodplanner.view.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_mealFragment"
+            app:destination="@id/mealFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/loaderFragment"
         android:name="com.example.foodplanner.view.LoaderFragment"
         android:label="fragment_loader"
         tools:layout="@layout/fragment_loader" >
         <action
-            android:id="@+id/action_loaderFragment_to_homeDataActivity"
-            app:destination="@id/homeDataActivity" />
+            android:id="@+id/action_loaderFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/onboardingFragment"
@@ -83,10 +88,37 @@
             android:id="@+id/action_splashFragment_to_onboardingFragment"
             app:destination="@id/onboardingFragment"
             app:popUpTo="@id/nav_graph" />
+        <action
+            android:id="@+id/action_splashFragment_to_chooserFragment"
+            app:destination="@id/chooserFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_loaderFragment"
+            app:destination="@id/loaderFragment" />
     </fragment>
-    <activity
-        android:id="@+id/homeDataActivity"
-        android:name="com.example.foodplanner.HomeDataActivity"
-        android:label="activity_home_data"
-        tools:layout="@layout/activity_home_data" />
+    <fragment
+        android:id="@+id/mealFragment"
+        android:name="com.example.foodplanner.view.MealFragment"
+        android:label="MealFragment"
+        tools:layout="@layout/fragment_meal">
+        <argument
+            android:name="SingleMealItem"
+            app:argType="com.example.foodplanner.model.MealsItem" />
+        <action
+            android:id="@+id/action_mealFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouritesFragment"
+        android:name="com.example.foodplanner.view.FavouritesFragment"
+        android:label="FavouritesFragment" />
+    <fragment
+        android:id="@+id/plansFragment"
+        android:name="com.example.foodplanner.view.PlansFragment"
+        android:label="fragment_plans"
+        tools:layout="@layout/fragment_plans" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.foodplanner.view.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

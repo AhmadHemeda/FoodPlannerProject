@@ -1,5 +1,6 @@
 package com.example.foodplanner.view;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
 
+import java.util.List;
+
 public class SingleMealAdapter extends RecyclerView.Adapter<SingleMealAdapter.SingleMealViewHolder> {
 
-    // TODO Array list from the pojo
+    private List<String> modelArrayList;
+    Context context;
 
+    public SingleMealAdapter(Context context) {
+        this.context = context;
+    }
+    public void setList(List<String> updatedItems){
+        this.modelArrayList = updatedItems;
+    }
     @NonNull
     @Override
     public SingleMealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -25,7 +35,8 @@ public class SingleMealAdapter extends RecyclerView.Adapter<SingleMealAdapter.Si
 
     @Override
     public void onBindViewHolder(@NonNull SingleMealViewHolder holder, int position) {
-
+        holder.textViewIngredient.setText(modelArrayList.get(position).toString());
+        holder.textViewMeasure.setText(modelArrayList.get(position).toString());
     }
 
     @Override

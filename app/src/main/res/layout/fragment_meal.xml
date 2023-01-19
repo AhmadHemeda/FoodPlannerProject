@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeDataActivity">
+    tools:context=".view.HomeDataActivity">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -25,13 +25,16 @@
     <TextView
         android:id="@+id/textViewMealName"
         android:layout_width="wrap_content"
+        android:fontFamily="@font/merienda_one"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="52dp"
+        android:background="#80000000"
         android:text="@string/text_meal_name"
-        android:textColor="@color/green_dark"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,8 +65,20 @@
                 <ImageView
                     android:id="@+id/imageViewMealImage"
                     android:layout_width="match_parent"
+                    android:scaleType="fitXY"
                     android:layout_height="match_parent" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textViewArea"
+                    android:background="#80000000"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:paddingStart="40dp"
+                    android:paddingBottom="20dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="bottom"/>
             </androidx.cardview.widget.CardView>
 
             <Button
@@ -80,6 +95,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/cardViewMealImage"
                 app:layout_constraintEnd_toEndOf="@id/cardViewMealImage" />
 
+
             <TextView
                 android:id="@+id/textViewSteps"
                 android:layout_width="match_parent"
@@ -87,6 +103,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/text_steps"
+                android:fontFamily="@font/merienda_one"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="40sp"
@@ -104,6 +121,7 @@
                 android:text="@string/text_steps"
                 android:textAlignment="textStart"
                 android:textSize="20sp"
+                android:fontFamily="@font/merienda_one"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -120,6 +138,7 @@
                 android:textColor="@color/black"
                 android:textSize="40sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/merienda_one"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -130,9 +149,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="284dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewIngredients"
                 tools:listitem="@layout/ingredient_item" />
@@ -146,6 +165,7 @@
                 android:text="@string/text_instructions"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
+                android:fontFamily="@font/merienda_one"
                 android:textSize="40sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -165,10 +185,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewInstructions">
 
-                <VideoView
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                     android:id="@+id/videoViewMeal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_width="300dp"
+                    android:layout_gravity="center"
+                    android:layout_height="300dp"
+                    app:autoPlay="false"
+                    />
 
             </androidx.cardview.widget.CardView>
 
