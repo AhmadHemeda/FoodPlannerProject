@@ -9,14 +9,13 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-
     <ImageView
         android:id="@+id/imageViewBackgroundFavourite"
         android:layout_width="wrap_content"
         android:layout_height="320dp"
         android:layout_marginTop="-180dp"
         android:src="@drawable/background_signup"
-        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewFavMeal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,11 +56,15 @@
         app:layout_constraintTop_toTopOf="@id/textViewFavourite" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerViewFavMeal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageViewBackgroundFavourite" />

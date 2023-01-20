@@ -12,12 +12,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.foodplanner.R;
+import com.example.foodplanner.database.MealDataBase;
+import com.example.foodplanner.model.FavouriteMeal;
 import com.example.foodplanner.model.MealsItem;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -26,8 +29,13 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 
 public class MealFragment extends Fragment {
+    private MealDataBase mealDataBase;
     private static final String TAG = "MealFragment";
     List<String> list=new ArrayList<String>();
     SingleMealAdapter singleMealAdapter;
@@ -37,9 +45,7 @@ public class MealFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     ImageView imageViewMealImage;
     TextView mealName , textViewStepsDetails , textViewArea;
-    public MealFragment() {
-        // Required empty public constructor
-    }
+    Button buttonFavourite;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,7 @@ public class MealFragment extends Fragment {
         super.onCreate(savedInstanceState);
         linearLayoutManager = new LinearLayoutManager(requireContext());
         singleMealAdapter = new SingleMealAdapter(requireContext());
+       mealDataBase = MealDataBase.getInstance(requireContext());
     }
 
     @Override
@@ -54,6 +61,7 @@ public class MealFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_meal, container, false);
         mealName = view.findViewById(R.id.textViewMealName);
+        buttonFavourite = view.findViewById(R.id.buttonAddToFavourite);
         imageViewMealImage = view.findViewById(R.id.imageViewMealImage);
         textViewStepsDetails = view.findViewById(R.id.textViewStepsDetails);
         mealVideo = view.findViewById(R.id.videoViewMeal);
@@ -66,11 +74,11 @@ public class MealFragment extends Fragment {
         mealName.setText(mealsItem.getStrMeal());
         Log.i(TAG, "onCreateView: "+mealsItem.getStrYoutube());
         String [] split = mealsItem.getStrYoutube().split("=");
-        Log.i(TAG, "onCreateView: "+split[1]);
+        Log.i(TAG, "onCreateView: "+split[0]);
         mealVideo.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                String videoId = split[1];
+                String videoId = split[0];
                 youTubePlayer.loadVideo(videoId, 0);
             }
         });
@@ -86,6 +94,28 @@ public class MealFragment extends Fragment {
 //        list.add(mealsItem.getStrIngredient7());
 //        list.add(mealsItem.getStrIngredient8());
 //        list.add(mealsItem.getStrIngredient9());
+        buttonFavourite.setOnClickListener(view -> mealDataBase.mealDao().insertFavMeal(new FavouriteMeal(Long.parseLong(mealsItem.getIdMeal()),
+                mealsItem.getStrMeal(), mealsItem.getStrMealThumb(), mealsItem.getStrArea(), new ArrayList<>(), new ArrayList<>(),
+                mealsItem.getStrInstructions(), mealsItem.getStrYoutube()))
+
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                }));
+
         return view;
     }
 

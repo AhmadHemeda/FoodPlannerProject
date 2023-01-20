@@ -1,5 +1,6 @@
 package com.example.foodplanner.view;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
+import com.example.foodplanner.model.FavouriteMeal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAdapter.MealViewHolder> {
 
-    // TODO Array list from the pojo
+    private List<FavouriteMeal> favouriteMealList = new ArrayList<>();
+//
+//    public FavouritesListAdapter(List<FavouriteMeal> favouriteMealList) {
+//        this.favouriteMealList = favouriteMealList;
+//    }
 
     @NonNull
     @Override
@@ -26,27 +36,31 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
 
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
-        // TODO bind the view holder by new data
+        FavouriteMeal favouriteMeal = favouriteMealList.get(position);
+        holder.textViewMealName.setText(favouriteMeal.getMealName());
+        Glide.with(holder.itemView).load(favouriteMeal.getMealImage()).into(holder.imageViewMeal);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
-        // TODO return the length of the array list
+        return favouriteMealList.size();
     }
 
-    // TODO setList method
+    @SuppressLint("NotifyDataSetChanged")
+    public void setList(List<FavouriteMeal> favouriteMealList) {
+        this.favouriteMealList = favouriteMealList;
+        notifyDataSetChanged();
+    }
 
     public static class MealViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewMeal;
-        TextView textViewMealName, textViewMealDescription;
+        TextView textViewMealName;
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageViewMeal = itemView.findViewById(R.id.iv_saturday_meal);
-            textViewMealName = itemView.findViewById(R.id.tv_saturday_meal_name);
-            textViewMealDescription = itemView.findViewById(R.id.tv_saturday_description);
+            imageViewMeal = itemView.findViewById(R.id.imageViewFavMealThumb);
+            textViewMealName = itemView.findViewById(R.id.textViewFavMealName);
         }
     }
 }
