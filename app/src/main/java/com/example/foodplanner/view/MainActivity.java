@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                         Navigation.findNavController(MainActivity.this,R.id.nav_host_fragment).navigate(R.id.homeFragment);
                         return true;
                     case R.id.nav_search:
-                        Navigation.findNavController(MainActivity.this,R.id.nav_host_fragment).navigate(R.id.searchFragment);
+                        Navigation.findNavController(MainActivity.this,R.id.nav_host_fragment).navigate(R.id.allSearchesFragment);
                         return true;
                     case R.id.nav_fav:
                         Navigation.findNavController(MainActivity.this,R.id.nav_host_fragment).navigate(R.id.favouritesFragment);

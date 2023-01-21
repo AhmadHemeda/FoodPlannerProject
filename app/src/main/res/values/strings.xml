@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FoodPlanner</string>
+    <string name="app_name">Foodie</string>
     <string name="have_account_text">Already have an account ?</string>
     <string name="login_text">Login</string>
     <string name="policy_text"><![CDATA[By signing up, you agree to our terms & conditions and privacy policy]]></string>
@@ -57,4 +57,7 @@
     <string name="text_category">Category</string>
     <string name="text_area">Area</string>
     <string name="text_list">List</string>
+    <string name="food_category">Food Category</string>
+    <string name="food_categories">Food Categories</string>
+    <string name="search_by_area">Search By Area</string>
 </resources>

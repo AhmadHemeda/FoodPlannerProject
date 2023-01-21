@@ -3,6 +3,8 @@ package com.example.foodplanner.model;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.foodplanner.model.pojos.area.AreaListModel;
+import com.example.foodplanner.model.pojos.area.AreaModel;
 import com.example.foodplanner.network.ApiClient;
 import com.example.foodplanner.network.ApiServer;
 import com.example.foodplanner.network.NetworkCallBack;
@@ -35,7 +37,7 @@ public class Repository{
     public void getMealByCategory(String area,NetworkCallBack<List<MealsItem>> networkCallBack) {
 
 
-            Single<RandomMeal> singleObservable = apiServer.getMealByCategory(area);
+            Single<RandomMeal> singleObservable = apiServer.getMealArea(area);
             singleObservable
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -58,6 +60,12 @@ public class Repository{
             );
 
         Log.i("ApiClient", "Repository getRandomMeal: ");
+
+    }
+    public void getAllAreas(NetworkCallBack<List<AreaModel>> networkCallBack) {
+
+
+
 
     }
 

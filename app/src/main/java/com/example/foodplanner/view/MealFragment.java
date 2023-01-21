@@ -72,7 +72,8 @@ public class MealFragment extends Fragment {
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .apply(new RequestOptions().override(100,100)).into(imageViewMealImage);
         mealName.setText(mealsItem.getStrMeal());
-        Log.i(TAG, "onCreateView: "+mealsItem.getStrYoutube());
+        Log.i(TAG,
+                "onCreateView: "+mealsItem.getStrYoutube());
         String [] split = mealsItem.getStrYoutube().split("=");
         Log.i(TAG, "onCreateView: "+split[0]);
         mealVideo.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {

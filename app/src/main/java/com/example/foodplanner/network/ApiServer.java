@@ -1,6 +1,7 @@
 package com.example.foodplanner.network;
 
 import com.example.foodplanner.model.RandomMeal;
+import com.example.foodplanner.model.pojos.area.AreaListModel;
 
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.GET;
@@ -16,9 +17,12 @@ public interface ApiServer {
 ////    Call<Categorys> getCategories();
 //
     @GET("filter.php")
-    Single<RandomMeal> getMealByCategory(@Query("a")String category);
+    Single<RandomMeal> getMealArea(@Query("a")String category);
 
-    //search.php?s=Arrabiata
+    @GET("list.php?a=list")
+    Single<AreaListModel> getAllAreas();
+//www.themealdb.com/api/json/v1/1/list.php?a=list
+
 //
 //
     @GET("search.php")

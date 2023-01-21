@@ -20,7 +20,7 @@
         <item name="boxCornerRadiusBottomEnd">16dp</item>
         <item name="boxCornerRadiusBottomStart">16dp</item>
         <item name="boxCornerRadiusTopEnd">16dp</item>
-        <item name="boxBackgroundColor">#B3000000</item>
+        <item name="boxBackgroundColor">#b3cf99</item>
         <item name="boxCornerRadiusTopStart">16dp</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>

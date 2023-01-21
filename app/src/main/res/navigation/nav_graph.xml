@@ -17,7 +17,8 @@
             app:destination="@id/signUp" />
         <action
             android:id="@+id/action_loginFragment_to_loaderFragment"
-            app:destination="@id/loaderFragment" />
+            app:destination="@id/loaderFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/chooserFragment"
@@ -33,7 +34,8 @@
             app:destination="@id/signUp" />
         <action
             android:id="@+id/action_chooserFragment_to_loaderFragment"
-            app:destination="@id/loaderFragment" />
+            app:destination="@id/loaderFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/signUp"
@@ -48,7 +50,8 @@
             app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_signUp_to_loaderFragment"
-            app:destination="@id/loaderFragment" />
+            app:destination="@id/loaderFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -67,7 +70,8 @@
         tools:layout="@layout/fragment_loader" >
         <action
             android:id="@+id/action_loaderFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/onboardingFragment"
@@ -121,4 +125,35 @@
         android:id="@+id/searchFragment"
         android:name="com.example.foodplanner.view.SearchFragment"
         android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/allSearchesFragment"
+        android:name="com.example.foodplanner.AllSearchesFragment"
+        android:label="fragment_all_searches"
+        tools:layout="@layout/fragment_all_searches" >
+        <action
+            android:id="@+id/action_allSearchesFragment_to_searchByAreaFragment"
+            app:destination="@id/searchByAreaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchByAreaFragment"
+        android:name="com.example.foodplanner.SearchByAreaFragment"
+        android:label="fragment_search_by_area"
+        tools:layout="@layout/fragment_search_by_area" >
+        <action
+            android:id="@+id/action_searchByAreaFragment_to_areaMealsFragment"
+            app:destination="@id/areaMealsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/areaMealsFragment"
+        android:name="com.example.foodplanner.view.AreaMealsFragment"
+        android:label="fragment_area_meals"
+        tools:layout="@layout/fragment_area_meals" >
+
+        <argument
+            android:name="AreaName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_areaMealsFragment_to_mealFragment"
+            app:destination="@id/mealFragment" />
+    </fragment>
 </navigation>
