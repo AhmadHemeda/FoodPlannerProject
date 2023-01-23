@@ -1,6 +1,5 @@
 package com.example.foodplanner.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,28 +25,29 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder>{
+public class IndredientMealsAdapter extends RecyclerView.Adapter<IndredientMealsAdapter.IndredientMealViewHolder>{
     private List<MealsItem> modelArrayList;
     Context context;
     ViewGroup frag;
-    private static final String TAG = "MealAdapter";
-    public MealAdapter( Context context) {
+    private static final String TAG = "IndredientMealsAdapter";
+
+    public IndredientMealsAdapter(Context context) {
         this.context = context;
     }
 
     @NonNull
     @Override
-    public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public IndredientMealsAdapter.IndredientMealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         frag = parent;
-        return new MealViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item,parent,false));
+        return new IndredientMealsAdapter.IndredientMealViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MealAdapter.MealViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull IndredientMealsAdapter.IndredientMealViewHolder holder, int position) {
         if (modelArrayList != null){
             if(!modelArrayList.get(position).getStrMealThumb().isEmpty()){
                 Glide.with(context).load(modelArrayList.get(position).getStrMealThumb())
-                       .placeholder(R.drawable.ic_launcher_foreground)
+                        .placeholder(R.drawable.ic_launcher_foreground)
                         .apply(new RequestOptions().override(100,100)).into(holder.imageViewMeal);
             }
             holder.textViewMealName.setText(modelArrayList.get(position).getStrMeal());
@@ -60,7 +60,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe( response ->{
                                         List<MealsItem> singleMeal =response.getMeals();
-                                        Navigation.findNavController(frag).navigate(HomeFragmentDirections.actionHomeFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
+                                        Navigation.findNavController(frag).navigate(IngredientsMealsFragmentDirections.actionIngredientsMealsFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
                                         Log.i(TAG, "onClick: "+ singleMeal.get(0).getStrMeal());
                                     },
                                     error ->{error.printStackTrace();
@@ -80,15 +80,16 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
             return 2;
         }
     }
+
     public void setList(List<MealsItem> updatedItems){
         this.modelArrayList = updatedItems;
         notifyDataSetChanged();
     }
-    public static class MealViewHolder extends RecyclerView.ViewHolder {
+    public class IndredientMealViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewMeal;
         TextView textViewMealName;
 
-        public MealViewHolder(@NonNull View itemView) {
+        public IndredientMealViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageViewMeal = itemView.findViewById(R.id.category_image);

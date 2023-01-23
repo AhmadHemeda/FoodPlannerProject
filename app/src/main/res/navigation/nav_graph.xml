@@ -127,16 +127,19 @@
         android:label="SearchFragment" />
     <fragment
         android:id="@+id/allSearchesFragment"
-        android:name="com.example.foodplanner.AllSearchesFragment"
+        android:name="com.example.foodplanner.view.AllSearchesFragment"
         android:label="fragment_all_searches"
         tools:layout="@layout/fragment_all_searches" >
+        <action
+            android:id="@+id/action_allSearchesFragment_to_searchByIngredientFragment"
+            app:destination="@id/searchByIngredientFragment" />
         <action
             android:id="@+id/action_allSearchesFragment_to_searchByAreaFragment"
             app:destination="@id/searchByAreaFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchByAreaFragment"
-        android:name="com.example.foodplanner.SearchByAreaFragment"
+        android:name="com.example.foodplanner.view.SearchByAreaFragment"
         android:label="fragment_search_by_area"
         tools:layout="@layout/fragment_search_by_area" >
         <action
@@ -154,6 +157,27 @@
             app:argType="string" />
         <action
             android:id="@+id/action_areaMealsFragment_to_mealFragment"
+            app:destination="@id/mealFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchByIngredientFragment"
+        tools:layout="@layout/fragment_search_by_ingredient"
+        android:name="com.example.foodplanner.view.SearchByIngredientFragment"
+        android:label="SearchByIngredientFragment" >
+        <action
+            android:id="@+id/action_searchByIngredientFragment_to_ingredientsMealsFragment"
+            app:destination="@id/ingredientsMealsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ingredientsMealsFragment"
+        android:name="com.example.foodplanner.view.IngredientsMealsFragment"
+        android:label="fragment_ingredients_meals"
+        tools:layout="@layout/fragment_ingredients_meals" >
+        <argument
+            android:name="IngredientName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_ingredientsMealsFragment_to_mealFragment"
             app:destination="@id/mealFragment" />
     </fragment>
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.foodplanner;
+package com.example.foodplanner.view;
 
 import android.os.Bundle;
 
@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.pojos.area.AreaListModel;
 import com.example.foodplanner.model.pojos.area.AreaModel;
@@ -42,20 +43,12 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class SearchByAreaFragment extends Fragment {
 
     RecyclerView areaRecyclerView;
-    LinearLayoutManager linearLayoutManager;
     AreaAdapter areaAdapter;
-    SearchAdapter searchAdapter;
     TextInputEditText search;
-    List<AreaModel> areaModels;
-    List <String> names = new ArrayList<>();
-    List res;
+    List<AreaModel> areaModels = new ArrayList<>();
+    List<AreaModel> areaModelsSearch = new ArrayList<>();
     View view;
     private static final String TAG = "SearchByAreaFragment";
-
-    public SearchByAreaFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,63 +62,45 @@ public class SearchByAreaFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_search_by_area, container, false);
         areaRecyclerView = view.findViewById(R.id.recyclerViewAreas);
         search = view.findViewById(R.id.et_search_area);
-        linearLayoutManager = new LinearLayoutManager(requireContext());
-        areaAdapter = new AreaAdapter(requireContext());
-        areaRecyclerView.setLayoutManager(linearLayoutManager);
+        handlingRecyclerView();
+
         Single<AreaListModel> singleObservable = ApiClient.getInstance().getAllAreas();
         singleObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response ->{
                             areaModels =response.getMeals();
-//                            names.add(response.getMeals().toString());
-//                            Log.i(TAG, "onCreateView: "+names.get(0));
                             areaAdapter.setList(areaModels);
-                            areaRecyclerView.setAdapter(areaAdapter);
-                            for (int i = 0; i< areaModels.size();i++){
-                                names.add(areaModels.get(i).getStrArea());
-                                Log.i(TAG, "onCreateView: "+areaModels.get(i).getStrArea());
-                            }
-//                            Log.i(TAG, "onClick: "+ areaModels.get(0).getStrArea());
-                            Log.i(TAG, "onCreateView: "+names.toString());
-
                         },
                         error ->{error.printStackTrace();
                             Log.i(TAG, "onClick: "+ error.getMessage());
                         });
-        Observable.create(new ObservableOnSubscribe<Object>() {
+
+        search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void subscribe(@io.reactivex.rxjava3.annotations.NonNull ObservableEmitter<Object> emitter) throws Throwable {
-                search.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        res = names.stream().filter((e->e.startsWith(charSequence.toString()))).collect(Collectors.toList());
-                        Log.i(TAG, "onTextChanged: "+names.toString());
-                        Log.i(TAG, "onTextChanged: "+res.toString());
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-//                        areaAdapter.setList(res);
-                        searchAdapter = new SearchAdapter(requireContext(),res);
-                        areaRecyclerView.setAdapter(searchAdapter);
-                    }
-                });
             }
-        }).subscribe(e->Log.i(TAG,e.toString()));
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                areaModelsSearch = areaModels.stream().filter((e->e.getStrArea().startsWith(charSequence.toString()))).collect(Collectors.toList());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                areaAdapter.setList(areaModelsSearch);
+            }
+        });
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
+    private void handlingRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+        areaAdapter = new AreaAdapter(requireContext());
+        areaRecyclerView.setAdapter(areaAdapter);
+        areaRecyclerView.setLayoutManager(linearLayoutManager);
     }
+
 }

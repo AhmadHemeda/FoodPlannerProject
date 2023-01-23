@@ -1,4 +1,4 @@
-package com.example.foodplanner;
+package com.example.foodplanner.view;
 
 import android.os.Bundle;
 
@@ -9,6 +9,8 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.foodplanner.R;
 
 
 public class AllSearchesFragment extends Fragment {
@@ -37,7 +39,7 @@ public class AllSearchesFragment extends Fragment {
         ingredientCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByAreaFragment());
+                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByIngredientFragment());
             }
         });
 

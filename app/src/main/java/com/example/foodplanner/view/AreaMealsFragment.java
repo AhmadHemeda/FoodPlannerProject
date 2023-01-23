@@ -41,10 +41,8 @@ public class AreaMealsFragment extends Fragment {
     GridLayoutManager linearLayout;
     TextView area;
     List<MealsItem> mealsItemResults = new ArrayList<>();
-    Observable<List<MealsItem>> observableMealsResult;
-
     TextInputEditText search;
-    MealAdapter mealAdapter;
+    AreaMealsAdapter mealAdapter;
     View view;
     private static final String TAG = "AreaMealsFragment";
 
@@ -63,17 +61,13 @@ public class AreaMealsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         view = inflater.inflate(R.layout.fragment_area_meals, container, false);
         mealOfAreaRecyclerView = view.findViewById(R.id.recyclerView_meals);
         area = view.findViewById(R.id.area_name);
         search = view.findViewById(R.id.et_search_meal);
-
         handlingRecyclerView();
-
-
-         String areaName = AreaMealsFragmentArgs.fromBundle(getArguments()).getAreaName();
+        String areaName = AreaMealsFragmentArgs.fromBundle(getArguments()).getAreaName();
         Log.i(TAG, "onCreateView: "+ areaName);
         area.setText(areaName);
         Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealArea(areaName);
@@ -82,7 +76,6 @@ public class AreaMealsFragment extends Fragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response ->{
                                     mealsItemResults = response.getMeals();
-                                    observableMealsResult = Observable.fromArray(mealsItemResults);
                                     mealAdapter.setList(mealsItemResults);
                                 },
                                 error ->{error.printStackTrace();
@@ -100,22 +93,6 @@ public class AreaMealsFragment extends Fragment {
                 mealAdapter.setList(
                         mealsItemResults.stream()
                                 .filter(mealsItem->mealsItem.getStrMeal().startsWith(charSequence.toString())).collect(Collectors.toList()));
-
-//                for (int j = 0; j<res .size();j++) {
-//                    Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealByName(res.get(0).toString());
-//
-//                    singleObservable
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe(response ->{
-//                                        mealsItem = response.getMeals();
-//                                        Log.i(TAG, "onCreateView: "+ mealsItem.get(0).getStrMeal());
-//                                    },
-//                                    error ->{error.printStackTrace();
-//                                        Log.i(TAG, "onClick: "+ error.getMessage());
-//                                    });
-////                    Log.i(TAG, "onTextChanged: "+names.toString());
-//                    Log.i(TAG, "onTextChanged: "+res.toString());
                 }
 
 
@@ -128,7 +105,7 @@ public class AreaMealsFragment extends Fragment {
 
     private void handlingRecyclerView() {
         linearLayout = new GridLayoutManager(requireContext(),2);
-        mealAdapter = new MealAdapter(requireContext());
+        mealAdapter = new AreaMealsAdapter(requireContext());
         mealOfAreaRecyclerView.setLayoutManager(linearLayout);
         mealOfAreaRecyclerView.setAdapter(mealAdapter);
     }

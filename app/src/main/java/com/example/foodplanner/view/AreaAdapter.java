@@ -13,24 +13,14 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.SearchByAreaFragmentDirections;
-import com.example.foodplanner.model.MealsItem;
-import com.example.foodplanner.model.RandomMeal;
-import com.example.foodplanner.model.Repository;
-import com.example.foodplanner.model.pojos.area.AreaListModel;
 import com.example.foodplanner.model.pojos.area.AreaModel;
-import com.example.foodplanner.network.ApiClient;
-import com.example.foodplanner.network.NetworkCallBack;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder>{
 
-    private List<AreaModel> modelArrayList;
+    private List<AreaModel> modelArrayList = new ArrayList<>();
     Context context;
     ViewGroup frag;
     private static final String TAG = "AreaAdapter";
@@ -39,6 +29,7 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
     }
     public void setList(List<AreaModel> updatedItems){
         this.modelArrayList = updatedItems;
+        notifyDataSetChanged();
     }
 
 
@@ -51,7 +42,6 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull AreaAdapter.AreaViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Log.i(TAG, "onBindViewHolder: " +modelArrayList.size());
         holder.areaTextView.setText(modelArrayList.get(position).getStrArea());
         holder.areaTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,19 +49,6 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
 
                 Navigation.findNavController(frag)
                                             .navigate(SearchByAreaFragmentDirections.actionSearchByAreaFragmentToAreaMealsFragment(holder.areaTextView.getText().toString()).setAreaName(holder.areaTextView.getText().toString()));
-//                Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealArea(holder.areaTextView.getText().toString());
-//                singleObservable
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(response ->{
-//                                   List<MealsItem> mealsItem = response.getMeals();
-////
-//                                    Log.i(TAG, "onClick: "+ mealsItem.get(position).getStrMeal());
-//                                    Log.i(TAG, "onClick: "+ mealsItem.get(position+1).getStrMeal());
-//                                },
-//                                error ->{error.printStackTrace();
-//                                    Log.i(TAG, "onClick: "+ error.getMessage());
-//                                });
             }
         });
     }
