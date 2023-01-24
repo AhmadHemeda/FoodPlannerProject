@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,21 @@ import android.widget.Toast;
 
 import com.example.foodplanner.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SignUp extends Fragment {
     FirebaseAuth auth;
+    FirebaseFirestore db;
     private EditText signupEmail, signupName, signupPassword, signupPasswordAgain;
     private AppCompatButton signUpBtn;
     public SignUp() {
@@ -47,6 +56,7 @@ public class SignUp extends Fragment {
         signUpBtn = view.findViewById(R.id.btn_signup);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,6 +79,22 @@ public class SignUp extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("userEmail", signupEmail.getText().toString());
+                                        user.put("userName", signupName.getText().toString());
+
+                                        // Add a new document with a generated ID
+                                        db.collection("users")
+                                                .document(auth.getUid())
+                                                .set(user)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+//                                                                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+
+                                                    }
+                                                });
+
                                         Navigation.findNavController(view).navigate(SignUpDirections.actionSignUpToLoaderFragment());
                                         Toast.makeText(getContext(),"SignUp Successful",Toast.LENGTH_LONG).show();
                                     }else {
