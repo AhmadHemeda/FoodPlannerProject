@@ -12,9 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -35,8 +39,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class MealFragment extends Fragment {
-    private MealDataBase mealDataBase;
+
     private static final String TAG = "MealFragment";
+    private MealDataBase mealDataBase;
+
+    String[] days = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    AutoCompleteTextView autoCompleteTextView;
+    ArrayAdapter<String> adapterDays;
+
     List<String> list=new ArrayList<String>();
     SingleMealAdapter singleMealAdapter;
     YouTubePlayerView mealVideo;
@@ -66,6 +76,16 @@ public class MealFragment extends Fragment {
         textViewStepsDetails = view.findViewById(R.id.textViewStepsDetails);
         mealVideo = view.findViewById(R.id.videoViewMeal);
         textViewArea = view.findViewById(R.id.textViewArea);
+        autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
+
+        adapterDays = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_list_item, days);
+        autoCompleteTextView.setAdapter(adapterDays);
+
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            String day = parent.getItemAtPosition(position).toString();
+            Toast.makeText(getContext(), "Day: " + day, Toast.LENGTH_SHORT).show();
+        });
+
         getLifecycle().addObserver(mealVideo);
         MealsItem mealsItem = MealFragmentArgs.fromBundle(getArguments()).getSingleMealItem();
         Glide.with(requireContext()).load(mealsItem.getStrMealThumb())

@@ -60,4 +60,6 @@
     <string name="food_category">Food Category</string>
     <string name="food_categories">Food Categories</string>
     <string name="search_by_area">Search By Area</string>
+    <string name="hint_select_day">Select day</string>
+    <string name="text_select_day">Select day</string>
 </resources>
