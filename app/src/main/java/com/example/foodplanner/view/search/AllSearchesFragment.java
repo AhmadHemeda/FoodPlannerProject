@@ -1,4 +1,4 @@
-package com.example.foodplanner.view;
+package com.example.foodplanner.view.search;
 
 import android.os.Bundle;
 
@@ -47,7 +47,7 @@ public class AllSearchesFragment extends Fragment {
         categoryCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByAreaFragment());
+                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByCategoryFragment());
             }
         });
 
