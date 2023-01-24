@@ -21,7 +21,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.foodplanner.R;
 import com.example.foodplanner.database.MealDataBase;
 import com.example.foodplanner.model.FavouriteMeal;
+import com.example.foodplanner.model.MealIngredients;
 import com.example.foodplanner.model.MealsItem;
+import com.example.foodplanner.model.pojos.area.IngredientModel;
+import com.example.foodplanner.network.ApiClient;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -30,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -37,7 +41,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MealFragment extends Fragment {
     private MealDataBase mealDataBase;
     private static final String TAG = "MealFragment";
-    List<String> list=new ArrayList<String>();
+    List <String> ingredients = new ArrayList<>();
+    List <String> measurements = new ArrayList<>();
+
     SingleMealAdapter singleMealAdapter;
     YouTubePlayerView mealVideo;
     RecyclerView mealRecyclerView;
@@ -49,11 +55,11 @@ public class MealFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate: iteeeem");
         super.onCreate(savedInstanceState);
         linearLayoutManager = new LinearLayoutManager(requireContext());
         singleMealAdapter = new SingleMealAdapter(requireContext());
-       mealDataBase = MealDataBase.getInstance(requireContext());
+        mealDataBase = MealDataBase.getInstance(requireContext());
+
     }
 
     @Override
@@ -66,6 +72,7 @@ public class MealFragment extends Fragment {
         textViewStepsDetails = view.findViewById(R.id.textViewStepsDetails);
         mealVideo = view.findViewById(R.id.videoViewMeal);
         textViewArea = view.findViewById(R.id.textViewArea);
+        mealRecyclerView = view.findViewById(R.id.recyclerViewIngredients);
         getLifecycle().addObserver(mealVideo);
         MealsItem mealsItem = MealFragmentArgs.fromBundle(getArguments()).getSingleMealItem();
         Glide.with(requireContext()).load(mealsItem.getStrMealThumb())
@@ -85,16 +92,50 @@ public class MealFragment extends Fragment {
         });
         textViewStepsDetails.setText(mealsItem.getStrInstructions());
         textViewArea.setText(mealsItem.getStrArea());
-//        singleMealAdapter.setList(mealsItem.getStrIngredient1());
-//        list.add(mealsItem.getStrIngredient1());
-//        list.add(mealsItem.getStrIngredient2());
-//        list.add(mealsItem.getStrIngredient3());
-//        list.add(mealsItem.getStrIngredient4());
-//        list.add(mealsItem.getStrIngredient5());
-//        list.add(mealsItem.getStrIngredient6());
-//        list.add(mealsItem.getStrIngredient7());
-//        list.add(mealsItem.getStrIngredient8());
-//        list.add(mealsItem.getStrIngredient9());
+
+//        setIngreds(mealsItem.getStrIngredient1(),mealsItem.getStrMeasure1());
+        getIngredient(mealsItem.getStrIngredient1());
+        getMeasurement(mealsItem.getStrMeasure1());
+        getIngredient(mealsItem.getStrIngredient2());
+        getMeasurement(mealsItem.getStrMeasure2());
+        getIngredient(mealsItem.getStrIngredient3());
+        getMeasurement(mealsItem.getStrMeasure3());
+        getIngredient(mealsItem.getStrIngredient4());
+        getMeasurement(mealsItem.getStrMeasure4());
+        getIngredient(mealsItem.getStrIngredient5());
+        getMeasurement(mealsItem.getStrMeasure5());
+        getIngredient(mealsItem.getStrIngredient6());
+        getMeasurement(mealsItem.getStrMeasure6());
+        getIngredient(mealsItem.getStrIngredient7());
+        getMeasurement(mealsItem.getStrMeasure7());
+        getIngredient(mealsItem.getStrIngredient8());
+        getMeasurement(mealsItem.getStrMeasure8());
+        getIngredient(mealsItem.getStrIngredient9());
+        getMeasurement(mealsItem.getStrMeasure9());
+        getIngredient(mealsItem.getStrIngredient10());
+        getMeasurement(mealsItem.getStrMeasure10());
+        getIngredient(mealsItem.getStrIngredient11());
+        getMeasurement(mealsItem.getStrMeasure11());
+        getIngredient(mealsItem.getStrIngredient12());
+        getMeasurement(mealsItem.getStrMeasure12());
+        getIngredient(mealsItem.getStrIngredient13());
+        getMeasurement(mealsItem.getStrMeasure13());
+        getIngredient(mealsItem.getStrIngredient14());
+        getMeasurement(mealsItem.getStrMeasure14());
+        getIngredient(mealsItem.getStrIngredient15());
+        getMeasurement(mealsItem.getStrMeasure15());
+        getIngredient(mealsItem.getStrIngredient16());
+        getMeasurement(mealsItem.getStrMeasure16());
+        getIngredient(mealsItem.getStrIngredient17());
+        getMeasurement(mealsItem.getStrMeasure17());
+        getIngredient(mealsItem.getStrIngredient18());
+        getMeasurement(mealsItem.getStrMeasure18());
+        getIngredient(mealsItem.getStrIngredient19());
+        getMeasurement(mealsItem.getStrMeasure19());
+        getIngredient(mealsItem.getStrIngredient20());
+        getMeasurement(mealsItem.getStrMeasure20());
+        Log.i(TAG, "getIngredient: "+ingredients.size());
+
         buttonFavourite.setOnClickListener(view -> mealDataBase.mealDao().insertFavMeal(new FavouriteMeal(Long.parseLong(mealsItem.getIdMeal()),
                 mealsItem.getStrMeal(), mealsItem.getStrMealThumb(), mealsItem.getStrArea(), new ArrayList<>(), new ArrayList<>(),
                 mealsItem.getStrInstructions(), mealsItem.getStrYoutube()))
@@ -124,8 +165,27 @@ public class MealFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mealRecyclerView = view.findViewById(R.id.recyclerViewIngredients);
-//        allRecyclerView.setLayoutManager(linearLayoutManager);
-//        singleMealAdapter.setList(list);
-//        allRecyclerView.setAdapter(singleMealAdapter);
+        mealRecyclerView.setLayoutManager(linearLayoutManager);
+        singleMealAdapter.setList(ingredients ,measurements);
+        mealRecyclerView.setAdapter(singleMealAdapter);
+    }
+//    private List<MealIngredients> setIngreds(String ingredientName, String measurementName){
+//        List <MealIngredients> mealIngredientsList = new ArrayList<>();
+//        mealIngredientsList.get(0).setIngredients(ingredientName);
+//        mealIngredientsList.get(0).setMeasurements(measurementName);
+//        Log.i(TAG, "setIngreds: "+  mealIngredientsList.get(0).getIngredients());
+//        Log.i(TAG, "setIngreds: "+  mealIngredientsList.get(0).getMeasurements());
+//
+//        return mealIngredientsList;
+//    }
+    private List<String> getIngredient(String ingredientName){
+        if( ingredientName != null && !ingredientName.isEmpty())
+            ingredients.add(ingredientName);
+        return ingredients;
+    }
+    private List<String> getMeasurement(String measurementName){
+        if( measurementName != null && !measurementName.isEmpty())
+            measurements.add(measurementName);
+        return measurements;
     }
 }

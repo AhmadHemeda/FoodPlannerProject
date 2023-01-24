@@ -22,6 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:paddingEnd="5dp"
+            android:fontFamily="@font/merienda_one"
             android:text="@string/text_ingredient" />
 
         <TextView
@@ -30,7 +32,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/text_measure"
-            android:textAlignment="textEnd" />
+            android:fontFamily="@font/merienda_one"
+            android:paddingStart="5dp"
+            android:textAlignment="textStart" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
