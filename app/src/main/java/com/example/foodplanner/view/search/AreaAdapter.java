@@ -1,8 +1,7 @@
-package com.example.foodplanner.view;
+package com.example.foodplanner.view.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.pojos.area.AreaModel;
+import com.example.foodplanner.view.search.SearchByAreaFragmentDirections;
 
 import java.util.ArrayList;
 import java.util.List;

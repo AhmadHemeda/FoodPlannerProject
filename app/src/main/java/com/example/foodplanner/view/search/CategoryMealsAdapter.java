@@ -1,4 +1,4 @@
-package com.example.foodplanner.view;
+package com.example.foodplanner.view.search;
 
 import android.content.Context;
 import android.util.Log;
@@ -25,26 +25,26 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class AreaMealsAdapter  extends RecyclerView.Adapter<AreaMealsAdapter.AreaMealsViewHolder>{
+public class CategoryMealsAdapter extends RecyclerView.Adapter<CategoryMealsAdapter.CategoryMealsViewHolder>{
 
     private List<MealsItem> modelArrayList;
     Context context;
     ViewGroup frag;
     private static final String TAG = "AreaMealsAdapter";
 
-    public AreaMealsAdapter(Context context) {
+    public CategoryMealsAdapter(Context context) {
         this.context = context;
     }
 
     @NonNull
     @Override
-    public AreaMealsAdapter.AreaMealsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       frag = parent;
-        return new AreaMealsAdapter.AreaMealsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item,parent,false));
+    public CategoryMealsAdapter.CategoryMealsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        frag = parent;
+        return new CategoryMealsAdapter.CategoryMealsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AreaMealsAdapter.AreaMealsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryMealsAdapter.CategoryMealsViewHolder holder, int position) {
         if (modelArrayList != null){
             if(!modelArrayList.get(position).getStrMealThumb().isEmpty()){
                 Glide.with(context).load(modelArrayList.get(position).getStrMealThumb())
@@ -61,7 +61,7 @@ public class AreaMealsAdapter  extends RecyclerView.Adapter<AreaMealsAdapter.Are
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe( response ->{
                                         List<MealsItem> singleMeal =response.getMeals();
-                                        Navigation.findNavController(frag).navigate(AreaMealsFragmentDirections.actionAreaMealsFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
+                                        Navigation.findNavController(frag).navigate(CategoryMealsFragmentDirections.actionCategoryMealsFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
 
                                         Log.i(TAG, "onClick: "+ singleMeal.get(0).getStrMeal());
                                     },
@@ -87,11 +87,10 @@ public class AreaMealsAdapter  extends RecyclerView.Adapter<AreaMealsAdapter.Are
         this.modelArrayList = updatedItems;
         notifyDataSetChanged();
     }
-    public class AreaMealsViewHolder extends RecyclerView.ViewHolder{
+    public class CategoryMealsViewHolder extends RecyclerView.ViewHolder{
         ImageView imageViewMeal;
         TextView textViewMealName;
-
-        public AreaMealsViewHolder(@NonNull View itemView) {
+        public CategoryMealsViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewMeal = itemView.findViewById(R.id.category_image);
             textViewMealName = itemView.findViewById(R.id.category_text);

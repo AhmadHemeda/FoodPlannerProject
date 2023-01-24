@@ -1,4 +1,4 @@
-package com.example.foodplanner.view;
+package com.example.foodplanner.view.search;
 
 import android.os.Bundle;
 
@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.model.pojos.area.AreaListModel;
-import com.example.foodplanner.model.pojos.area.AreaModel;
+import com.example.foodplanner.model.pojos.area.CategoryListModel;
+import com.example.foodplanner.model.pojos.area.CategoryModel;
 import com.example.foodplanner.model.pojos.area.IngredientListModel;
 import com.example.foodplanner.model.pojos.area.IngredientModel;
 import com.example.foodplanner.network.ApiClient;
@@ -26,22 +26,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableEmitter;
-import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-
-public class SearchByIngredientFragment extends Fragment {
-    RecyclerView ingredientRecyclerView;
-    IngredientAdapter ingredientAdapter;
+public class SearchByCategoryFragment extends Fragment {
+    RecyclerView categoryRecyclerView;
+    CategoryAdapter categoryAdapter;
     TextInputEditText search;
-    List<IngredientModel> ingredientModels = new ArrayList<>();
-    List<IngredientModel> ingredientModelsSearch = new ArrayList<>();
-    private static final String TAG = "SearchByIngredientFragm";
+    List<CategoryModel> categoryModels = new ArrayList<>();
+    List<CategoryModel> categoryModelsSearch = new ArrayList<>();
+    private static final String TAG = "SearchByCategoryFragment";
     View view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,23 +47,24 @@ public class SearchByIngredientFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_search_by_ingredient, container, false);
-        ingredientRecyclerView = view.findViewById(R.id.recyclerViewIngredients);
-        search = view.findViewById(R.id.et_search_ingredient);
+        view  = inflater.inflate(R.layout.fragment_search_by_category, container, false);
+        categoryRecyclerView = view.findViewById(R.id.recyclerViewCategory);
+        search = view.findViewById(R.id.et_search_category);
         handlingRecyclerView();
 
-        Single<IngredientListModel> singleObservable = ApiClient.getInstance().getAllIngredient();
+        Single<CategoryListModel> singleObservable = ApiClient.getInstance().getAllCategories();
         singleObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response ->{
-                    ingredientModels = response.getMeals();
-                    ingredientAdapter.setList(ingredientModels);
+                    categoryModels = response.getMeals();
+                    categoryAdapter.setList(categoryModels);
+                    Log.i(TAG, "onCreateView: "+categoryModels.get(0).getStrCategory());
+                    Log.i(TAG, "onCreateView: "+categoryModels.get(1).getStrCategory());
 
                 },error ->{error.printStackTrace();
                     Log.i(TAG, "onClick: "+ error.getMessage());
                 });
-
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -76,23 +73,22 @@ public class SearchByIngredientFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ingredientModelsSearch = ingredientModels.stream().filter((e->e.getStrIngredient().startsWith(s.toString()))).collect(Collectors.toList());
+                categoryModelsSearch = categoryModels.stream().filter((e->e.getStrCategory().startsWith(s.toString()))).collect(Collectors.toList());
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                ingredientAdapter.setList(ingredientModelsSearch);
+                categoryAdapter.setList(categoryModelsSearch);
             }
         });
+
         return view;
     }
-
     private void handlingRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
-        ingredientAdapter = new IngredientAdapter(requireContext());
-        ingredientRecyclerView.setAdapter(ingredientAdapter);
-        ingredientRecyclerView.setLayoutManager(linearLayoutManager);
+        categoryAdapter = new CategoryAdapter(requireContext());
+        categoryRecyclerView.setAdapter(categoryAdapter);
+        categoryRecyclerView.setLayoutManager(linearLayoutManager);
     }
-
 }

@@ -1,4 +1,4 @@
-package com.example.foodplanner.view;
+package com.example.foodplanner.view.search;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,6 +18,7 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.RandomMeal;
 import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.view.search.AreaMealsFragmentDirections;
 
 import java.util.List;
 
@@ -25,25 +26,26 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class IndredientMealsAdapter extends RecyclerView.Adapter<IndredientMealsAdapter.IndredientMealViewHolder>{
+public class AreaMealsAdapter  extends RecyclerView.Adapter<AreaMealsAdapter.AreaMealsViewHolder>{
+
     private List<MealsItem> modelArrayList;
     Context context;
     ViewGroup frag;
-    private static final String TAG = "IndredientMealsAdapter";
+    private static final String TAG = "AreaMealsAdapter";
 
-    public IndredientMealsAdapter(Context context) {
+    public AreaMealsAdapter(Context context) {
         this.context = context;
     }
 
     @NonNull
     @Override
-    public IndredientMealsAdapter.IndredientMealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        frag = parent;
-        return new IndredientMealsAdapter.IndredientMealViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item,parent,false));
+    public AreaMealsAdapter.AreaMealsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+       frag = parent;
+        return new AreaMealsAdapter.AreaMealsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull IndredientMealsAdapter.IndredientMealViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AreaMealsAdapter.AreaMealsViewHolder holder, int position) {
         if (modelArrayList != null){
             if(!modelArrayList.get(position).getStrMealThumb().isEmpty()){
                 Glide.with(context).load(modelArrayList.get(position).getStrMealThumb())
@@ -60,7 +62,8 @@ public class IndredientMealsAdapter extends RecyclerView.Adapter<IndredientMeals
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe( response ->{
                                         List<MealsItem> singleMeal =response.getMeals();
-                                        Navigation.findNavController(frag).navigate(IngredientsMealsFragmentDirections.actionIngredientsMealsFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
+                                        Navigation.findNavController(frag).navigate(AreaMealsFragmentDirections.actionAreaMealsFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
+
                                         Log.i(TAG, "onClick: "+ singleMeal.get(0).getStrMeal());
                                     },
                                     error ->{error.printStackTrace();
@@ -85,13 +88,12 @@ public class IndredientMealsAdapter extends RecyclerView.Adapter<IndredientMeals
         this.modelArrayList = updatedItems;
         notifyDataSetChanged();
     }
-    public class IndredientMealViewHolder extends RecyclerView.ViewHolder {
+    public class AreaMealsViewHolder extends RecyclerView.ViewHolder{
         ImageView imageViewMeal;
         TextView textViewMealName;
 
-        public IndredientMealViewHolder(@NonNull View itemView) {
+        public AreaMealsViewHolder(@NonNull View itemView) {
             super(itemView);
-
             imageViewMeal = itemView.findViewById(R.id.category_image);
             textViewMealName = itemView.findViewById(R.id.category_text);
         }
