@@ -8,8 +8,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.example.foodplanner.model.FavouriteMeal;
+import com.example.foodplanner.model.PlanMeal;
 
-@Database(entities = {FavouriteMeal.class}, version = 1)
+@Database(entities = {FavouriteMeal.class, PlanMeal.class}, version = 1)
 @TypeConverters(Converters.class)
 public abstract class MealDataBase extends RoomDatabase {
 

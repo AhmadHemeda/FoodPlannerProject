@@ -12,9 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -25,6 +28,8 @@ import com.example.foodplanner.model.MealIngredients;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.pojos.area.IngredientModel;
 import com.example.foodplanner.network.ApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -41,9 +46,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MealFragment extends Fragment {
     private MealDataBase mealDataBase;
     private static final String TAG = "MealFragment";
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
+    String[] days = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    AutoCompleteTextView autoCompleteTextView;
+    ArrayAdapter<String> adapterDays;
     List <String> ingredients = new ArrayList<>();
     List <String> measurements = new ArrayList<>();
-
     SingleMealAdapter singleMealAdapter;
     YouTubePlayerView mealVideo;
     RecyclerView mealRecyclerView;
@@ -73,6 +82,20 @@ public class MealFragment extends Fragment {
         mealVideo = view.findViewById(R.id.videoViewMeal);
         textViewArea = view.findViewById(R.id.textViewArea);
         mealRecyclerView = view.findViewById(R.id.recyclerViewIngredients);
+        autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
+
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
+
+        adapterDays = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_list_item, days);
+        autoCompleteTextView.setAdapter(adapterDays);
+
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            String day = parent.getItemAtPosition(position).toString();
+            Toast.makeText(getContext(), "Day: " + day, Toast.LENGTH_SHORT).show();
+        });
+
         getLifecycle().addObserver(mealVideo);
         MealsItem mealsItem = MealFragmentArgs.fromBundle(getArguments()).getSingleMealItem();
         Glide.with(requireContext()).load(mealsItem.getStrMealThumb())
@@ -149,7 +172,11 @@ public class MealFragment extends Fragment {
 
                     @Override
                     public void onComplete() {
-
+                        db.collection("database")
+                                .document(auth.getCurrentUser().getEmail())
+                                .collection("Favourite")
+                                .document(mealsItem.getIdMeal())
+                                .set(mealsItem);
                     }
 
                     @Override
