@@ -24,10 +24,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.foodplanner.R;
 import com.example.foodplanner.database.MealDataBase;
 import com.example.foodplanner.model.FavouriteMeal;
-import com.example.foodplanner.model.MealIngredients;
 import com.example.foodplanner.model.MealsItem;
-import com.example.foodplanner.model.pojos.area.IngredientModel;
-import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.model.PlanMeal;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
@@ -38,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -68,7 +65,6 @@ public class MealFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(requireContext());
         singleMealAdapter = new SingleMealAdapter(requireContext());
         mealDataBase = MealDataBase.getInstance(requireContext());
-
     }
 
     @Override
@@ -87,14 +83,6 @@ public class MealFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
-
-        adapterDays = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_list_item, days);
-        autoCompleteTextView.setAdapter(adapterDays);
-
-        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
-            String day = parent.getItemAtPosition(position).toString();
-            Toast.makeText(getContext(), "Day: " + day, Toast.LENGTH_SHORT).show();
-        });
 
         getLifecycle().addObserver(mealVideo);
         MealsItem mealsItem = MealFragmentArgs.fromBundle(getArguments()).getSingleMealItem();
@@ -184,6 +172,36 @@ public class MealFragment extends Fragment {
 
                     }
                 }));
+
+        adapterDays = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_list_item, days);
+        autoCompleteTextView.setAdapter(adapterDays);
+
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            String day = parent.getItemAtPosition(position).toString();
+
+            mealDataBase.planMealDao().insertPlanMeal(new PlanMeal(Long.parseLong(mealsItem.getIdMeal()),
+                    mealsItem.getStrMeal(), mealsItem.getStrMealThumb(), mealsItem.getStrArea(), new ArrayList<>(), new ArrayList<>(),
+                    mealsItem.getStrInstructions(), mealsItem.getStrYoutube(), day))
+                            .subscribeOn(Schedulers.io())
+                                    .subscribe(new CompletableObserver() {
+                                        @Override
+                                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                                        }
+
+                                        @Override
+                                        public void onComplete() {
+
+                                        }
+
+                                        @Override
+                                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                                        }
+                                    });
+
+            Toast.makeText(getContext(), "Day: " + day, Toast.LENGTH_SHORT).show();
+        });
 
         return view;
     }

@@ -10,17 +10,18 @@ import androidx.room.TypeConverters;
 import com.example.foodplanner.model.FavouriteMeal;
 import com.example.foodplanner.model.PlanMeal;
 
-@Database(entities = {FavouriteMeal.class, PlanMeal.class}, version = 1)
+@Database(entities = {FavouriteMeal.class, PlanMeal.class}, version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class MealDataBase extends RoomDatabase {
 
     private static MealDataBase instance = null;
     public abstract MealDao mealDao();
+    public abstract PlanMealDao planMealDao();
 
     public static synchronized MealDataBase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-            MealDataBase.class, "meal_database")
+                            MealDataBase.class, "meal_database")
                     .fallbackToDestructiveMigration()
                     .build();
         }

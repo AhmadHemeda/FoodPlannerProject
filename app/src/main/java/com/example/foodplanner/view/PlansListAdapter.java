@@ -47,10 +47,9 @@ public class PlansListAdapter extends RecyclerView.Adapter<PlansListAdapter.Meal
         notifyDataSetChanged();
     }
 
-    public class MealViewHolder extends RecyclerView.ViewHolder {
-
-        private ImageView imageViewMeal;
-        private TextView textViewMealName;
+    public static class MealViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageViewMeal;
+        TextView textViewMealName;
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -1,6 +1,5 @@
 package com.example.foodplanner.view;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,6 @@ import java.util.List;
 public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAdapter.MealViewHolder> {
 
     private List<FavouriteMeal> favouriteMealList = new ArrayList<>();
-//
-//    public FavouritesListAdapter(List<FavouriteMeal> favouriteMealList) {
-//        this.favouriteMealList = favouriteMealList;
-//    }
 
     @NonNull
     @Override
@@ -46,7 +41,6 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
         return favouriteMealList.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void setList(List<FavouriteMeal> favouriteMealList) {
         this.favouriteMealList = favouriteMealList;
         notifyDataSetChanged();

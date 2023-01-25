@@ -36,7 +36,7 @@ public class SingleMealAdapter extends RecyclerView.Adapter<SingleMealAdapter.Si
     @Override
     public void onBindViewHolder(@NonNull SingleMealViewHolder holder, int position) {
         holder.textViewIngredient.setText(modelArrayList.get(position));
-        holder.textViewMeasure.setText(mesurList.get(position));
+//        holder.textViewMeasure.setText(mesurList.get(position));
     }
 
     @Override
