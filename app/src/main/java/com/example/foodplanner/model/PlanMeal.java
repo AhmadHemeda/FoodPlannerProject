@@ -10,18 +10,23 @@ import java.util.List;
 public class PlanMeal {
 
     @NonNull
-    private final long mealID;
-    private final String mealName;
-    private final String mealImage;
-    private final String mealArea;
-    private final List<String> mealIngredients;
-    private final List<String> mealMeasures;
-    private final String mealSteps;
-    private final String mealVideo;
+    private long mealID;
+    private String mealName;
+    private String mealImage;
+    private String mealArea;
+    private List<String> mealIngredients;
+    private List<String> mealMeasures;
+    private String mealSteps;
+    private String mealVideo;
     @NonNull
-    private final String mealDay;
+    private String mealDay;
 
-    public PlanMeal(long mealID, String mealName, String mealImage, String mealArea, List<String> mealIngredients, List<String> mealMeasures, String mealSteps, String mealVideo, String mealDay) {
+    public PlanMeal() {
+    }
+
+    public PlanMeal(long mealID, String mealName, String mealImage, String mealArea,
+                    List<String> mealIngredients, List<String> mealMeasures,
+                    String mealSteps, String mealVideo, String mealDay) {
         this.mealID = mealID;
         this.mealName = mealName;
         this.mealImage = mealImage;
@@ -30,6 +35,42 @@ public class PlanMeal {
         this.mealMeasures = mealMeasures;
         this.mealSteps = mealSteps;
         this.mealVideo = mealVideo;
+        this.mealDay = mealDay;
+    }
+
+    public void setMealID(long mealID) {
+        this.mealID = mealID;
+    }
+
+    public void setMealName(String mealName) {
+        this.mealName = mealName;
+    }
+
+    public void setMealImage(String mealImage) {
+        this.mealImage = mealImage;
+    }
+
+    public void setMealArea(String mealArea) {
+        this.mealArea = mealArea;
+    }
+
+    public void setMealIngredients(List<String> mealIngredients) {
+        this.mealIngredients = mealIngredients;
+    }
+
+    public void setMealMeasures(List<String> mealMeasures) {
+        this.mealMeasures = mealMeasures;
+    }
+
+    public void setMealSteps(String mealSteps) {
+        this.mealSteps = mealSteps;
+    }
+
+    public void setMealVideo(String mealVideo) {
+        this.mealVideo = mealVideo;
+    }
+
+    public void setMealDay(@NonNull String mealDay) {
         this.mealDay = mealDay;
     }
 

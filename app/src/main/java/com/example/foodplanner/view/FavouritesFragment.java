@@ -15,9 +15,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.database.MealDataBase;
 import com.example.foodplanner.model.FavouriteMeal;
+import com.example.foodplanner.model.MealsItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.SingleObserver;
@@ -27,6 +38,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class FavouritesFragment extends Fragment {
 
     private  MealDataBase mealDataBase;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth firebaseAuth;
+    private MealsItem mealsItem;
     private ImageView imageViewMealThumb;
     private TextView textViewMealName;
     private View view;
@@ -36,6 +50,10 @@ public class FavouritesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        mealsItem = new MealsItem();
     }
 
     @Override
@@ -44,6 +62,7 @@ public class FavouritesFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_favourites, container, false);
         mealDataBase = MealDataBase.getInstance(getContext());
+
 
         imageViewMealThumb = view.findViewById(R.id.imageViewFavMealThumb);
         textViewMealName = view.findViewById(R.id.textViewFavMealName);
@@ -80,5 +99,22 @@ public class FavouritesFragment extends Fragment {
 
                     }
                 });
+//        firebaseFirestore
+//                .collection("database")
+//                .document(Objects.requireNonNull(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail()))
+//                .collection("Favourite")
+//                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            if (task.getResult() != null) {
+//                                List<MealsItem> mealsItemList = new ArrayList<>();
+//                                task.getResult()
+//                                        .getDocuments()
+//                                        .forEach(t -> mealsItemList.add((t.toObject(MealsItem.class))));
+//                            }
+//                        }
+//                    }
+//                });
     }
 }

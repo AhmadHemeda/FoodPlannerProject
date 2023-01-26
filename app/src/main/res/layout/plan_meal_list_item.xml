@@ -24,7 +24,7 @@
         <ImageView
             android:id="@+id/imageViewMealPlanImage"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="200dp"
             android:layout_weight="3"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -41,6 +41,19 @@
             android:maxLines="2"
             android:text="@string/title"
             android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonRemoveFromPlan"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_design"
+            android:text="@string/button_text_remove"
+            android:fontFamily="@font/merienda_one"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

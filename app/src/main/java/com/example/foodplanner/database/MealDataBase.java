@@ -13,7 +13,9 @@ import com.example.foodplanner.model.PlanMeal;
 @Database(entities = {FavouriteMeal.class, PlanMeal.class}, version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class MealDataBase extends RoomDatabase {
-
+    public static final String PLAN = "planMeal";
+    public static final  String FAV = "Favourite";
+    public static final String FIRESTORE="database";
     private static MealDataBase instance = null;
     public abstract MealDao mealDao();
     public abstract PlanMealDao planMealDao();

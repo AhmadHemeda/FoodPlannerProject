@@ -7,18 +7,22 @@ import java.util.List;
 
 @Entity(tableName = "meal_table")
 public class FavouriteMeal {
-
     @PrimaryKey
-    private final long mealID;
-    private final String mealName;
-    private final String mealImage;
-    private final String mealArea;
-    private final List<String> mealIngredients;
-    private final List<String> mealMeasures;
-    private final String mealSteps;
-    private final String mealVideo;
+    private  long mealID;
+    private  String mealName;
+    private  String mealImage;
+    private  String mealArea;
+    private List<String> mealIngredients;
+    private  List<String> mealMeasures;
+    private  String mealSteps;
+    private  String mealVideo;
 
-    public FavouriteMeal(long mealID, String mealName, String mealImage, String mealArea, List<String> mealIngredients, List<String> mealMeasures, String mealSteps, String mealVideo) {
+    public FavouriteMeal() {
+    }
+
+    public FavouriteMeal(long mealID, String mealName, String mealImage, String mealArea,
+                         List<String> mealIngredients, List<String> mealMeasures,
+                         String mealSteps, String mealVideo) {
         this.mealID = mealID;
         this.mealName = mealName;
         this.mealImage = mealImage;
@@ -26,6 +30,38 @@ public class FavouriteMeal {
         this.mealIngredients = mealIngredients;
         this.mealMeasures = mealMeasures;
         this.mealSteps = mealSteps;
+        this.mealVideo = mealVideo;
+    }
+
+    public void setMealID(long mealID) {
+        this.mealID = mealID;
+    }
+
+    public void setMealName(String mealName) {
+        this.mealName = mealName;
+    }
+
+    public void setMealImage(String mealImage) {
+        this.mealImage = mealImage;
+    }
+
+    public void setMealArea(String mealArea) {
+        this.mealArea = mealArea;
+    }
+
+    public void setMealIngredients(List<String> mealIngredients) {
+        this.mealIngredients = mealIngredients;
+    }
+
+    public void setMealMeasures(List<String> mealMeasures) {
+        this.mealMeasures = mealMeasures;
+    }
+
+    public void setMealSteps(String mealSteps) {
+        this.mealSteps = mealSteps;
+    }
+
+    public void setMealVideo(String mealVideo) {
         this.mealVideo = mealVideo;
     }
 

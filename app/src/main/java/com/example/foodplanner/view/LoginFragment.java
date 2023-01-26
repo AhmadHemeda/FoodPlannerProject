@@ -1,7 +1,5 @@
 package com.example.foodplanner.view;
 
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -24,7 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.TestActivity;
+import com.example.foodplanner.database.MealDataBase;
+import com.example.foodplanner.model.FavouriteMeal;
 import com.example.foodplanner.model.MealsItem;
+import com.example.foodplanner.model.PlanMeal;
 import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.network.ApiClient;
 import com.example.foodplanner.presenter.GetRandomMealInterfacePresenter;
@@ -33,45 +35,56 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class LoginFragment extends Fragment{
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
-    private static final String TAG = "LoginFragment";
+public class LoginFragment extends Fragment{
+    private MealDataBase roomDb;
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    private View view;
     private EditText logInEmail,logInPassword;
     private AppCompatButton logInBtn;
-    TextView signupBtn;
-    public LoginFragment() {
-        // Required empty public constructor
-    }
+    private TextView signupBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        roomDb = MealDataBase.getInstance(getContext());
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        auth = FirebaseAuth.getInstance();
         logInEmail = view.findViewById(R.id.et_email);
         logInPassword = view.findViewById(R.id.et_password);
-
         logInBtn = view.findViewById(R.id.btn_login);
         signupBtn = view.findViewById(R.id.btn_goSignUp);
+
         SharedPreferences sharedPref = requireContext().getSharedPreferences(
                 "setting", Context.MODE_PRIVATE);
         sharedPref.edit().putBoolean("first_look", true).apply();
+
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +96,11 @@ public class LoginFragment extends Fragment{
                                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                     @Override
                                     public void onSuccess(AuthResult authResult) {
-                                        Toast.makeText(getContext(),"Login Successful",Toast.LENGTH_LONG).show();
+
+                                        gatherAllFavoriteData();
+                                        gatherAllPlanData();
+
+                                        Toast.makeText(requireContext(),"Login Successful",Toast.LENGTH_LONG).show();
                                         Navigation.findNavController(view).navigate(LoginFragmentDirections.actionLoginFragmentToLoaderFragment());
 
                                     }
@@ -107,24 +124,104 @@ public class LoginFragment extends Fragment{
                 }
             }
         });
+
         signupBtn.setOnClickListener(v->{
             NavDirections navDirections =LoginFragmentDirections.actionLoginFragmentToSignUp();
             NavController navController = Navigation.findNavController(v);
             navController.navigate(navDirections);
         });
-
     }
 
+    private void gatherAllFavoriteData() {
+        if (auth.getCurrentUser() ==null)
+            return;
 
+        ArrayList<FavouriteMeal> favouriteMealArrayList = new ArrayList<>();
+        db.collection(MealDataBase.FIRESTORE)
+                .document(auth.getCurrentUser().getEmail())
+                .collection(MealDataBase.FAV)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            favouriteMealArrayList.add(document.toObject(FavouriteMeal.class));
+                        }
+                        // insert all items in databse
+                        insertAllFavouriteMeals(favouriteMealArrayList);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
+    private void insertAllFavouriteMeals(ArrayList<FavouriteMeal> favouriteMealArrayList) {
+        roomDb.mealDao().insertAllFavMeal(favouriteMealArrayList).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    private void gatherAllPlanData() {
+        if (auth.getCurrentUser() ==null)
+            return;
+        ArrayList<PlanMeal> planMealArrayList = new ArrayList<>();
+        db.collection(MealDataBase.FIRESTORE)
+                .document(auth.getCurrentUser().getEmail())
+                .collection(MealDataBase.PLAN)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            PlanMeal planMeal = document.toObject(PlanMeal.class);
+                            planMealArrayList.add(planMeal);
+                        }
+                        insertAllPlaneMeals(planMealArrayList);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
+    private void insertAllPlaneMeals(ArrayList<PlanMeal> planMealArrayList) {
+        roomDb.planMealDao().insertAllPlanMeal(planMealArrayList).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
+    }
 
 }
-//.addOnCompleteListener(getContext(), new OnCompleteListener<AuthResult>() {
-//@Override
-//public void onComplete(@NonNull Task<AuthResult> task) {
-//        if(task.isSuccessful()){
-//        FirebaseUser user = auth.getCurrentUser();
-//        //updateUI(user);
-//        }else {
-//        Toast.makeText(getContext(),"Login Failed",Toast.LENGTH_LONG).show();
-//        }
-//        });

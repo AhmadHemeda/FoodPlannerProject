@@ -10,6 +10,7 @@
     <string name="slogan_text">Build a better meal plan to achieve your health and fitness</string>
     <string name="text_have_not_an_account">Do not have an account ?</string>
     <string name="sign_up_text">Sign Up</string>
+    <string name="cancel_text">Cancel</string>
     <string name="text_connect">You can connect with...</string>
     <string name="text_login">Login</string>
     <string name="checkbox_remember_me">Remember me and keep me logged in</string>
@@ -62,4 +63,7 @@
     <string name="search_by_area">Search By Area</string>
     <string name="slash">|</string>
     <string name="hint_select_day">Select Day</string>
+    <string name="button_text_remove">Remove</string>
+    <string name="string_user">User</string>
+    <string name="button_text_logout">Logout</string>
 </resources>

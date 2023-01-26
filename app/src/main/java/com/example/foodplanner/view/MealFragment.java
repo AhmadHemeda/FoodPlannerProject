@@ -26,6 +26,7 @@ import com.example.foodplanner.database.MealDataBase;
 import com.example.foodplanner.model.FavouriteMeal;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.PlanMeal;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
@@ -35,7 +36,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -45,18 +48,21 @@ public class MealFragment extends Fragment {
     private static final String TAG = "MealFragment";
     private FirebaseFirestore db;
     private FirebaseAuth auth;
+    private String day;
+    private TextInputLayout textInputLayout;
+    private TextView textView;
     String[] days = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> adapterDays;
-    List <String> ingredients = new ArrayList<>();
-    List <String> measurements = new ArrayList<>();
+    List<String> ingredients = new ArrayList<>();
+    List<String> measurements = new ArrayList<>();
     SingleMealAdapter singleMealAdapter;
     YouTubePlayerView mealVideo;
     RecyclerView mealRecyclerView;
     View view;
     LinearLayoutManager linearLayoutManager;
     ImageView imageViewMealImage;
-    TextView mealName , textViewStepsDetails , textViewArea;
+    TextView mealName, textViewStepsDetails, textViewArea;
     Button buttonFavourite;
 
     @Override
@@ -79,21 +85,29 @@ public class MealFragment extends Fragment {
         textViewArea = view.findViewById(R.id.textViewArea);
         mealRecyclerView = view.findViewById(R.id.recyclerViewIngredients);
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
+        textInputLayout = view.findViewById(R.id.textInputLayoutSelect);
+        textView = view.findViewById(R.id.textViewSelectDay);
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
 
+        if( auth != null) {
+            textInputLayout.setVisibility(View.GONE);
+            buttonFavourite.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
+        }
+
         getLifecycle().addObserver(mealVideo);
         MealsItem mealsItem = MealFragmentArgs.fromBundle(getArguments()).getSingleMealItem();
         Glide.with(requireContext()).load(mealsItem.getStrMealThumb())
                 .placeholder(R.drawable.ic_launcher_foreground)
-                .apply(new RequestOptions().override(100,100)).into(imageViewMealImage);
+                .apply(new RequestOptions().override(100, 100)).into(imageViewMealImage);
         mealName.setText(mealsItem.getStrMeal());
         Log.i(TAG,
-                "onCreateView: "+mealsItem.getStrYoutube());
-        String [] split = mealsItem.getStrYoutube().split("=");
-        Log.i(TAG, "onCreateView: "+split[0]);
+                "onCreateView: " + mealsItem.getStrYoutube());
+        String[] split = mealsItem.getStrYoutube().split("=");
+        Log.i(TAG, "onCreateView: " + split[0]);
         mealVideo.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -145,60 +159,103 @@ public class MealFragment extends Fragment {
         getMeasurement(mealsItem.getStrMeasure19());
         getIngredient(mealsItem.getStrIngredient20());
         getMeasurement(mealsItem.getStrMeasure20());
-        Log.i(TAG, "getIngredient: "+ingredients.size());
+        Log.i(TAG, "getIngredient: " + ingredients.size());
 
-        buttonFavourite.setOnClickListener(view -> mealDataBase.mealDao().insertFavMeal(new FavouriteMeal(Long.parseLong(mealsItem.getIdMeal()),
+        FavouriteMeal favouriteMealItem = new FavouriteMeal(Long.parseLong(mealsItem.getIdMeal()),
                 mealsItem.getStrMeal(), mealsItem.getStrMealThumb(), mealsItem.getStrArea(), new ArrayList<>(), new ArrayList<>(),
-                mealsItem.getStrInstructions(), mealsItem.getStrYoutube()))
-
-                .subscribeOn(Schedulers.io())
-                .subscribe(new CompletableObserver() {
+                mealsItem.getStrInstructions(), mealsItem.getStrYoutube());
+        mealDataBase.mealDao().getFavMealByID(favouriteMealItem.getMealID()).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<Boolean>() {
                     @Override
                     public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onComplete() {
-                        db.collection("database")
-                                .document(auth.getCurrentUser().getEmail())
-                                .collection("Favourite")
-                                .document(mealsItem.getIdMeal())
-                                .set(mealsItem);
+                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull Boolean isItem) {
+                        if (isItem) {
+                            buttonFavourite.setText("Remove");
+                            buttonFavourite.setBackgroundColor(getContext().getColor(R.color.red));
+                        } else {
+
+                            buttonFavourite.setText("Favorite");
+                            buttonFavourite.setBackgroundColor(getContext().getColor(R.color.green_dark));
+
+                        }
                     }
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
 
                     }
-                }));
+                });
+        buttonFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mealDataBase.mealDao().getFavMealByID(favouriteMealItem.getMealID()).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<Boolean>() {
+                            @Override
+                            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull Boolean isItem) {
+                                if (isItem) {
+                                    deleteFavoriteItem(favouriteMealItem);
+                                    buttonFavourite.setText("Favorite");
+                                    buttonFavourite.setBackgroundColor(getContext().getColor(R.color.green_dark));
+                                } else {
+
+                                    insertFavoriteItem(favouriteMealItem);
+                                    buttonFavourite.setText("Remove");
+                                    buttonFavourite.setBackgroundColor(getContext().getColor(R.color.red));
+                                }
+                            }
+
+                            @Override
+                            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                            }
+                        });
+
+            }
+        });
+
 
         adapterDays = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_list_item, days);
         autoCompleteTextView.setAdapter(adapterDays);
 
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
-            String day = parent.getItemAtPosition(position).toString();
-
-            mealDataBase.planMealDao().insertPlanMeal(new PlanMeal(Long.parseLong(mealsItem.getIdMeal()),
+            day = parent.getItemAtPosition(position).toString();
+            PlanMeal planMealItem = new PlanMeal(Long.parseLong(mealsItem.getIdMeal()),
                     mealsItem.getStrMeal(), mealsItem.getStrMealThumb(), mealsItem.getStrArea(), new ArrayList<>(), new ArrayList<>(),
-                    mealsItem.getStrInstructions(), mealsItem.getStrYoutube(), day))
-                            .subscribeOn(Schedulers.io())
-                                    .subscribe(new CompletableObserver() {
-                                        @Override
-                                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+                    mealsItem.getStrInstructions(), mealsItem.getStrYoutube(), day);
 
-                                        }
 
-                                        @Override
-                                        public void onComplete() {
+            mealDataBase.planMealDao().insertPlanMeal(planMealItem)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
-                                        }
+                        }
 
-                                        @Override
-                                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        @Override
+                        public void onComplete() {
+                            if (auth.getCurrentUser() != null)
+                                db.collection(MealDataBase.FIRESTORE)
+                                        .document(auth.getCurrentUser().getEmail())
+                                        .collection(MealDataBase.PLAN)
+                                        .document(planMealItem.getMealID() +"_"+ day)
+                                        .set(planMealItem);
+                        }
 
-                                        }
-                                    });
+                        @Override
+                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                        }
+                    });
 
             Toast.makeText(getContext(), "Day: " + day, Toast.LENGTH_SHORT).show();
         });
@@ -211,26 +268,73 @@ public class MealFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mealRecyclerView = view.findViewById(R.id.recyclerViewIngredients);
         mealRecyclerView.setLayoutManager(linearLayoutManager);
-        singleMealAdapter.setList(ingredients ,measurements);
+        singleMealAdapter.setList(ingredients, measurements);
         mealRecyclerView.setAdapter(singleMealAdapter);
     }
-//    private List<MealIngredients> setIngreds(String ingredientName, String measurementName){
-//        List <MealIngredients> mealIngredientsList = new ArrayList<>();
-//        mealIngredientsList.get(0).setIngredients(ingredientName);
-//        mealIngredientsList.get(0).setMeasurements(measurementName);
-//        Log.i(TAG, "setIngreds: "+  mealIngredientsList.get(0).getIngredients());
-//        Log.i(TAG, "setIngreds: "+  mealIngredientsList.get(0).getMeasurements());
-//
-//        return mealIngredientsList;
-//    }
-    private List<String> getIngredient(String ingredientName){
-        if( ingredientName != null && !ingredientName.isEmpty())
+
+    private List<String> getIngredient(String ingredientName) {
+        if (ingredientName != null && !ingredientName.isEmpty())
             ingredients.add(ingredientName);
         return ingredients;
     }
-    private List<String> getMeasurement(String measurementName){
-        if( measurementName != null && !measurementName.isEmpty())
+
+    private List<String> getMeasurement(String measurementName) {
+        if (measurementName != null && !measurementName.isEmpty())
             measurements.add(measurementName);
         return measurements;
+    }
+
+    private void insertFavoriteItem(FavouriteMeal favouriteMealItem) {
+        mealDataBase.mealDao().insertFavMeal(favouriteMealItem)
+
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (auth.getCurrentUser() != null)
+                            db.collection(MealDataBase.FIRESTORE)
+                                    .document(auth.getCurrentUser().getEmail())
+                                    .collection(MealDataBase.FAV)
+                                    .document(favouriteMealItem.getMealID() + "")
+                                    .set(favouriteMealItem);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+
+                });
+    }
+
+    private void deleteFavoriteItem(FavouriteMeal favouriteMealItem) {
+        mealDataBase.mealDao().deleteFavMeal(favouriteMealItem)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (auth.getCurrentUser() != null)
+                            db.collection(MealDataBase.FIRESTORE)
+                                    .document(auth.getCurrentUser().getEmail())
+                                    .collection(MealDataBase.FAV)
+                                    .document(favouriteMealItem.getMealID() + "")
+                                    .delete();
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
     }
 }
