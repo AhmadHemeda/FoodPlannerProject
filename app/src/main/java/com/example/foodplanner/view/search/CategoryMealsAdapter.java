@@ -49,7 +49,7 @@ public class CategoryMealsAdapter extends RecyclerView.Adapter<CategoryMealsAdap
             if(!modelArrayList.get(position).getStrMealThumb().isEmpty()){
                 Glide.with(context).load(modelArrayList.get(position).getStrMealThumb())
                         .placeholder(R.drawable.ic_launcher_foreground)
-                        .apply(new RequestOptions().override(100,100)).into(holder.imageViewMeal);
+                        .into(holder.imageViewMeal);
             }
             holder.textViewMealName.setText(modelArrayList.get(position).getStrMeal());
             holder.itemView.setOnClickListener(new View.OnClickListener() {

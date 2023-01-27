@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1A000000"
     tools:context=".view.MainActivity">
 
     <!-- TODO: Update blank fragment layout -->
@@ -26,8 +27,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/favourites_tv"
-        android:textColor="@color/green_dark"
-        android:textSize="20sp"
+        android:fontFamily="@font/merienda_one"
+        android:background="#80000000"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/imageViewBackgroundFavourite"
         app:layout_constraintEnd_toStartOf="@+id/imageViewForkIcon"

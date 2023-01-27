@@ -15,12 +15,12 @@ import com.example.foodplanner.R;
 
 import java.util.Objects;
 
-public class ShowAlertDialog extends AppCompatDialogFragment {
+public class ShowAlertDialog extends DialogFragment {
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("Sign Up for More Features")
                 .setMessage("Add your food preferences, plan your meals and more")

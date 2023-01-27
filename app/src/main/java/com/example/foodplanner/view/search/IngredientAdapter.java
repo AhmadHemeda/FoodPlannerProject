@@ -11,12 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.pojos.area.IngredientModel;
 import com.example.foodplanner.view.search.SearchByIngredientFragmentDirections;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>{
 
@@ -37,13 +41,15 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     @Override
     public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         frag = parent;
-        return new IngredientAdapter.IngredientViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.area_item,parent,false));
+        return new IngredientAdapter.IngredientViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_image_item,parent,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
         Log.i(TAG, "onBindViewHolder: " +modelArrayList.size());
         holder.ingredientTextView.setText(modelArrayList.get(position).getStrIngredient());
+        Glide.with(context).load(String.format("https://www.themealdb.com/images/ingredients/%s-Small.png",modelArrayList.get(position).getStrIngredient()))
+                .placeholder(R.drawable.ic_launcher_foreground).into(holder.ingredientImage);
         holder.ingredientTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,10 +71,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     public class IngredientViewHolder extends RecyclerView.ViewHolder{
         TextView ingredientTextView;
+        CircleImageView ingredientImage;
 
         public IngredientViewHolder(@NonNull View itemView) {
             super(itemView);
-            ingredientTextView = itemView.findViewById(R.id.area_textView);
+            ingredientTextView = itemView.findViewById(R.id.textViewIngredient);
+            ingredientImage = itemView.findViewById(R.id.ingredient_image);
         }
     }
 }

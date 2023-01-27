@@ -33,6 +33,7 @@
             android:id="@+id/textViewMealPlanTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merienda_one"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
@@ -40,13 +41,16 @@
             android:maxLength="50"
             android:maxLines="2"
             android:text="@string/title"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonRemoveFromPlan"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:paddingStart="10dp"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@drawable/ic_baseline_delete_24"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_design"

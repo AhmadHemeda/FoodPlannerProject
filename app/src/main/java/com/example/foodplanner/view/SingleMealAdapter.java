@@ -9,11 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
-import com.example.foodplanner.model.MealsItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SingleMealAdapter extends RecyclerView.Adapter<SingleMealAdapter.SingleMealViewHolder> {
 
@@ -36,7 +38,9 @@ public class SingleMealAdapter extends RecyclerView.Adapter<SingleMealAdapter.Si
     @Override
     public void onBindViewHolder(@NonNull SingleMealViewHolder holder, int position) {
         holder.textViewIngredient.setText(modelArrayList.get(position));
-//        holder.textViewMeasure.setText(mesurList.get(position));
+        holder.textViewMeasure.setText(mesurList.get(position));
+        Glide.with(context).load(String.format("https://www.themealdb.com/images/ingredients/%s-Small.png",modelArrayList.get(position)))
+                .placeholder(R.drawable.ic_launcher_foreground).into(holder.ingredientImage);
     }
 
     @Override
@@ -56,12 +60,15 @@ public class SingleMealAdapter extends RecyclerView.Adapter<SingleMealAdapter.Si
     public static class SingleMealViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewIngredient, textViewMeasure;
+        CircleImageView ingredientImage;
 
         public SingleMealViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textViewIngredient = itemView.findViewById(R.id.textViewIngredient);
             textViewMeasure = itemView.findViewById(R.id.textViewMeasure);
+            ingredientImage = itemView.findViewById(R.id.ingredient_image);
+
         }
     }
 }

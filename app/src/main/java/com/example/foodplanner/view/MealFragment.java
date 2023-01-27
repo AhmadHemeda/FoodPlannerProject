@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,8 +63,9 @@ public class MealFragment extends Fragment {
     View view;
     LinearLayoutManager linearLayoutManager;
     ImageView imageViewMealImage;
-    TextView mealName, textViewStepsDetails, textViewArea;
+    TextView mealName, textViewStepsDetails, textViewArea , textViewInstructions;
     Button buttonFavourite;
+    CardView cardViewMealVideo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,8 +93,9 @@ public class MealFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
-
-        if( auth != null) {
+        cardViewMealVideo = view.findViewById(R.id.cardViewMealVideo);
+        textViewInstructions = view.findViewById(R.id.textViewInstructions);
+        if( auth.getCurrentUser() == null) {
             textInputLayout.setVisibility(View.GONE);
             buttonFavourite.setVisibility(View.GONE);
             textView.setVisibility(View.GONE);
@@ -102,23 +105,26 @@ public class MealFragment extends Fragment {
         MealsItem mealsItem = MealFragmentArgs.fromBundle(getArguments()).getSingleMealItem();
         Glide.with(requireContext()).load(mealsItem.getStrMealThumb())
                 .placeholder(R.drawable.ic_launcher_foreground)
-                .apply(new RequestOptions().override(100, 100)).into(imageViewMealImage);
+                .into(imageViewMealImage);
         mealName.setText(mealsItem.getStrMeal());
-        Log.i(TAG,
-                "onCreateView: " + mealsItem.getStrYoutube());
-        String[] split = mealsItem.getStrYoutube().split("=");
-        Log.i(TAG, "onCreateView: " + split[0]);
-        mealVideo.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                String videoId = split[0];
-                youTubePlayer.loadVideo(videoId, 0);
-            }
-        });
+        if(mealsItem.getStrYoutube() !=null && !mealsItem.getStrYoutube().isEmpty()){
+            String [] split = mealsItem.getStrYoutube().split("=");
+            mealVideo.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                    String videoId = split[1];
+                    youTubePlayer.loadVideo(videoId, 0);
+                }
+            });
+
+        }else{
+            mealVideo.setVisibility(View.GONE);
+            cardViewMealVideo.setVisibility(View.GONE);
+            textViewInstructions.setVisibility(View.GONE);
+        }
         textViewStepsDetails.setText(mealsItem.getStrInstructions());
         textViewArea.setText(mealsItem.getStrArea());
 
-//        setIngreds(mealsItem.getStrIngredient1(),mealsItem.getStrMeasure1());
         getIngredient(mealsItem.getStrIngredient1());
         getMeasurement(mealsItem.getStrMeasure1());
         getIngredient(mealsItem.getStrIngredient2());
@@ -159,7 +165,6 @@ public class MealFragment extends Fragment {
         getMeasurement(mealsItem.getStrMeasure19());
         getIngredient(mealsItem.getStrIngredient20());
         getMeasurement(mealsItem.getStrMeasure20());
-        Log.i(TAG, "getIngredient: " + ingredients.size());
 
         FavouriteMeal favouriteMealItem = new FavouriteMeal(Long.parseLong(mealsItem.getIdMeal()),
                 mealsItem.getStrMeal(), mealsItem.getStrMealThumb(), mealsItem.getStrArea(), new ArrayList<>(), new ArrayList<>(),
@@ -337,4 +342,5 @@ public class MealFragment extends Fragment {
                     }
                 });
     }
+
 }

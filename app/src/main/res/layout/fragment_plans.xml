@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#66FFFFFF"
     tools:context=".view.PlansFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -25,36 +26,18 @@
         android:id="@+id/textViewMyPlans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#80000000"
+        android:fontFamily="@font/merienda_one"
         android:text="@string/my_plans_tv"
-        android:textColor="@color/green_dark"
-        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/imageViewBackgroundMyPlans"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewForkIcon"
-        app:layout_constraintStart_toEndOf="@+id/imageViewDots"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.511"
         tools:ignore="TextContrastCheck" />
-
-    <ImageView
-        android:id="@+id/imageViewForkIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/fork_icon"
-        app:layout_constraintBottom_toBottomOf="@id/textViewMyPlans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textViewMyPlans" />
-
-    <ImageView
-        android:id="@+id/imageViewDots"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:src="@drawable/dots_icon"
-        app:layout_constraintBottom_toBottomOf="@id/textViewMyPlans"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textViewMyPlans" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutSelectMeal"
@@ -71,6 +54,8 @@
         <AutoCompleteTextView
             android:id="@+id/autoCompleteTextView"
             android:layout_width="match_parent"
+            android:fontFamily="@font/merienda_one"
+            android:textSize="18sp"
             android:layout_height="wrap_content"
             android:inputType="none"
             android:labelFor="@id/textInputLayoutSelectMeal" />

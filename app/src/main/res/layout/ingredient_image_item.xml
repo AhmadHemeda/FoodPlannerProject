@@ -20,10 +20,10 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ingredient_image"
-            android:layout_width="50dp"
             android:padding="5dp"
+            android:layout_width="70dp"
             android:background="@drawable/circle_shap"
-            android:layout_height="50dp" />
+            android:layout_height="70dp" />
 
         <TextView
             android:id="@+id/textViewIngredient"
@@ -31,24 +31,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="@font/merienda_one"
-            android:maxLength="60"
-            android:maxLines="1"
+            android:paddingTop="20dp"
             android:paddingStart="5dp"
-            android:paddingTop="15dp"
             android:paddingEnd="5dp"
             android:text="@string/text_ingredient"
             android:textAlignment="textStart" />
 
-        <TextView
-            android:id="@+id/textViewMeasure"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/text_measure"
-            android:paddingTop="15dp"
-            android:fontFamily="@font/merienda_one"
-            android:paddingStart="5dp"
-            android:textAlignment="textStart" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

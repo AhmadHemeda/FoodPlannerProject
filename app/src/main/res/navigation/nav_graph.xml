@@ -114,13 +114,22 @@
     </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
+        tools:layout="@layout/fragment_favourites"
         android:name="com.example.foodplanner.view.FavouritesFragment"
-        android:label="FavouritesFragment" />
+        android:label="FavouritesFragment" >
+        <action
+            android:id="@+id/action_favouritesFragment_to_mealFragment"
+            app:destination="@id/mealFragment" />
+    </fragment>
     <fragment
         android:id="@+id/plansFragment"
         android:name="com.example.foodplanner.view.PlansFragment"
         android:label="fragment_plans"
-        tools:layout="@layout/fragment_plans" />
+        tools:layout="@layout/fragment_plans" >
+        <action
+            android:id="@+id/action_plansFragment_to_mealFragment"
+            app:destination="@id/mealFragment" />
+    </fragment>
     <fragment
         android:id="@+id/allSearchesFragment"
         android:name="com.example.foodplanner.view.search.AllSearchesFragment"
