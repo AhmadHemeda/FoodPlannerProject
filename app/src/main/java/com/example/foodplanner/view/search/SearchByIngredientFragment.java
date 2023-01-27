@@ -14,9 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.model.pojos.area.IngredientListModel;
 import com.example.foodplanner.model.pojos.area.IngredientModel;
 import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.presenter.ingredientSearch.AllIngredientsViewInterface;
+import com.example.foodplanner.presenter.ingredientSearch.GetAllIngredientsPresenter;
+import com.example.foodplanner.presenter.ingredientSearch.GetAllIngredientsPresenterInterface;
 import com.example.foodplanner.view.search.IngredientAdapter;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -29,18 +33,18 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
-public class SearchByIngredientFragment extends Fragment {
+public class SearchByIngredientFragment extends Fragment implements AllIngredientsViewInterface {
     RecyclerView ingredientRecyclerView;
     IngredientAdapter ingredientAdapter;
     TextInputEditText search;
-    List<IngredientModel> ingredientModels = new ArrayList<>();
     List<IngredientModel> ingredientModelsSearch = new ArrayList<>();
+    GetAllIngredientsPresenterInterface getAllIngredientsPresenterInterface;
     private static final String TAG = "SearchByIngredientFragm";
     View view;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getAllIngredientsPresenterInterface = new GetAllIngredientsPresenter(this::showIngredients, Repository.getInstance(requireContext()));
     }
 
     @Override
@@ -49,20 +53,7 @@ public class SearchByIngredientFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_search_by_ingredient, container, false);
         ingredientRecyclerView = view.findViewById(R.id.recyclerViewIngredients);
         search = view.findViewById(R.id.et_search_ingredient);
-        handlingRecyclerView();
-
-        Single<IngredientListModel> singleObservable = ApiClient.getInstance().getAllIngredient();
-        singleObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response ->{
-                    ingredientModels = response.getMeals();
-                    ingredientAdapter.setList(ingredientModels);
-
-                },error ->{error.printStackTrace();
-                    Log.i(TAG, "onClick: "+ error.getMessage());
-                });
-
+        getAllIngredientsPresenterInterface.getAllIngredients();
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -71,23 +62,23 @@ public class SearchByIngredientFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ingredientModelsSearch = ingredientModels.stream().filter((e->e.getStrIngredient().startsWith(s.toString()))).collect(Collectors.toList());
-
+                ingredientAdapter.setList(getAllIngredientsPresenterInterface.filteringIngredients(s,ingredientModelsSearch));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                ingredientAdapter.setList(ingredientModelsSearch);
             }
         });
         return view;
     }
 
-    private void handlingRecyclerView() {
+    @Override
+    public void showIngredients(List<IngredientModel> ingredientModels) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
         ingredientAdapter = new IngredientAdapter(requireContext());
+        ingredientModelsSearch = ingredientModels;
+        ingredientAdapter.setList(ingredientModels);
         ingredientRecyclerView.setAdapter(ingredientAdapter);
         ingredientRecyclerView.setLayoutManager(linearLayoutManager);
     }
-
 }

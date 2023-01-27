@@ -19,6 +19,8 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.RandomMeal;
 import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.presenter.SingleMeal.GetMealPresenterInterface;
+import com.example.foodplanner.presenter.SingleMeal.GetMealViewInterface;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder>{
+public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder>  {
     private List<MealsItem> modelArrayList;
     Context context;
     ViewGroup frag;

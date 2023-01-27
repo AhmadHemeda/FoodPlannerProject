@@ -67,9 +67,9 @@ public class SplashFragment extends Fragment {
 
 
                 }
-                else {
-                    Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToLoaderFragment());
-                }
+//                else {
+//                    Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToLoaderFragment());
+//                }
             }
         };
         handler.postDelayed(runnable,4000);

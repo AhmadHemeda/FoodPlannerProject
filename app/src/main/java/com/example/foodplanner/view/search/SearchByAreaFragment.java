@@ -8,27 +8,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.model.pojos.area.AreaListModel;
+import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.model.pojos.area.AreaModel;
-import com.example.foodplanner.network.ApiClient;
-import com.example.foodplanner.view.search.AreaAdapter;
+import com.example.foodplanner.presenter.areaSearch.AllAreasViewInterface;
+import com.example.foodplanner.presenter.areaSearch.GetAllAreasPresenter;
+import com.example.foodplanner.presenter.areaSearch.GetAllAreasPresenterInterface;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-
-public class SearchByAreaFragment extends Fragment {
+public class SearchByAreaFragment extends Fragment implements AllAreasViewInterface {
 
     RecyclerView areaRecyclerView;
     AreaAdapter areaAdapter;
@@ -36,12 +32,13 @@ public class SearchByAreaFragment extends Fragment {
     List<AreaModel> areaModels = new ArrayList<>();
     List<AreaModel> areaModelsSearch = new ArrayList<>();
     View view;
+    GetAllAreasPresenterInterface getAllAreasPresenterInterface;
     private static final String TAG = "SearchByAreaFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getAllAreasPresenterInterface = new GetAllAreasPresenter(this, Repository.getInstance(requireContext())) ;
     }
 
     @Override
@@ -50,19 +47,19 @@ public class SearchByAreaFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_search_by_area, container, false);
         areaRecyclerView = view.findViewById(R.id.recyclerViewAreas);
         search = view.findViewById(R.id.et_search_area);
-        handlingRecyclerView();
-
-        Single<AreaListModel> singleObservable = ApiClient.getInstance().getAllAreas();
-        singleObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response ->{
-                            areaModels =response.getMeals();
-                            areaAdapter.setList(areaModels);
-                        },
-                        error ->{error.printStackTrace();
-                            Log.i(TAG, "onClick: "+ error.getMessage());
-                        });
+//        handlingRecyclerView();
+        getAllAreasPresenterInterface.getAllAreas();
+//        Single<AreaListModel> singleObservable = ApiClient.getInstance().getAllAreas();
+//        singleObservable
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(response ->{
+//                            areaModels =response.getMeals();
+//                            areaAdapter.setList(areaModels);
+//                        },
+//                        error ->{error.printStackTrace();
+//                            Log.i(TAG, "onClick: "+ error.getMessage());
+//                        });
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -72,23 +69,24 @@ public class SearchByAreaFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                areaModelsSearch = areaModels.stream().filter((e->e.getStrArea().startsWith(charSequence.toString()))).collect(Collectors.toList());
-
+                areaAdapter.setList(getAllAreasPresenterInterface.filteringIngredients(charSequence,areaModelsSearch));
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                areaAdapter.setList(areaModelsSearch);
             }
         });
         return view;
     }
 
-    private void handlingRecyclerView() {
+
+    @Override
+    public void showMeals(List<AreaModel> areaModels) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
         areaAdapter = new AreaAdapter(requireContext());
+        areaModelsSearch = areaModels;
+        areaAdapter.setList(areaModels);
         areaRecyclerView.setAdapter(areaAdapter);
         areaRecyclerView.setLayoutManager(linearLayoutManager);
     }
-
 }

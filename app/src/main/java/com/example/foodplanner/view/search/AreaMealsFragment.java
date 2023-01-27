@@ -17,7 +17,11 @@ import android.widget.TextView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.RandomMeal;
+import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.presenter.areaSearch.AreaMealsPresenter;
+import com.example.foodplanner.presenter.areaSearch.AreaMealsPresenterInterface;
+import com.example.foodplanner.presenter.areaSearch.AreaMealsViewInterface;
 import com.example.foodplanner.view.search.AreaMealsAdapter;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -30,7 +34,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
-public class AreaMealsFragment extends Fragment {
+public class AreaMealsFragment extends Fragment implements AreaMealsViewInterface {
 
     RecyclerView mealOfAreaRecyclerView;
     GridLayoutManager linearLayout;
@@ -38,20 +42,9 @@ public class AreaMealsFragment extends Fragment {
     List<MealsItem> mealsItemResults = new ArrayList<>();
     TextInputEditText search;
     AreaMealsAdapter mealAdapter;
+    AreaMealsPresenterInterface areaMealsPresenterInterface;
     View view;
     private static final String TAG = "AreaMealsFragment";
-
-    public AreaMealsFragment() {
-        // Required empty public constructor
-    }
-
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,22 +54,10 @@ public class AreaMealsFragment extends Fragment {
         mealOfAreaRecyclerView = view.findViewById(R.id.recyclerView_meals);
         area = view.findViewById(R.id.area_name);
         search = view.findViewById(R.id.et_search_meal);
-        handlingRecyclerView();
         String areaName = AreaMealsFragmentArgs.fromBundle(getArguments()).getAreaName();
-        Log.i(TAG, "onCreateView: "+ areaName);
-        area.setText(areaName);
-        Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealArea(areaName);
-                singleObservable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(response ->{
-                                    mealsItemResults = response.getMeals();
-                                    mealAdapter.setList(mealsItemResults);
-                                },
-                                error ->{error.printStackTrace();
-                                    Log.i(TAG, "onClick: "+ error.getMessage());
-                                });
+        areaMealsPresenterInterface = new AreaMealsPresenter(this::showMeals, Repository.getInstance(requireContext()),areaName);
 
+        area.setText(areaName);
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -85,10 +66,8 @@ public class AreaMealsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                mealAdapter.setList(
-                        mealsItemResults.stream()
-                                .filter(mealsItem->mealsItem.getStrMeal().startsWith(charSequence.toString())).collect(Collectors.toList()));
-                }
+                mealAdapter.setList(areaMealsPresenterInterface.filteringArea(charSequence,mealsItemResults));
+                        }
 
 
             @Override
@@ -98,9 +77,11 @@ public class AreaMealsFragment extends Fragment {
         return view;
     }
 
-    private void handlingRecyclerView() {
+    @Override
+    public void showMeals(List<MealsItem> randomMeal) {
         linearLayout = new GridLayoutManager(requireContext(),2);
         mealAdapter = new AreaMealsAdapter(requireContext());
+        mealAdapter.setList(randomMeal);
         mealOfAreaRecyclerView.setLayoutManager(linearLayout);
         mealOfAreaRecyclerView.setAdapter(mealAdapter);
     }

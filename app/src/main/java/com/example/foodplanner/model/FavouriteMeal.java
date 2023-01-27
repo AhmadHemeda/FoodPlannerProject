@@ -17,8 +17,6 @@ public class FavouriteMeal {
     private  String mealSteps;
     private  String mealVideo;
 
-    public FavouriteMeal() {
-    }
 
     public FavouriteMeal(long mealID, String mealName, String mealImage, String mealArea,
                          List<String> mealIngredients, List<String> mealMeasures,

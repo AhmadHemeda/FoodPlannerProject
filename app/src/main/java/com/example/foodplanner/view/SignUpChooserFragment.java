@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.database.MealDataBase;
+import com.example.foodplanner.model.FavouriteMeal;
+import com.example.foodplanner.model.PlanMeal;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SignUpChooserFragment extends Fragment {
     private static final Integer RC_SIGN_UP = 1;
@@ -39,16 +56,16 @@ public class SignUpChooserFragment extends Fragment {
     private FirebaseAuth auth;
     GoogleSignInOptions googleSignInOptions;
     GoogleSignInClient googleSignInClient;
+    private MealDataBase roomDb;
+    private FirebaseFirestore db;
     View _view;
     ActivityResultLauncher<Intent> registerGoogleForActivityResult;
-    public SignUpChooserFragment() {
-        // Required empty public constructor
-    }
-
+    private static final String TAG = "SignUpChooserFragment";
+    
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
+        auth = FirebaseAuth.getInstance();
        registerGoogleForActivityResult=registerForActivityResult(new ActivityResultContract<Intent, Task<GoogleSignInAccount>>() {
             @Override
             public Task<GoogleSignInAccount> parseResult(int i, @Nullable Intent intent) {
@@ -71,9 +88,11 @@ public class SignUpChooserFragment extends Fragment {
                 }
                 else {
                     //success
+                    auth.signInWithCredential(GoogleAuthProvider.getCredential(result.getResult().getIdToken(),null));
                     Toast.makeText(requireContext(), "done", Toast.LENGTH_SHORT).show();
+                    gatherAllFavoriteData();
+                    gatherAllPlanData();
                     Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
-                    FirebaseAuth.getInstance().signInWithCredential(GoogleAuthProvider.getCredential(result.getResult().getIdToken(),null));
                 }
             }
         });
@@ -82,6 +101,8 @@ public class SignUpChooserFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        roomDb = MealDataBase.getInstance(getContext());
+        db = FirebaseFirestore.getInstance();
         logInBtn = view.findViewById(R.id.btn_goLogIn);
         gotoSignup = view.findViewById(R.id.buttonEmail);
         guestBtn = view.findViewById(R.id.buttonGuest);
@@ -92,17 +113,11 @@ public class SignUpChooserFragment extends Fragment {
                 Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
             }
         });
-//        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build();
-//        googleSignInClient = GoogleSignIn.getClient(requireContext(),googleSignInOptions);
 
         gotoSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToSignUp());
-//                Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToHomeFragment());
 
             }
         });
@@ -118,13 +133,13 @@ public class SignUpChooserFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         _view =inflater.inflate(R.layout.fragment_sign_up_chooser, container, false);
         googleSignUp = _view.findViewById(R.id.btn_google_signup);
         googleSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 registration();
+                
 
             }
         });
@@ -132,13 +147,116 @@ public class SignUpChooserFragment extends Fragment {
         return _view;
     }
     private void registration(){
-//        Intent intent = googleSignInClient.getSignInIntent();
-//        startActivityForResult(intent,RC_SIGN_UP);
-        //register method
         registerGoogleForActivityResult.launch(GoogleSignIn.getClient(requireContext(),new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()).getSignInIntent());
+    }
+    private void gatherAllFavoriteData() {
+        if (auth.getCurrentUser() ==null)
+            return;
 
+        ArrayList<FavouriteMeal> favouriteMealArrayList = new ArrayList<>();
+        db.collection(MealDataBase.FIRESTORE)
+                .document(auth.getCurrentUser().getEmail())
+                .collection(MealDataBase.FAV)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            favouriteMealArrayList.add(document.toObject(FavouriteMeal.class));
+                            Log.i(TAG, "onSuccess: Data");
+                        }
+                        insertAllFavouriteMeals(favouriteMealArrayList);
+                    }
+                });
 
+                /*.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            favouriteMealArrayList.add(document.toObject(FavouriteMeal.class));
+                            Log.i(TAG, "onSuccess: Data");
+                        }
+                        insertAllFavouriteMeals(favouriteMealArrayList);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "onFailure: ");
+                    }
+                });
+
+                 */
+    }
+
+    private void insertAllFavouriteMeals(ArrayList<FavouriteMeal> favouriteMealArrayList) {
+        roomDb.mealDao().insertAllFavMeal(favouriteMealArrayList).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    private void gatherAllPlanData() {
+        if (auth.getCurrentUser() ==null){
+
+            return;
+        }
+
+        ArrayList<PlanMeal> planMealArrayList = new ArrayList<>();
+        db.collection(MealDataBase.FIRESTORE)
+                .document(auth.getCurrentUser().getEmail())
+                .collection(MealDataBase.PLAN)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            PlanMeal planMeal = document.toObject(PlanMeal.class);
+                            planMealArrayList.add(planMeal);
+                        }
+                        insertAllPlaneMeals(planMealArrayList);
+                        Log.i(TAG, "onSuccess: ");
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "onFailure: ");
+                    }
+                });
+    }
+
+    private void insertAllPlaneMeals(ArrayList<PlanMeal> planMealArrayList) {
+        roomDb.planMealDao().insertAllPlanMeal(planMealArrayList).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
     }
 
 

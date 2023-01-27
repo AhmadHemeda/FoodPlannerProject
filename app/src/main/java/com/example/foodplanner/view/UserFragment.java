@@ -34,7 +34,6 @@ public class UserFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user, container, false);
         appCompatButtonLogout = view.findViewById(R.id.buttonLogout);
         auth = FirebaseAuth.getInstance();
@@ -48,22 +47,15 @@ public class UserFragment extends Fragment {
 
         appCompatButtonLogout.setOnClickListener(v -> {
             logoutAction();
-
             deleteAllFavouriteMeals();
             deleteAllPlanMeals();
             Toast.makeText(requireContext(), "LogOut", Toast.LENGTH_SHORT).show();
-            if(auth.getCurrentUser() == null)
-                System.out.println("logout"+auth);
-            else
-                System.out.println("logout2"+auth);
             Navigation.findNavController(view).navigate(UserFragmentDirections.actionUserFragmentToChooserFragment());
         });
     }
 
     private void logoutAction() {
         auth.signOut();
-//        auth.getCurrentUser().delete();
-
     }
 
     private void deleteAllPlanMeals() {

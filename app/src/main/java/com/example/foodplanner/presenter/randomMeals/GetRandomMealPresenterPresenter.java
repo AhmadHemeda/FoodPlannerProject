@@ -1,17 +1,15 @@
-package com.example.foodplanner.presenter;
+package com.example.foodplanner.presenter.randomMeals;
 
 import android.util.Log;
 
 
 import com.example.foodplanner.model.MealsItem;
-import com.example.foodplanner.model.RandomMeal;
 import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.network.NetworkCallBack;
-import com.example.foodplanner.view.RandomMealViewInterface;
 
 import java.util.List;
 
-public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePresenter ,NetworkCallBack<List<MealsItem>>{
+public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePresenter,NetworkCallBack<List<MealsItem>>{
 
     private final RandomMealViewInterface _view;
     private final Repository _repo;
@@ -40,9 +38,4 @@ public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePr
         Log.i("ApiClient", "getRandomMeal: ");
     }
 
-
-    @Override
-    public void addToFav(RandomMeal randomMeal) {
-
-    }
 }

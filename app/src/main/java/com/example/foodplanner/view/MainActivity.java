@@ -30,6 +30,17 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView navigationView;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (auth.getCurrentUser() != null) {
+            isUser = true;
+            navigationView.setSelectedItemId(R.id.nav_home);
+        }
+
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -37,13 +48,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController);
         getSupportActionBar().hide();
         navigationView = findViewById(R.id.bottom_nav_bar);
-        navigationView.setSelectedItemId(R.id.nav_home);
+//        navigationView.setSelectedItemId(R.id.nav_home);
         auth = FirebaseAuth.getInstance();
 
-        if (auth.getCurrentUser() != null) {
-
-            isUser = true;
-        }
 
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

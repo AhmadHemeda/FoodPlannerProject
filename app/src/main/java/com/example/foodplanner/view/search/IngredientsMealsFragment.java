@@ -17,7 +17,11 @@ import android.widget.TextView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.RandomMeal;
+import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.presenter.ingredientSearch.IngredientMealsPresenter;
+import com.example.foodplanner.presenter.ingredientSearch.IngredientMealsPresenterInterface;
+import com.example.foodplanner.presenter.ingredientSearch.IngredientMealsViewInterface;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
-public class IngredientsMealsFragment extends Fragment {
+public class IngredientsMealsFragment extends Fragment implements IngredientMealsViewInterface {
 
     RecyclerView mealOfIngredientRecyclerView;
     GridLayoutManager linearLayout;
@@ -37,14 +41,9 @@ public class IngredientsMealsFragment extends Fragment {
     List<MealsItem> mealsItemResults = new ArrayList<>();
     TextInputEditText search;
     IndredientMealsAdapter mealAdapter;
+    IngredientMealsPresenterInterface ingredientMealsPresenterInterface;
     View view;
     private static final String TAG = "IngredientsMealsFragment";
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,23 +54,10 @@ public class IngredientsMealsFragment extends Fragment {
         search = view.findViewById(R.id.et_search_meal_ingredient);
 
         String ingredientName = IngredientsMealsFragmentArgs.fromBundle(getArguments()).getIngredientName();
-        Log.i(TAG, "onCreateView: "+ingredientName);
         ingredient.setText(ingredientName);
-        handlingRecyclerView();
 
-
-        Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealIngredient(ingredientName);
-        singleObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response ->{
-                            mealsItemResults = response.getMeals();
-                            mealAdapter.setList(mealsItemResults);
-                            Log.i(TAG, "onCreateView: "+mealsItemResults.get(0).getStrMeal());
-                        },
-                        error ->{error.printStackTrace();
-                            Log.i(TAG, "onClick: "+ error.getMessage());
-                        });
+        ingredientMealsPresenterInterface = new IngredientMealsPresenter(this::showMeals, Repository.getInstance(requireContext()),ingredientName);
+        ingredientMealsPresenterInterface.getIngredientMeal(ingredientName);
 
 
         search.addTextChangedListener(new TextWatcher() {
@@ -82,9 +68,7 @@ public class IngredientsMealsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mealAdapter.setList(
-                        mealsItemResults.stream()
-                                .filter(mealsItem->mealsItem.getStrMeal().startsWith(s.toString())).collect(Collectors.toList()));
+                mealAdapter.setList(ingredientMealsPresenterInterface.filteringIngredients(s,mealsItemResults));
             }
 
             @Override
@@ -94,9 +78,13 @@ public class IngredientsMealsFragment extends Fragment {
         });
         return view;
     }
-    private void handlingRecyclerView() {
+
+    @Override
+    public void showMeals(List<MealsItem> randomMeal) {
         linearLayout = new GridLayoutManager(requireContext(),2);
         mealAdapter = new IndredientMealsAdapter(requireContext());
+        mealsItemResults = randomMeal;
+        mealAdapter.setList(randomMeal);
         mealOfIngredientRecyclerView.setLayoutManager(linearLayout);
         mealOfIngredientRecyclerView.setAdapter(mealAdapter);
     }

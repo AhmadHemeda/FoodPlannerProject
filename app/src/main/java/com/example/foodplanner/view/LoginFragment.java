@@ -24,12 +24,7 @@ import android.widget.Toast;
 import com.example.foodplanner.R;
 import com.example.foodplanner.database.MealDataBase;
 import com.example.foodplanner.model.FavouriteMeal;
-import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.PlanMeal;
-import com.example.foodplanner.model.Repository;
-import com.example.foodplanner.network.ApiClient;
-import com.example.foodplanner.presenter.GetRandomMealInterfacePresenter;
-import com.example.foodplanner.presenter.GetRandomMealPresenterPresenter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -39,8 +34,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -95,20 +88,16 @@ public class LoginFragment extends Fragment{
                                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                     @Override
                                     public void onSuccess(AuthResult authResult) {
-
                                         gatherAllFavoriteData();
                                         gatherAllPlanData();
-
                                         Toast.makeText(requireContext(),"Login Successful",Toast.LENGTH_LONG).show();
                                         Navigation.findNavController(view).navigate(LoginFragmentDirections.actionLoginFragmentToLoaderFragment());
-
                                     }
                                 }
                                 ).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Toast.makeText(getContext(),e.toString(),Toast.LENGTH_LONG).show();
-
                                     }
                                 });
                     }else {

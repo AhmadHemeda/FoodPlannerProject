@@ -37,7 +37,6 @@ public class SignUp extends Fragment {
     private EditText signupEmail, signupName, signupPassword, signupPasswordAgain;
     private AppCompatButton signUpBtn;
     public SignUp() {
-        // Required empty public constructor
     }
 
     @Override
@@ -79,22 +78,6 @@ public class SignUp extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
-//                                        Map<String, Object> user = new HashMap<>();
-//                                        user.put("userEmail", signupEmail.getText().toString());
-//                                        user.put("userName", signupName.getText().toString());
-//
-//                                        // Add a new document with a generated ID
-//                                        db.collection("users")
-//                                                .document(auth.getUid())
-//                                                .set(user)
-//                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                    @Override
-//                                                    public void onComplete(@NonNull Task<Void> task) {
-////                                                                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-//
-//                                                    }
-//                                                });
-
                                         Navigation.findNavController(view).navigate(SignUpDirections.actionSignUpToLoaderFragment());
                                         Toast.makeText(getContext(),"SignUp Successful",Toast.LENGTH_LONG).show();
                                     }else {

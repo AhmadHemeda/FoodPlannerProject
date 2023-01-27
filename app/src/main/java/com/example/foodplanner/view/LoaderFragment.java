@@ -30,6 +30,7 @@ public class LoaderFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Override
@@ -39,10 +40,10 @@ public class LoaderFragment extends DialogFragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 Navigation.findNavController(_view).navigate(LoaderFragmentDirections.actionLoaderFragmentToHomeFragment());
             }
         },3000);
-        // Inflate the layout for this fragment
         return _view;
     }
 

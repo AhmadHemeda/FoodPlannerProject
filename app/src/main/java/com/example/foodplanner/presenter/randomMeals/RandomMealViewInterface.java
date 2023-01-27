@@ -1,4 +1,4 @@
-package com.example.foodplanner.view;
+package com.example.foodplanner.presenter.randomMeals;
 
 import com.example.foodplanner.model.MealsItem;
 import java.util.List;
