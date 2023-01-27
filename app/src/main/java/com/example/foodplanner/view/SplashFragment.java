@@ -26,6 +26,8 @@ public class SplashFragment extends Fragment {
 
     View _view;
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    Handler handler;
+    Runnable runnable;
     public SplashFragment() {
         // Required empty public constructor
     }
@@ -41,7 +43,16 @@ public class SplashFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         _view = inflater.inflate(R.layout.fragment_splash, container, false);
-        new Handler().postDelayed(new Runnable() {
+
+        return _view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        handler = new Handler();
+        runnable = new Runnable() {
             @Override
             public void run() {
                 SharedPreferences sharedPref = requireContext().getSharedPreferences("setting", Context.MODE_PRIVATE);
@@ -57,16 +68,22 @@ public class SplashFragment extends Fragment {
 
                 }
                 else {
-                Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToLoaderFragment());
+                    Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToLoaderFragment());
                 }
             }
-        },4000);
-        return _view;
+        };
+        handler.postDelayed(runnable,4000);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable,2000);
     }
 }

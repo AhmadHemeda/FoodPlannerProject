@@ -59,33 +59,33 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.nav_fav:
-                        if (!isUser) {
-                            showDialog();
-                            Toast.makeText(MainActivity.this, "No User", Toast.LENGTH_SHORT).show();
-                            isUser = false;
-                        } else {
+//                        if (!isUser) {
+//                            showDialog();
+//                            Toast.makeText(MainActivity.this, "No User", Toast.LENGTH_SHORT).show();
+//                            isUser = false;
+//                        } else {
                             Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.favouritesFragment);
-                        }
+//                        }
                         return true;
 
                     case R.id.nav_plane:
-                        if (!isUser) {
-                            showDialog();
-                            Toast.makeText(MainActivity.this, "No User", Toast.LENGTH_SHORT).show();
-                            isUser = false;
-                        } else if(auth !=null){
+//                        if (!isUser) {
+//                            showDialog();
+//                            Toast.makeText(MainActivity.this, "No User", Toast.LENGTH_SHORT).show();
+//                            isUser = false;
+//                        } else if(auth !=null){
                             Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.plansFragment);
-                        }
+//                        }
                         return true;
 
                     case R.id.nav_user:
-                        if (!isUser) {
-                            showDialog();
-                            Toast.makeText(MainActivity.this, "No User", Toast.LENGTH_SHORT).show();
-                            isUser = false;
-                        } else {
+//                        if (!isUser) {
+//                            showDialog();
+//                            Toast.makeText(MainActivity.this, "No User", Toast.LENGTH_SHORT).show();
+//                            isUser = false;
+//                        } else {
                             Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.userFragment);
-                        }
+//                        }
                         return true;
                 }
 //                getSupportFragmentManager().beginTransaction().replace(R.id.mainActivity,fragment).commit();

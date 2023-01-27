@@ -62,6 +62,7 @@ public class UserFragment extends Fragment {
 
     private void logoutAction() {
         auth.signOut();
+//        auth.getCurrentUser().delete();
 
     }
 
