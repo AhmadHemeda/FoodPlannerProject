@@ -1,8 +1,12 @@
 package com.example.foodplanner.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -58,6 +62,7 @@ public class SignUpChooserFragment extends Fragment {
     Button googleSignUp;
     Button guestBtn;
     Button gotoSignup;
+    boolean isConnected = false;
     private FirebaseAuth auth;
     GoogleSignInOptions googleSignInOptions;
     GoogleSignInClient googleSignInClient;
@@ -109,25 +114,28 @@ public class SignUpChooserFragment extends Fragment {
         logInBtn = view.findViewById(R.id.btn_goLogIn);
         gotoSignup = view.findViewById(R.id.buttonEmail);
         guestBtn = view.findViewById(R.id.buttonGuest);
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnected())
+            isConnected = true;
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         guestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
+                     Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
             }
         });
 
         gotoSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToSignUp());
-
+                   Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToSignUp());
             }
         });
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToLoginFragment());
+                    Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToLoginFragment());
             }
         });
     }
@@ -139,12 +147,11 @@ public class SignUpChooserFragment extends Fragment {
         googleSignUp = _view.findViewById(R.id.btn_google_signup);
         roomDb = MealDataBase.getInstance(requireContext());
         db = FirebaseFirestore.getInstance();
+
         googleSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registration();
-                
-
+                    registration();
             }
         });
 
@@ -155,12 +162,18 @@ public class SignUpChooserFragment extends Fragment {
                 .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()).getSignInIntent());
     }
     private void gatherAllFavoriteData() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
         if (auth.getCurrentUser() ==null)
-        {return;}
+        {
+            return;
+        }
         else {
+
+            String email = firebaseAuth.getCurrentUser().getEmail();
             ArrayList<FavouriteMeal> favouriteMealArrayList = new ArrayList<>();
             db.collection(MealDataBase.FIRESTORE)
-                    .document(auth.getCurrentUser().getEmail())
+                    .document(email)
                     .collection(MealDataBase.FAV)
                     .get()
 
@@ -179,7 +192,6 @@ public class SignUpChooserFragment extends Fragment {
                             Log.i(TAG, "onFailure: ");
                         }
                     });
-
         }
     }
 
@@ -254,7 +266,6 @@ public class SignUpChooserFragment extends Fragment {
                     }
                 });
     }
-
 
 
 }

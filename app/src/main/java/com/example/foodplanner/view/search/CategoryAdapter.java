@@ -11,11 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.pojos.area.CategoryModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>{
 
@@ -37,13 +40,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public CategoryAdapter.CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         frag = parent;
-        return new CategoryViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.area_item,parent,false));
+        return new CategoryViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_image_item,parent,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
         holder.areaTextView.setText(modelArrayList.get(position).getStrCategory());
-        holder.areaTextView.setOnClickListener(new View.OnClickListener() {
+        Glide.with(context).load(String.format("https://www.themealdb.com/images/category/%s.png",modelArrayList.get(position).getStrCategory()).toLowerCase())
+                .placeholder(R.drawable.ic_launcher_foreground).into(holder.ingredientImage);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -64,11 +69,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder{
         TextView areaTextView;
-
+        CircleImageView ingredientImage;
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            areaTextView = itemView.findViewById(R.id.area_textView);
-
+            areaTextView = itemView.findViewById(R.id.textViewIngredient);
+            ingredientImage = itemView.findViewById(R.id.ingredient_image);
         }
     }
 }

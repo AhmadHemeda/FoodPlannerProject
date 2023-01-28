@@ -114,9 +114,7 @@ public class LoginFragment extends Fragment{
         });
 
         signupBtn.setOnClickListener(v->{
-            NavDirections navDirections =LoginFragmentDirections.actionLoginFragmentToSignUp();
-            NavController navController = Navigation.findNavController(v);
-            navController.navigate(navDirections);
+            Navigation.findNavController(view).navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment());
         });
     }
 

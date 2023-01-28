@@ -2,7 +2,6 @@ package com.example.foodplanner.view;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -13,8 +12,10 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -70,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
                     snackbar.setBackgroundTint(getColor(R.color.red));
                     snackbar.setText("Internet Is Not Connected");
                     snackbar.show();
+                    android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(getApplicationContext());
+                    builder1.setTitle("No Internet");
+                    builder1.setMessage("Check Your Internet Connection.");
+                    builder1.setCancelable(true);
+
+                    AlertDialog alert11 = builder1.create();
+                    alert11.show();
                 }
 
             }
@@ -82,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController);
         getSupportActionBar().hide();

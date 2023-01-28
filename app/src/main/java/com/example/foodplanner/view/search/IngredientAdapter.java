@@ -50,7 +50,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         holder.ingredientTextView.setText(modelArrayList.get(position).getStrIngredient());
         Glide.with(context).load(String.format("https://www.themealdb.com/images/ingredients/%s-Small.png",modelArrayList.get(position).getStrIngredient()))
                 .placeholder(R.drawable.ic_launcher_foreground).into(holder.ingredientImage);
-        holder.ingredientTextView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
