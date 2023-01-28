@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.Repository;
+import com.example.foodplanner.presenter.SingleMeal.GetMealViewInterface;
 import com.example.foodplanner.presenter.randomMeals.GetRandomMealInterfacePresenter;
 import com.example.foodplanner.presenter.randomMeals.GetRandomMealPresenterPresenter;
 import com.example.foodplanner.presenter.randomMeals.RandomMealViewInterface;
@@ -28,6 +30,7 @@ public class HomeFragment extends Fragment implements RandomMealViewInterface {
     RecyclerView allRecyclerView;
     GridLayoutManager linearLayout;
     MealAdapter mealAdapter;
+    View view;
     GetRandomMealInterfacePresenter getRandomMealInterfacePresenter;
 
 
@@ -54,13 +57,16 @@ public class HomeFragment extends Fragment implements RandomMealViewInterface {
                              Bundle savedInstanceState) {
 
 
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
+        return view;
     }
 
     @Override
     public void showMeals(List<MealsItem> randomMeal) {
         linearLayout = new GridLayoutManager(requireContext(),2);
-        mealAdapter = new MealAdapter(requireContext());
+        mealAdapter = new MealAdapter(requireContext(), randomMeal1 -> {
+                Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToMealFragment(randomMeal1.get(0)).setSingleMealItem(randomMeal1.get(0)));
+        });
         mealAdapter.setList(randomMeal);
         allRecyclerView.setLayoutManager(linearLayout);
         allRecyclerView.setAdapter(mealAdapter);

@@ -47,20 +47,7 @@ public class SearchByAreaFragment extends Fragment implements AllAreasViewInterf
         view = inflater.inflate(R.layout.fragment_search_by_area, container, false);
         areaRecyclerView = view.findViewById(R.id.recyclerViewAreas);
         search = view.findViewById(R.id.et_search_area);
-//        handlingRecyclerView();
         getAllAreasPresenterInterface.getAllAreas();
-//        Single<AreaListModel> singleObservable = ApiClient.getInstance().getAllAreas();
-//        singleObservable
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(response ->{
-//                            areaModels =response.getMeals();
-//                            areaAdapter.setList(areaModels);
-//                        },
-//                        error ->{error.printStackTrace();
-//                            Log.i(TAG, "onClick: "+ error.getMessage());
-//                        });
-
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

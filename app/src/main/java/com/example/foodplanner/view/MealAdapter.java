@@ -19,6 +19,8 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.RandomMeal;
 import com.example.foodplanner.network.ApiClient;
+import com.example.foodplanner.network.NetworkCallBack;
+import com.example.foodplanner.presenter.SingleMeal.GetMealPresenter;
 import com.example.foodplanner.presenter.SingleMeal.GetMealPresenterInterface;
 import com.example.foodplanner.presenter.SingleMeal.GetMealViewInterface;
 
@@ -32,8 +34,10 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     private List<MealsItem> modelArrayList;
     Context context;
     ViewGroup frag;
+    GetMealPresenter presenter;
     private static final String TAG = "MealAdapter";
-    public MealAdapter( Context context) {
+    public MealAdapter(Context context, GetMealViewInterface getMealViewInterface) {
+        presenter = new GetMealPresenter(getMealViewInterface,context);
         this.context = context;
     }
 
@@ -56,19 +60,23 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealByName(holder.textViewMealName.getText().toString());
-                    singleObservable
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe( response ->{
-                                        List<MealsItem> singleMeal =response.getMeals();
-                                        Navigation.findNavController(frag).navigate(HomeFragmentDirections.actionHomeFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
-                                        Log.i(TAG, "onClick: "+ singleMeal.get(0).getStrMeal());
-                                    },
-                                    error ->{error.printStackTrace();
-                                        Log.i(TAG, "onClick: "+ error.getMessage());
-                                    }
-                            );
+                    String mealName = holder.textViewMealName.getText().toString();
+                    presenter.getSingleMeal(mealName);
+//                    Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealByName();
+//                    singleObservable
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe( response ->{
+//                                        List<MealsItem> singleMeal =response.getMeals();
+//                                        Navigation.findNavController(frag).navigate(HomeFragmentDirections.actionHomeFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
+//                                        Log.i(TAG, "onClick: "+ singleMeal.get(0).getStrMeal());
+//                                    },
+//                                    error ->{error.printStackTrace();
+//                                        Log.i(TAG, "onClick: "+ error.getMessage());
+//                                    }
+//                            );
+
+
                 }
             });
         }

@@ -38,6 +38,6 @@ public class GetAllIngredientsPresenter implements GetAllIngredientsPresenterInt
 
     @Override
     public List<IngredientModel> filteringIngredients(CharSequence s, List<IngredientModel> ingredientModels) {
-        return ingredientModels.stream().filter((e->e.getStrIngredient().startsWith(s.toString()))).collect(Collectors.toList());
+        return ingredientModels.stream().filter((e->e.getStrIngredient().toLowerCase().startsWith(s.toString().toLowerCase()))).collect(Collectors.toList());
     }
 }

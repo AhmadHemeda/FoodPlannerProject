@@ -35,7 +35,7 @@ public class Repository{
     }
 
     private Repository(Context context) {
-        apiServer = ApiClient.getInstance();
+        apiServer = ApiClient.getInstance(context);
     }
 
     public void getMealByCategory(String area,NetworkCallBack<List<MealsItem>> networkCallBack) {

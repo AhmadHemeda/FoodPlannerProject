@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -16,15 +19,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.foodplanner.InternetConnection;
 import com.example.foodplanner.R;
+import com.example.foodplanner.network.ApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
     FirebaseAuth auth;
+    MutableLiveData<Boolean> isConnected = new MutableLiveData<>();
     private boolean isUser = false;
     private static final String TAG = "MainActivity";
     BottomNavigationView navigationView;
@@ -36,6 +44,36 @@ public class MainActivity extends AppCompatActivity {
             isUser = true;
             navigationView.setSelectedItemId(R.id.nav_home);
         }
+        ConstraintLayout constraintLayout = findViewById(R.id.mainActivity);
+        Snackbar snackbar =  Snackbar
+        .make(constraintLayout,"",Snackbar.LENGTH_LONG);
+        snackbar.setTextColor(getColor(R.color.white));
+
+        View snackbarLayout = snackbar.getView();
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        lp.setMargins(0, 0, 0, 0);
+
+        snackbarLayout.setLayoutParams(lp);
+
+        new InternetConnection(this).observeForever(new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isConnected) {
+                if (isConnected) {
+                    snackbar.setText("Internet Is Connected");
+                    snackbar.show();
+                    snackbar.setBackgroundTint(getColor(R.color.green_dark));
+                }
+                else {
+                    snackbar.setBackgroundTint(getColor(R.color.red));
+                    snackbar.setText("Internet Is Not Connected");
+                    snackbar.show();
+                }
+
+            }
+        });
 
     }
 

@@ -21,7 +21,8 @@ public class PlanMeal {
     @NonNull
     private String mealDay;
 
-
+    public PlanMeal() {
+    }
 
     public PlanMeal(long mealID, String mealName, String mealImage, String mealArea,
                     List<String> mealIngredients, List<String> mealMeasures,

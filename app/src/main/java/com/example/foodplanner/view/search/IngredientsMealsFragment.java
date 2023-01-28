@@ -68,6 +68,7 @@ public class IngredientsMealsFragment extends Fragment implements IngredientMeal
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Attempt to invoke virtual method 'void com.example.foodplanner.view.search.IndredientMealsAdapter.setList(java.util.List)' on a null
                 mealAdapter.setList(ingredientMealsPresenterInterface.filteringIngredients(s,mealsItemResults));
             }
 

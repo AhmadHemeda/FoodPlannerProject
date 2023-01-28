@@ -11,7 +11,9 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -19,9 +21,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.foodplanner.InternetConnection;
 import com.example.foodplanner.R;
 import com.example.foodplanner.database.MealDataBase;
 import com.example.foodplanner.model.FavouriteMeal;
@@ -34,6 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -101,8 +106,6 @@ public class SignUpChooserFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        roomDb = MealDataBase.getInstance(getContext());
-        db = FirebaseFirestore.getInstance();
         logInBtn = view.findViewById(R.id.btn_goLogIn);
         gotoSignup = view.findViewById(R.id.buttonEmail);
         guestBtn = view.findViewById(R.id.buttonGuest);
@@ -124,7 +127,6 @@ public class SignUpChooserFragment extends Fragment {
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Navigation.findNavController(view).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToLoginFragment());
             }
         });
@@ -135,6 +137,8 @@ public class SignUpChooserFragment extends Fragment {
                              Bundle savedInstanceState) {
         _view =inflater.inflate(R.layout.fragment_sign_up_chooser, container, false);
         googleSignUp = _view.findViewById(R.id.btn_google_signup);
+        roomDb = MealDataBase.getInstance(requireContext());
+        db = FirebaseFirestore.getInstance();
         googleSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,44 +156,36 @@ public class SignUpChooserFragment extends Fragment {
     }
     private void gatherAllFavoriteData() {
         if (auth.getCurrentUser() ==null)
-            return;
+        {return;}
+        else {
+            ArrayList<FavouriteMeal> favouriteMealArrayList = new ArrayList<>();
+            db.collection(MealDataBase.FIRESTORE)
+                    .document(auth.getCurrentUser().getEmail())
+                    .collection(MealDataBase.FAV)
+                    .get()
 
-        ArrayList<FavouriteMeal> favouriteMealArrayList = new ArrayList<>();
-        db.collection(MealDataBase.FIRESTORE)
-                .document(auth.getCurrentUser().getEmail())
-                .collection(MealDataBase.FAV)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            favouriteMealArrayList.add(document.toObject(FavouriteMeal.class));
-                            Log.i(TAG, "onSuccess: Data");
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                favouriteMealArrayList.add(document.toObject(FavouriteMeal.class));
+                                Log.i(TAG, "onSuccess: Data");
+                            }
+                            insertAllFavouriteMeals(favouriteMealArrayList);
                         }
-                        insertAllFavouriteMeals(favouriteMealArrayList);
-                    }
-                });
-
-                /*.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            favouriteMealArrayList.add(document.toObject(FavouriteMeal.class));
-                            Log.i(TAG, "onSuccess: Data");
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i(TAG, "onFailure: ");
                         }
-                        insertAllFavouriteMeals(favouriteMealArrayList);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "onFailure: ");
-                    }
-                });
+                    });
 
-                 */
+        }
     }
 
     private void insertAllFavouriteMeals(ArrayList<FavouriteMeal> favouriteMealArrayList) {
-        roomDb.mealDao().insertAllFavMeal(favouriteMealArrayList).subscribeOn(Schedulers.io())
+        roomDb.mealDao().insertAllFavMeal(favouriteMealArrayList)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CompletableObserver() {
                     @Override

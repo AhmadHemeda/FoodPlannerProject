@@ -56,7 +56,7 @@ public class AreaMealsAdapter  extends RecyclerView.Adapter<AreaMealsAdapter.Are
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealByName(holder.textViewMealName.getText().toString());
+                    Single<RandomMeal> singleObservable = ApiClient.getInstance(view.getContext()).getMealByName(holder.textViewMealName.getText().toString());
                     singleObservable
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())

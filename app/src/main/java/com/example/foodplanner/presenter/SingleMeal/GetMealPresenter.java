@@ -1,5 +1,6 @@
 package com.example.foodplanner.presenter.SingleMeal;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.foodplanner.model.MealsItem;
@@ -8,16 +9,15 @@ import com.example.foodplanner.network.NetworkCallBack;
 
 import java.util.List;
 
-public class GetMealPresenter implements GetMealPresenterInterface , NetworkCallBack<List<MealsItem>> {
+public class GetMealPresenter implements GetMealPresenterInterface{
 
     private final GetMealViewInterface _view;
     private final Repository _repo;
     private static final String TAG = "GetMealPresenter";
 
-    public GetMealPresenter(GetMealViewInterface view, Repository repo, String mealName) {
+    public GetMealPresenter(GetMealViewInterface view, Context context) {
         _view = view;
-        _repo = repo;
-        _repo.getMealByName(mealName , this);
+        _repo =  Repository.getInstance(context);
     }
 
     @Override

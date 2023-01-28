@@ -38,7 +38,12 @@ public class SingleMealAdapter extends RecyclerView.Adapter<SingleMealAdapter.Si
     @Override
     public void onBindViewHolder(@NonNull SingleMealViewHolder holder, int position) {
         holder.textViewIngredient.setText(modelArrayList.get(position));
-        holder.textViewMeasure.setText(mesurList.get(position));
+        if (mesurList.size() > position)
+            holder.textViewMeasure.setText(mesurList.get(position));
+        else
+            holder.textViewMeasure.setText("");
+
+        // TODO Index: 4, Size: 4
         Glide.with(context).load(String.format("https://www.themealdb.com/images/ingredients/%s-Small.png",modelArrayList.get(position)))
                 .placeholder(R.drawable.ic_launcher_foreground).into(holder.ingredientImage);
     }

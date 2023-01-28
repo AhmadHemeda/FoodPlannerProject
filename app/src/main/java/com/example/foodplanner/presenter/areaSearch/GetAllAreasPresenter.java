@@ -36,6 +36,6 @@ public class GetAllAreasPresenter implements GetAllAreasPresenterInterface , Net
 
     @Override
     public List<AreaModel> filteringIngredients(CharSequence s, List<AreaModel> areaModels) {
-        return areaModels.stream().filter((e->e.getStrArea().startsWith(s.toString()))).collect(Collectors.toList());
+        return areaModels.stream().filter((e->e.getStrArea().toLowerCase().startsWith(s.toString().toLowerCase()))).collect(Collectors.toList());
     }
 }

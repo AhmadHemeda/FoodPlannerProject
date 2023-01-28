@@ -40,7 +40,7 @@ public class IngredientMealsPresenter implements IngredientMealsPresenterInterfa
     @Override
     public List<MealsItem> filteringIngredients(CharSequence s, List<MealsItem> mealsItem) {
         return mealsItem.stream()
-                .filter(response->response.getStrMeal().startsWith(s.toString())).collect(Collectors.toList());
+                .filter(response->response.getStrMeal().toLowerCase().startsWith(s.toString().toLowerCase())).collect(Collectors.toList());
     }
 
 

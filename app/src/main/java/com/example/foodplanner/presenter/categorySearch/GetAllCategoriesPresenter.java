@@ -39,7 +39,7 @@ public class GetAllCategoriesPresenter implements GetAllCategoriesPresenterInter
 
     @Override
     public List<CategoryModel> filteringCategories(CharSequence s, List<CategoryModel> categoryModels) {
-        return categoryModels.stream().filter((e->e.getStrCategory().startsWith(s.toString()))).collect(Collectors.toList());
+        return categoryModels.stream().filter((e->e.getStrCategory().toLowerCase().startsWith(s.toString().toLowerCase()))).collect(Collectors.toList());
     }
 
 }

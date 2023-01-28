@@ -64,17 +64,6 @@ public class CategoryMealsFragment extends Fragment implements CategoryMealsView
         categoryMealsPresenterInterface = new CategoryMealsPresenter(this::showMeals, Repository.getInstance(requireContext()),categoryName);
         categoryMealsPresenterInterface.getCategoryMeal(categoryName);
         category.setText(categoryName);
-//        Single<RandomMeal> singleObservable = ApiClient.getInstance().getMealCategory(categoryName);
-//        singleObservable
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(response ->{
-//                            mealsItemResults = response.getMeals();
-//                            mealAdapter.setList(mealsItemResults);
-//                        },
-//                        error ->{error.printStackTrace();
-//                            Log.i(TAG, "onClick: "+ error.getMessage());
-//                        });
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -92,12 +81,6 @@ public class CategoryMealsFragment extends Fragment implements CategoryMealsView
             }
         });
         return view;
-    }
-    private void handlingRecyclerView() {
-        linearLayout = new GridLayoutManager(requireContext(),2);
-        mealAdapter = new CategoryMealsAdapter(requireContext());
-        mealOfAreaRecyclerView.setLayoutManager(linearLayout);
-        mealOfAreaRecyclerView.setAdapter(mealAdapter);
     }
 
     @Override
