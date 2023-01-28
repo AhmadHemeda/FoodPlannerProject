@@ -38,6 +38,30 @@ public class Repository{
         apiServer = ApiClient.getInstance(context);
     }
 
+    public void getRandomMeal(NetworkCallBack<List<MealsItem>> networkCallBack) {
+
+        Single<RandomMeal> singleObservable = apiServer.getInspirationMeal();
+        singleObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<RandomMeal>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull RandomMeal randomMeal) {
+                        networkCallBack.onSuccessResult(randomMeal.getMeals());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        networkCallBack.onFailureResult(e.getMessage());
+                    }
+                });
+    }
+
     public void getMealByCategory(String area,NetworkCallBack<List<MealsItem>> networkCallBack) {
 
             Single<RandomMeal> singleObservable = apiServer.getMealArea(area);
