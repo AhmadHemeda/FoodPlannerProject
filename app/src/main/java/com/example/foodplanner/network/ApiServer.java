@@ -11,6 +11,8 @@ import retrofit2.http.Query;
 
 public interface ApiServer {
 
+    @GET("random.php")
+    Single<RandomMeal> getInspirationMeal();
 
     @GET("filter.php")
     Single<RandomMeal> getMealArea(@Query("a")String category);
