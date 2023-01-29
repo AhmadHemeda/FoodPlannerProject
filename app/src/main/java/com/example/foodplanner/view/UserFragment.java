@@ -56,7 +56,7 @@ public class UserFragment extends Fragment {
             deleteAllFavouriteMeals();
             deleteAllPlanMeals();
             Toast.makeText(requireContext(), "Done", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(view).navigate(UserFragmentDirections.actionUserFragmentToChooserFragment());
+            Navigation.findNavController(view).navigate(UserFragmentDirections.actionUserFragmentToSplashFragment());
         });
     }
 

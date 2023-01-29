@@ -218,8 +218,8 @@
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" >
         <action
-            android:id="@+id/action_userFragment_to_chooserFragment"
-            app:destination="@id/chooserFragment" />
+            android:id="@+id/action_userFragment_to_splashFragment"
+            app:destination="@id/splashFragment" />
     </fragment>
     <fragment
         android:id="@+id/mealsSearchFragment"
