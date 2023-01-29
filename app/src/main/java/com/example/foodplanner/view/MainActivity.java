@@ -56,13 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.setBackgroundTint(getColor(R.color.red));
                 snackbar.setText("Internet Is Not Connected");
                 snackbar.show();
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(getApplicationContext());
-                builder1.setTitle("No Internet");
-                builder1.setMessage("Check Your Internet Connection.");
-                builder1.setCancelable(true);
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
             }
 
         });

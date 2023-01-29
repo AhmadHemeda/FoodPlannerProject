@@ -40,6 +40,9 @@ public class UserFragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
         roomDb = MealDataBase.getInstance(requireContext());
+        if(auth.getCurrentUser() == null){
+            appCompatButtonLogout.setText("Sign Up");
+        }
 
         return view;
     }
@@ -52,7 +55,7 @@ public class UserFragment extends Fragment {
             logoutAction();
             deleteAllFavouriteMeals();
             deleteAllPlanMeals();
-            Toast.makeText(requireContext(), "LogOut", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Done", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(view).navigate(UserFragmentDirections.actionUserFragmentToChooserFragment());
         });
     }

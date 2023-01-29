@@ -2,6 +2,7 @@ package com.example.foodplanner.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -119,7 +121,32 @@ public class SignUpChooserFragment extends Fragment {
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
-        guestBtn.setOnClickListener(view1 -> Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment()));
+        guestBtn.setOnClickListener(view1 -> {
+            if(auth.getCurrentUser() == null){
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(requireContext());
+                builder1.setMessage("By Entering As a Guest You Will Loss Some Features.");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+        });
         gotoSignup.setOnClickListener(view12 -> Navigation.findNavController(view12).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToSignUp()));
         logInBtn.setOnClickListener(view13 -> Navigation.findNavController(view13).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToLoginFragment()));
     }
@@ -151,7 +178,6 @@ public class SignUpChooserFragment extends Fragment {
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             favouriteMealArrayList.add(document.toObject(FavouriteMeal.class));
-
                         }
                         insertAllFavouriteMeals(favouriteMealArrayList);
                     }).addOnFailureListener(e -> Log.i(TAG, "onFailure: "));
