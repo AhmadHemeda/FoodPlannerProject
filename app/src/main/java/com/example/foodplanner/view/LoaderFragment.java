@@ -21,29 +21,19 @@ public class LoaderFragment extends DialogFragment {
     View _view;
 
     public LoaderFragment() {
-        // Required empty public constructor
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         _view = inflater.inflate(R.layout.fragment_loader, container, false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                Navigation.findNavController(_view).navigate(LoaderFragmentDirections.actionLoaderFragmentToHomeFragment());
-            }
-        },3000);
+        new Handler().postDelayed(() -> Navigation.findNavController(_view)
+                .navigate(LoaderFragmentDirections.actionLoaderFragmentToHomeFragment()), 3000);
         return _view;
     }
 
@@ -51,6 +41,5 @@ public class LoaderFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
     }
 }

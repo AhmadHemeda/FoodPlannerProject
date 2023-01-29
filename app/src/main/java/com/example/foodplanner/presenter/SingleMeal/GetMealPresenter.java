@@ -5,11 +5,10 @@ import android.util.Log;
 
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.Repository;
-import com.example.foodplanner.network.NetworkCallBack;
 
 import java.util.List;
 
-public class GetMealPresenter implements GetMealPresenterInterface{
+public class GetMealPresenter implements GetMealPresenterInterface {
 
     private final GetMealViewInterface _view;
     private final Repository _repo;
@@ -17,7 +16,7 @@ public class GetMealPresenter implements GetMealPresenterInterface{
 
     public GetMealPresenter(GetMealViewInterface view, Context context) {
         _view = view;
-        _repo =  Repository.getInstance(context);
+        _repo = Repository.getInstance(context);
     }
 
     @Override
@@ -32,6 +31,6 @@ public class GetMealPresenter implements GetMealPresenterInterface{
 
     @Override
     public void getSingleMeal(String mealName) {
-        _repo.getMealByName(mealName , this);
+        _repo.getMealByName(mealName, this);
     }
 }

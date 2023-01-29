@@ -30,6 +30,7 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
     private List<FavouriteMeal> favouriteMealList = new ArrayList<>();
     ViewGroup frag;
     private static final String TAG = "FavouritesListAdapter";
+
     @NonNull
     @Override
     public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,25 +44,26 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
         FavouriteMeal favouriteMeal = favouriteMealList.get(position);
+
         holder.textViewMealName.setText(favouriteMeal.getMealName());
+
         Glide.with(holder.itemView).load(favouriteMeal.getMealImage()).into(holder.imageViewMeal);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Single<RandomMeal> singleObservable = ApiClient.getInstance(view.getContext()).getMealByName(holder.textViewMealName.getText().toString());
-                singleObservable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe( response ->{
-                                    List<MealsItem> singleMeal =response.getMeals();
-                                    Navigation.findNavController(frag).navigate(FavouritesFragmentDirections.actionFavouritesFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
-                                    Log.i(TAG, "onClick: "+ singleMeal.get(0).getStrMeal());
-                                },
-                                error ->{error.printStackTrace();
-                                    Log.i(TAG, "onClick: "+ error.getMessage());
-                                }
-                        );
-            }
+
+        holder.itemView.setOnClickListener(view -> {
+            Single<RandomMeal> singleObservable = ApiClient.getInstance(view.getContext()).getMealByName(holder.textViewMealName.getText().toString());
+            singleObservable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                                List<MealsItem> singleMeal = response.getMeals();
+                                Navigation.findNavController(frag).navigate(FavouritesFragmentDirections.actionFavouritesFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
+                                Log.i(TAG, "onClick: " + singleMeal.get(0).getStrMeal());
+                            },
+                            error -> {
+                                error.printStackTrace();
+                                Log.i(TAG, "onClick: " + error.getMessage());
+                            }
+                    );
         });
     }
 

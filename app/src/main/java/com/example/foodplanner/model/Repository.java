@@ -23,7 +23,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
-public class Repository{
+public class Repository {
     private static Repository repo = null;
     private ApiServer apiServer;
 
@@ -62,33 +62,34 @@ public class Repository{
                 });
     }
 
-    public void getMealByCategory(String area,NetworkCallBack<List<MealsItem>> networkCallBack) {
+    public void getMealByCategory(String area, NetworkCallBack<List<MealsItem>> networkCallBack) {
 
-            Single<RandomMeal> singleObservable = apiServer.getMealArea(area);
-            singleObservable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SingleObserver<RandomMeal>() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
+        Single<RandomMeal> singleObservable = apiServer.getMealArea(area);
+        singleObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<RandomMeal>() {
+                               @Override
+                               public void onSubscribe(@NonNull Disposable d) {
 
-                        }
+                               }
 
-                        @Override
-                        public void onSuccess(@NonNull RandomMeal randomMeal) {
-                            networkCallBack.onSuccessResult(randomMeal.getMeals());
-                        }
+                               @Override
+                               public void onSuccess(@NonNull RandomMeal randomMeal) {
+                                   networkCallBack.onSuccessResult(randomMeal.getMeals());
+                               }
 
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-                            networkCallBack.onFailureResult(e.getMessage());
-                        }
-                    }
-            );
+                               @Override
+                               public void onError(@NonNull Throwable e) {
+                                   networkCallBack.onFailureResult(e.getMessage());
+                               }
+                           }
+                );
 
         Log.i("ApiClient", "Repository getRandomMeal: ");
 
     }
+
     public void getAllAreas(NetworkCallBack<List<AreaModel>> networkCallBack) {
         Single<AreaListModel> singleObservable = apiServer.getAllAreas();
         singleObservable
@@ -112,6 +113,7 @@ public class Repository{
                            }
                 );
     }
+
     public void getAllCategories(NetworkCallBack<List<CategoryModel>> networkCallBack) {
         Single<CategoryListModel> singleObservable = apiServer.getAllCategories();
         singleObservable
@@ -136,6 +138,7 @@ public class Repository{
                            }
                 );
     }
+
     public void getAllIngredients(NetworkCallBack<List<IngredientModel>> networkCallBack) {
         Single<IngredientListModel> singleObservable = apiServer.getAllIngredient();
         singleObservable
@@ -160,35 +163,36 @@ public class Repository{
                            }
                 );
     }
-//    getMealArea
-public void getMealArea(String area,NetworkCallBack<List<MealsItem>> networkCallBack) {
 
-    Single<RandomMeal> singleObservable = apiServer.getMealArea(area);
-    singleObservable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new SingleObserver<RandomMeal>() {
-                           @Override
-                           public void onSubscribe(@NonNull Disposable d) {
+    public void getMealArea(String area, NetworkCallBack<List<MealsItem>> networkCallBack) {
 
+        Single<RandomMeal> singleObservable = apiServer.getMealArea(area);
+        singleObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<RandomMeal>() {
+                               @Override
+                               public void onSubscribe(@NonNull Disposable d) {
+
+                               }
+
+                               @Override
+                               public void onSuccess(@NonNull RandomMeal randomMeal) {
+                                   networkCallBack.onSuccessResult(randomMeal.getMeals());
+                               }
+
+                               @Override
+                               public void onError(@NonNull Throwable e) {
+                                   networkCallBack.onFailureResult(e.getMessage());
+                               }
                            }
+                );
 
-                           @Override
-                           public void onSuccess(@NonNull RandomMeal randomMeal) {
-                               networkCallBack.onSuccessResult(randomMeal.getMeals());
-                           }
+        Log.i("ApiClient", "Repository getRandomMeal: ");
 
-                           @Override
-                           public void onError(@NonNull Throwable e) {
-                               networkCallBack.onFailureResult(e.getMessage());
-                           }
-                       }
-            );
+    }
 
-    Log.i("ApiClient", "Repository getRandomMeal: ");
-
-}
-    public void getMealCategory(String category,NetworkCallBack<List<MealsItem>> networkCallBack) {
+    public void getMealCategory(String category, NetworkCallBack<List<MealsItem>> networkCallBack) {
 
         Single<RandomMeal> singleObservable = apiServer.getMealCategory(category);
         singleObservable
@@ -215,7 +219,8 @@ public void getMealArea(String area,NetworkCallBack<List<MealsItem>> networkCall
         Log.i("ApiClient", "Repository getRandomMeal: ");
 
     }
-    public void getMealIngredient(String ingredient,NetworkCallBack<List<MealsItem>> networkCallBack) {
+
+    public void getMealIngredient(String ingredient, NetworkCallBack<List<MealsItem>> networkCallBack) {
 
         Single<RandomMeal> singleObservable = apiServer.getMealIngredient(ingredient);
         singleObservable
@@ -239,7 +244,8 @@ public void getMealArea(String area,NetworkCallBack<List<MealsItem>> networkCall
                            }
                 );
     }
-    public void getMealByName(String meal,NetworkCallBack<List<MealsItem>> networkCallBack) {
+
+    public void getMealByName(String meal, NetworkCallBack<List<MealsItem>> networkCallBack) {
         Single<RandomMeal> singleObservable = apiServer.getMealByName(meal);
         singleObservable
                 .subscribeOn(Schedulers.io())

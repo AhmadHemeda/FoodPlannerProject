@@ -16,6 +16,7 @@ public class Converters {
 
     @TypeConverter
     public List<String> fromStringToList(String s) {
-        return new Gson().fromJson(s, new TypeToken<List<String>>(){});
+        return new Gson().fromJson(s, new TypeToken<List<String>>() {
+        });
     }
 }

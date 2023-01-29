@@ -1,36 +1,26 @@
 package com.example.foodplanner.view.search;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.Repository;
-import com.example.foodplanner.model.pojos.area.IngredientListModel;
 import com.example.foodplanner.model.pojos.area.IngredientModel;
-import com.example.foodplanner.network.ApiClient;
 import com.example.foodplanner.presenter.ingredientSearch.AllIngredientsViewInterface;
 import com.example.foodplanner.presenter.ingredientSearch.GetAllIngredientsPresenter;
 import com.example.foodplanner.presenter.ingredientSearch.GetAllIngredientsPresenterInterface;
-import com.example.foodplanner.view.search.IngredientAdapter;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class SearchByIngredientFragment extends Fragment implements AllIngredientsViewInterface {
@@ -39,8 +29,8 @@ public class SearchByIngredientFragment extends Fragment implements AllIngredien
     TextInputEditText search;
     List<IngredientModel> ingredientModelsSearch = new ArrayList<>();
     GetAllIngredientsPresenterInterface getAllIngredientsPresenterInterface;
-    private static final String TAG = "SearchByIngredientFragm";
     View view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +43,7 @@ public class SearchByIngredientFragment extends Fragment implements AllIngredien
         view = inflater.inflate(R.layout.fragment_search_by_ingredient, container, false);
         ingredientRecyclerView = view.findViewById(R.id.recyclerViewIngredients);
         search = view.findViewById(R.id.et_search_ingredient);
+
         getAllIngredientsPresenterInterface.getAllIngredients();
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -62,7 +53,7 @@ public class SearchByIngredientFragment extends Fragment implements AllIngredien
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ingredientAdapter.setList(getAllIngredientsPresenterInterface.filteringIngredients(s,ingredientModelsSearch));
+                ingredientAdapter.setList(getAllIngredientsPresenterInterface.filteringIngredients(s, ingredientModelsSearch));
             }
 
             @Override

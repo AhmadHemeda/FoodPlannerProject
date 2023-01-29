@@ -3,18 +3,16 @@ package com.example.foodplanner.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
-import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.foodplanner.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,8 +26,8 @@ public class SplashFragment extends Fragment {
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     Handler handler;
     Runnable runnable;
+
     public SplashFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -50,29 +48,25 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences sharedPref = requireContext().getSharedPreferences("setting", Context.MODE_PRIVATE);
 
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                boolean isFirst = sharedPref.getBoolean("first_look", true);
+        runnable = () -> {
+            SharedPreferences sharedPref = requireContext().getSharedPreferences("setting", Context.MODE_PRIVATE);
 
-                if (!isFirst) {
-                    Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToLoaderFragment());
-                } else if (user == null) {
-                    Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingFragment());
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            boolean isFirst = sharedPref.getBoolean("first_look", true);
 
-
-                }
-//                else {
-//                    Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToLoaderFragment());
-//                }
+            if (!isFirst) {
+                Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToLoaderFragment());
+            } else if (user == null) {
+                Navigation.findNavController(_view).navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingFragment());
             }
         };
-        handler.postDelayed(runnable,4000);
+
+        handler.postDelayed(runnable, 4000);
     }
 
     @Override
@@ -84,6 +78,6 @@ public class SplashFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        handler.postDelayed(runnable,2000);
+        handler.postDelayed(runnable, 2000);
     }
 }

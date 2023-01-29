@@ -9,16 +9,16 @@ import com.example.foodplanner.network.NetworkCallBack;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class IngredientMealsPresenter implements IngredientMealsPresenterInterface , NetworkCallBack<List<MealsItem>> {
+public class IngredientMealsPresenter implements IngredientMealsPresenterInterface, NetworkCallBack<List<MealsItem>> {
 
     private final IngredientMealsViewInterface _view;
     private final Repository _repo;
     private static final String TAG = "IngredientMealsPresente";
 
-    public IngredientMealsPresenter(IngredientMealsViewInterface view, Repository repo ,String ingredient) {
+    public IngredientMealsPresenter(IngredientMealsViewInterface view, Repository repo, String ingredient) {
         _view = view;
         _repo = repo;
-        _repo.getMealIngredient(ingredient,this);
+        _repo.getMealIngredient(ingredient, this);
     }
 
     @Override
@@ -33,14 +33,14 @@ public class IngredientMealsPresenter implements IngredientMealsPresenterInterfa
 
     @Override
     public void getIngredientMeal(String ingredient) {
-        _repo.getMealIngredient(ingredient,this);
+        _repo.getMealIngredient(ingredient, this);
 
     }
 
     @Override
     public List<MealsItem> filteringIngredients(CharSequence s, List<MealsItem> mealsItem) {
         return mealsItem.stream()
-                .filter(response->response.getStrMeal().toLowerCase().startsWith(s.toString().toLowerCase())).collect(Collectors.toList());
+                .filter(response -> response.getStrMeal().toLowerCase().startsWith(s.toString().toLowerCase())).collect(Collectors.toList());
     }
 
 

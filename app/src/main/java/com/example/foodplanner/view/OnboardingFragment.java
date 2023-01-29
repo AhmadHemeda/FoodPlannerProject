@@ -36,10 +36,10 @@ public class OnboardingFragment extends Fragment {
 
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_onboarding, container, false);
     }
 
@@ -47,20 +47,14 @@ public class OnboardingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //hide ActionBar
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         skipButton = view.findViewById(R.id.skip_btn);
         viewPager = view.findViewById(R.id.slideViewPager);
         dotLayout = view.findViewById(R.id.indicator_layout);
 
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(OnboardingFragmentDirections.actionOnboardingFragmentToChooserFragment());
-
-            }
-        });
+        skipButton.setOnClickListener(v -> Navigation.findNavController(view)
+                .navigate(OnboardingFragmentDirections.actionOnboardingFragmentToChooserFragment()));
 
         viewPagerAdapter = new ViewPadgerAdapter(requireContext());
 
@@ -112,9 +106,4 @@ public class OnboardingFragment extends Fragment {
 
         }
     };
-
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
-    }
-
 }

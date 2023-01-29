@@ -5,7 +5,8 @@ import com.example.foodplanner.model.MealsItem;
 import java.util.List;
 
 public interface CategoryMealsPresenterInterface {
-    public void getCategoryMeal(String category);
-    public List<MealsItem> filteringIngredients(CharSequence s , List<MealsItem> mealsItem);
+    void getCategoryMeal(String category);
+
+    List<MealsItem> filteringIngredients(CharSequence s, List<MealsItem> mealsItem);
 
 }

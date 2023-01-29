@@ -1,6 +1,13 @@
 package com.example.foodplanner.view.search;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,33 +15,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
-import com.example.foodplanner.model.RandomMeal;
 import com.example.foodplanner.model.Repository;
-import com.example.foodplanner.network.ApiClient;
 import com.example.foodplanner.presenter.areaSearch.AreaMealsPresenter;
 import com.example.foodplanner.presenter.areaSearch.AreaMealsPresenterInterface;
 import com.example.foodplanner.presenter.areaSearch.AreaMealsViewInterface;
-import com.example.foodplanner.view.search.AreaMealsAdapter;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class AreaMealsFragment extends Fragment implements AreaMealsViewInterface {
@@ -48,7 +38,6 @@ public class AreaMealsFragment extends Fragment implements AreaMealsViewInterfac
     AreaMealsAdapter mealAdapter;
     AreaMealsPresenterInterface areaMealsPresenterInterface;
     View view;
-    private static final String TAG = "AreaMealsFragment";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,7 +63,8 @@ public class AreaMealsFragment extends Fragment implements AreaMealsViewInterfac
         super.onViewCreated(view, savedInstanceState);
 
         String areaName = AreaMealsFragmentArgs.fromBundle(getArguments()).getAreaName();
-        areaMealsPresenterInterface = new AreaMealsPresenter(this::showMeals, Repository.getInstance(requireContext()),areaName);
+
+        areaMealsPresenterInterface = new AreaMealsPresenter(this::showMeals, Repository.getInstance(requireContext()), areaName);
         progressBar.setVisibility(View.GONE);
         area.setText(areaName);
         search.addTextChangedListener(new TextWatcher() {
@@ -84,8 +74,9 @@ public class AreaMealsFragment extends Fragment implements AreaMealsViewInterfac
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                mealAdapter.setList(areaMealsPresenterInterface.filteringArea(charSequence,mealsItemResults));
+                mealAdapter.setList(areaMealsPresenterInterface.filteringArea(charSequence, mealsItemResults));
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -95,7 +86,7 @@ public class AreaMealsFragment extends Fragment implements AreaMealsViewInterfac
 
     @Override
     public void showMeals(List<MealsItem> randomMeal) {
-        linearLayout = new GridLayoutManager(requireContext(),2);
+        linearLayout = new GridLayoutManager(requireContext(), 2);
         mealAdapter = new AreaMealsAdapter(requireContext());
         mealsItemResults = randomMeal;
         mealAdapter.setList(randomMeal);

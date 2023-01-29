@@ -1,11 +1,6 @@
 package com.example.foodplanner.view.search;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
-import com.example.foodplanner.model.RandomMeal;
 import com.example.foodplanner.model.Repository;
-import com.example.foodplanner.network.ApiClient;
 import com.example.foodplanner.presenter.categorySearch.CategoryMealsPresenter;
 import com.example.foodplanner.presenter.categorySearch.CategoryMealsPresenterInterface;
 import com.example.foodplanner.presenter.categorySearch.CategoryMealsViewInterface;
@@ -26,11 +23,6 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class CategoryMealsFragment extends Fragment implements CategoryMealsViewInterface {
@@ -44,6 +36,7 @@ public class CategoryMealsFragment extends Fragment implements CategoryMealsView
     CategoryMealsPresenterInterface categoryMealsPresenterInterface;
     View view;
     private static final String TAG = "CategoryMealsFragment";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +51,11 @@ public class CategoryMealsFragment extends Fragment implements CategoryMealsView
         mealOfAreaRecyclerView = view.findViewById(R.id.recyclerView_meals_category);
         category = view.findViewById(R.id.category_name);
         search = view.findViewById(R.id.et_search_meal_category);
-//        handlingRecyclerView();
+
         String categoryName = CategoryMealsFragmentArgs.fromBundle(getArguments()).getCategoryName();
-        Log.i(TAG, "onCreateView: "+ categoryName);
-        categoryMealsPresenterInterface = new CategoryMealsPresenter(this::showMeals, Repository.getInstance(requireContext()),categoryName);
+        Log.i(TAG, "onCreateView: " + categoryName);
+
+        categoryMealsPresenterInterface = new CategoryMealsPresenter(this::showMeals, Repository.getInstance(requireContext()), categoryName);
         categoryMealsPresenterInterface.getCategoryMeal(categoryName);
         category.setText(categoryName);
         search.addTextChangedListener(new TextWatcher() {
@@ -72,7 +66,7 @@ public class CategoryMealsFragment extends Fragment implements CategoryMealsView
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mealAdapter.setList(categoryMealsPresenterInterface.filteringIngredients(s,mealsItemResults));
+                mealAdapter.setList(categoryMealsPresenterInterface.filteringIngredients(s, mealsItemResults));
             }
 
             @Override
@@ -85,7 +79,7 @@ public class CategoryMealsFragment extends Fragment implements CategoryMealsView
 
     @Override
     public void showMeals(List<MealsItem> randomMeal) {
-        linearLayout = new GridLayoutManager(requireContext(),2);
+        linearLayout = new GridLayoutManager(requireContext(), 2);
         mealAdapter = new CategoryMealsAdapter(requireContext());
         mealsItemResults = randomMeal;
         mealAdapter.setList(randomMeal);

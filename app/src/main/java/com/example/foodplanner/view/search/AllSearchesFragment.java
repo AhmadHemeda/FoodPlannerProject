@@ -19,10 +19,9 @@ public class AllSearchesFragment extends Fragment {
     CardView categoryCardView;
     CardView ingredientCardView;
     View view;
-    public AllSearchesFragment() {
-        // Required empty public constructor
-    }
 
+    public AllSearchesFragment() {
+    }
 
 
     @Override
@@ -36,28 +35,17 @@ public class AllSearchesFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_all_searches, container, false);
 
         ingredientCardView = view.findViewById(R.id.ingredient_cardView);
-        ingredientCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByIngredientFragment());
-            }
-        });
+        ingredientCardView.setOnClickListener(view -> Navigation.findNavController(view)
+                .navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByIngredientFragment()));
 
         categoryCardView = view.findViewById(R.id.category_cardView);
-        categoryCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByCategoryFragment());
-            }
-        });
+        categoryCardView.setOnClickListener(view -> Navigation.findNavController(view)
+                .navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByCategoryFragment()));
 
         areaCardView = view.findViewById(R.id.area_cardView);
-        areaCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByAreaFragment());
-            }
-        });
+        areaCardView.setOnClickListener(view -> Navigation.findNavController(view)
+                .navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByAreaFragment()));
+
         return view;
     }
 }

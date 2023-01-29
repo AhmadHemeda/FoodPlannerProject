@@ -8,14 +8,14 @@ import java.util.List;
 @Entity(tableName = "meal_table")
 public class FavouriteMeal {
     @PrimaryKey
-    private  long mealID;
-    private  String mealName;
-    private  String mealImage;
-    private  String mealArea;
+    private long mealID;
+    private String mealName;
+    private String mealImage;
+    private String mealArea;
     private List<String> mealIngredients;
-    private  List<String> mealMeasures;
-    private  String mealSteps;
-    private  String mealVideo;
+    private List<String> mealMeasures;
+    private String mealSteps;
+    private String mealVideo;
 
     public FavouriteMeal() {
     }

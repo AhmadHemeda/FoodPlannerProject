@@ -14,10 +14,12 @@ import com.example.foodplanner.model.PlanMeal;
 @TypeConverters(Converters.class)
 public abstract class MealDataBase extends RoomDatabase {
     public static final String PLAN = "planMeal";
-    public static final  String FAV = "Favourite";
-    public static final String FIRESTORE="database";
+    public static final String FAV = "Favourite";
+    public static final String FIRESTORE = "database";
     private static MealDataBase instance = null;
+
     public abstract MealDao mealDao();
+
     public abstract PlanMealDao planMealDao();
 
     public static synchronized MealDataBase getInstance(Context context) {

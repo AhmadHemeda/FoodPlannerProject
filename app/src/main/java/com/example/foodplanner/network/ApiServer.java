@@ -15,13 +15,13 @@ public interface ApiServer {
     Single<RandomMeal> getInspirationMeal();
 
     @GET("filter.php")
-    Single<RandomMeal> getMealArea(@Query("a")String category);
+    Single<RandomMeal> getMealArea(@Query("a") String category);
 
     @GET("filter.php")
-    Single<RandomMeal> getMealIngredient(@Query("i")String category);
+    Single<RandomMeal> getMealIngredient(@Query("i") String category);
 
     @GET("filter.php")
-    Single<RandomMeal> getMealCategory(@Query("c")String category);
+    Single<RandomMeal> getMealCategory(@Query("c") String category);
 
     @GET("list.php?a=list")
     Single<AreaListModel> getAllAreas();
@@ -33,5 +33,5 @@ public interface ApiServer {
     Single<CategoryListModel> getAllCategories();
 
     @GET("search.php")
-    Single<RandomMeal> getMealByName(@Query("s")String mealName);
+    Single<RandomMeal> getMealByName(@Query("s") String mealName);
 }

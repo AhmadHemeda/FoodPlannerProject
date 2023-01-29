@@ -6,8 +6,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.foodplanner.model.FavouriteMeal;
-import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.PlanMeal;
 
 import java.util.ArrayList;

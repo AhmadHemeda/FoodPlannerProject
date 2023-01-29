@@ -9,10 +9,11 @@ import com.example.foodplanner.network.NetworkCallBack;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GetAllAreasPresenter implements GetAllAreasPresenterInterface , NetworkCallBack<List<AreaModel>> {
+public class GetAllAreasPresenter implements GetAllAreasPresenterInterface, NetworkCallBack<List<AreaModel>> {
     private final AllAreasViewInterface _view;
     private final Repository _repo;
     private static final String TAG = "GetAllAreasPresenter";
+
     public GetAllAreasPresenter(AllAreasViewInterface _view, Repository _repo) {
         this._view = _view;
         this._repo = _repo;
@@ -36,6 +37,9 @@ public class GetAllAreasPresenter implements GetAllAreasPresenterInterface , Net
 
     @Override
     public List<AreaModel> filteringIngredients(CharSequence s, List<AreaModel> areaModels) {
-        return areaModels.stream().filter((e->e.getStrArea().toLowerCase().startsWith(s.toString().toLowerCase()))).collect(Collectors.toList());
+        return areaModels
+                .stream()
+                .filter((e -> e.getStrArea().toLowerCase().startsWith(s.toString().toLowerCase())))
+                .collect(Collectors.toList());
     }
 }

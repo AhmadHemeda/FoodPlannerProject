@@ -2,11 +2,9 @@ package com.example.foodplanner.presenter.categorySearch;
 
 import android.util.Log;
 
-import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.model.pojos.area.CategoryModel;
 import com.example.foodplanner.network.NetworkCallBack;
-import com.example.foodplanner.presenter.areaSearch.AllAreasViewInterface;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +37,9 @@ public class GetAllCategoriesPresenter implements GetAllCategoriesPresenterInter
 
     @Override
     public List<CategoryModel> filteringCategories(CharSequence s, List<CategoryModel> categoryModels) {
-        return categoryModels.stream().filter((e->e.getStrCategory().toLowerCase().startsWith(s.toString().toLowerCase()))).collect(Collectors.toList());
+        return categoryModels.stream()
+                .filter((e -> e.getStrCategory().toLowerCase().startsWith(s.toString().toLowerCase())))
+                .collect(Collectors.toList());
     }
 
 }

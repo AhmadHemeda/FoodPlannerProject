@@ -1,6 +1,11 @@
 package com.example.foodplanner.view;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,22 +14,12 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.MealsItem;
 import com.example.foodplanner.model.RandomMeal;
 import com.example.foodplanner.model.Repository;
 import com.example.foodplanner.network.ApiClient;
-import com.example.foodplanner.network.ApiServer;
-import com.example.foodplanner.network.NetworkCallBack;
-import com.example.foodplanner.presenter.SingleMeal.GetMealViewInterface;
 import com.example.foodplanner.presenter.randomMeals.GetRandomMealInterfacePresenter;
 import com.example.foodplanner.presenter.randomMeals.GetRandomMealPresenterPresenter;
 import com.example.foodplanner.presenter.randomMeals.RandomMealViewInterface;
@@ -37,7 +32,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class HomeFragment extends Fragment implements RandomMealViewInterface {
-    private static final String TAG = "HomeFragment";
     RecyclerView allRecyclerView;
     GridLayoutManager linearLayout;
     MealAdapter mealAdapter;
@@ -46,16 +40,12 @@ public class HomeFragment extends Fragment implements RandomMealViewInterface {
     ImageView imageViewRandomMealThumb;
     TextView textViewRandomMealTitle;
 
-    Repository repository;
-
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getRandomMealInterfacePresenter = new GetRandomMealPresenterPresenter(this, Repository.getInstance(requireContext()));
-
-
     }
 
     @Override
@@ -64,13 +54,16 @@ public class HomeFragment extends Fragment implements RandomMealViewInterface {
         allRecyclerView = view.findViewById(R.id.recyclerView);
         imageViewRandomMealThumb = view.findViewById(R.id.imageViewRandomMeal);
         textViewRandomMealTitle = view.findViewById(R.id.textViewRandomMeal);
+
         getRandomMealInterfacePresenter.getRandomMeal();
+
         Single<RandomMeal> mealsItemSingle = ApiClient.getInstance(requireContext()).getInspirationMeal();
         mealsItemSingle
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mealsitem-> {mealsitem.getMeals();
-                textViewRandomMealTitle.setText(mealsitem.getMeals().get(0).getStrMeal());
+                .subscribe(mealsitem -> {
+                    mealsitem.getMeals();
+                    textViewRandomMealTitle.setText(mealsitem.getMeals().get(0).getStrMeal());
                     Glide.with(requireContext()).load(mealsitem.getMeals().get(0).getStrMealThumb()).into(imageViewRandomMealThumb);
                 });
     }
@@ -88,8 +81,11 @@ public class HomeFragment extends Fragment implements RandomMealViewInterface {
     public void showMeals(List<MealsItem> randomMeal) {
         linearLayout = new GridLayoutManager(requireContext(), 2);
         mealAdapter = new MealAdapter(requireContext(), randomMeal1 -> {
-            Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToMealFragment(randomMeal1.get(0)).setSingleMealItem(randomMeal1.get(0)));
+            Navigation.findNavController(view).
+                    navigate(HomeFragmentDirections.actionHomeFragmentToMealFragment(randomMeal1.get(0))
+                            .setSingleMealItem(randomMeal1.get(0)));
         });
+
         mealAdapter.setList(randomMeal);
         allRecyclerView.setLayoutManager(linearLayout);
         allRecyclerView.setAdapter(mealAdapter);

@@ -9,7 +9,7 @@ import com.example.foodplanner.network.NetworkCallBack;
 
 import java.util.List;
 
-public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePresenter,NetworkCallBack<List<MealsItem>>{
+public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePresenter, NetworkCallBack<List<MealsItem>> {
 
     private final RandomMealViewInterface _view;
     private final Repository _repo;
@@ -17,7 +17,7 @@ public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePr
     public GetRandomMealPresenterPresenter(RandomMealViewInterface _view, Repository _repo) {
         this._view = _view;
         this._repo = _repo;
-        _repo.getMealByCategory("American",this);
+        _repo.getMealByCategory("American", this);
         Log.i("ApiClient", "GetRandomMealPresenterPresenter: ");
     }
 
@@ -34,7 +34,7 @@ public class GetRandomMealPresenterPresenter implements GetRandomMealInterfacePr
 
     @Override
     public void getRandomMeal() {
-        _repo.getMealByCategory("American",this);
+        _repo.getMealByCategory("American", this);
         Log.i("ApiClient", "getRandomMeal: ");
     }
 

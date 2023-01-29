@@ -9,15 +9,16 @@ import com.example.foodplanner.R;
 
 public class HomeDataActivity extends AppCompatActivity {
     NavController navController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_data);
 
     }
+
     @Override
     public boolean onSupportNavigateUp() {
-
-        return navController.navigateUp()||super.onSupportNavigateUp();
+        return navController.navigateUp() || super.onSupportNavigateUp();
     }
 }

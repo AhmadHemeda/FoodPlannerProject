@@ -2,11 +2,10 @@ package com.example.foodplanner.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.util.List;
 
-@Entity(tableName = "plan_meal_table" ,primaryKeys = {"mealID","mealDay"})
+@Entity(tableName = "plan_meal_table", primaryKeys = {"mealID", "mealDay"})
 public class PlanMeal {
 
     @NonNull

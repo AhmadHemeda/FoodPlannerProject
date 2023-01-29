@@ -1,16 +1,15 @@
 package com.example.foodplanner.view.search;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.Repository;
@@ -22,23 +21,20 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SearchByAreaFragment extends Fragment implements AllAreasViewInterface {
 
     RecyclerView areaRecyclerView;
     AreaAdapter areaAdapter;
     TextInputEditText search;
-    List<AreaModel> areaModels = new ArrayList<>();
     List<AreaModel> areaModelsSearch = new ArrayList<>();
     View view;
     GetAllAreasPresenterInterface getAllAreasPresenterInterface;
-    private static final String TAG = "SearchByAreaFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getAllAreasPresenterInterface = new GetAllAreasPresenter(this, Repository.getInstance(requireContext())) ;
+        getAllAreasPresenterInterface = new GetAllAreasPresenter(this, Repository.getInstance(requireContext()));
     }
 
     @Override
@@ -47,6 +43,7 @@ public class SearchByAreaFragment extends Fragment implements AllAreasViewInterf
         view = inflater.inflate(R.layout.fragment_search_by_area, container, false);
         areaRecyclerView = view.findViewById(R.id.recyclerViewAreas);
         search = view.findViewById(R.id.et_search_area);
+
         getAllAreasPresenterInterface.getAllAreas();
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -56,7 +53,7 @@ public class SearchByAreaFragment extends Fragment implements AllAreasViewInterf
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                areaAdapter.setList(getAllAreasPresenterInterface.filteringIngredients(charSequence,areaModelsSearch));
+                areaAdapter.setList(getAllAreasPresenterInterface.filteringIngredients(charSequence, areaModelsSearch));
             }
 
             @Override

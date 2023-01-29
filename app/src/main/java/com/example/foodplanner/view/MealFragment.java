@@ -1,15 +1,6 @@
 package com.example.foodplanner.view;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.foodplanner.R;
 import com.example.foodplanner.database.MealDataBase;
 import com.example.foodplanner.model.FavouriteMeal;
@@ -63,7 +60,7 @@ public class MealFragment extends Fragment {
     View view;
     LinearLayoutManager linearLayoutManager;
     ImageView imageViewMealImage;
-    TextView mealName, textViewStepsDetails, textViewArea , textViewInstructions;
+    TextView mealName, textViewStepsDetails, textViewArea, textViewInstructions;
     Button buttonFavourite;
     CardView cardViewMealVideo;
 
@@ -95,7 +92,8 @@ public class MealFragment extends Fragment {
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
         cardViewMealVideo = view.findViewById(R.id.cardViewMealVideo);
         textViewInstructions = view.findViewById(R.id.textViewInstructions);
-        if( auth.getCurrentUser() == null) {
+
+        if (auth.getCurrentUser() == null) {
             textInputLayout.setVisibility(View.GONE);
             buttonFavourite.setVisibility(View.GONE);
             textView.setVisibility(View.GONE);
@@ -107,8 +105,8 @@ public class MealFragment extends Fragment {
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(imageViewMealImage);
         mealName.setText(mealsItem.getStrMeal());
-        if(mealsItem.getStrYoutube() !=null && !mealsItem.getStrYoutube().isEmpty()){
-            String [] split = mealsItem.getStrYoutube().split("=");
+        if (mealsItem.getStrYoutube() != null && !mealsItem.getStrYoutube().isEmpty()) {
+            String[] split = mealsItem.getStrYoutube().split("=");
             mealVideo.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
                 @Override
                 public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -117,7 +115,7 @@ public class MealFragment extends Fragment {
                 }
             });
 
-        }else{
+        } else {
             mealVideo.setVisibility(View.GONE);
             cardViewMealVideo.setVisibility(View.GONE);
             textViewInstructions.setVisibility(View.GONE);
@@ -185,7 +183,6 @@ public class MealFragment extends Fragment {
 
                             buttonFavourite.setText("Favorite");
                             buttonFavourite.setBackgroundColor(getContext().getColor(R.color.green_dark));
-
                         }
                     }
 
@@ -194,38 +191,34 @@ public class MealFragment extends Fragment {
 
                     }
                 });
-        buttonFavourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mealDataBase.mealDao().getFavMealByID(favouriteMealItem.getMealID()).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<Boolean>() {
-                            @Override
-                            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
-                            }
+        buttonFavourite.setOnClickListener(v -> mealDataBase.mealDao().getFavMealByID(favouriteMealItem.getMealID())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
-                            @Override
-                            public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull Boolean isItem) {
-                                if (isItem) {
-                                    deleteFavoriteItem(favouriteMealItem);
-                                    buttonFavourite.setText("Favorite");
-                                    buttonFavourite.setBackgroundColor(getContext().getColor(R.color.green_dark));
-                                } else {
+                    }
 
-                                    insertFavoriteItem(favouriteMealItem);
-                                    buttonFavourite.setText("Remove");
-                                    buttonFavourite.setBackgroundColor(getContext().getColor(R.color.red));
-                                }
-                            }
+                    @Override
+                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull Boolean isItem) {
+                        if (isItem) {
+                            deleteFavoriteItem(favouriteMealItem);
+                            buttonFavourite.setText("Favorite");
+                            buttonFavourite.setBackgroundColor(getContext().getColor(R.color.green_dark));
+                        } else {
 
-                            @Override
-                            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                            insertFavoriteItem(favouriteMealItem);
+                            buttonFavourite.setText("Remove");
+                            buttonFavourite.setBackgroundColor(getContext().getColor(R.color.red));
+                        }
+                    }
 
-                            }
-                        });
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
 
-            }
-        });
+                    }
+                }));
 
 
         adapterDays = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_list_item, days);
@@ -252,7 +245,7 @@ public class MealFragment extends Fragment {
                                 db.collection(MealDataBase.FIRESTORE)
                                         .document(auth.getCurrentUser().getEmail())
                                         .collection(MealDataBase.PLAN)
-                                        .document(planMealItem.getMealID() +"_"+ day)
+                                        .document(planMealItem.getMealID() + "_" + day)
                                         .set(planMealItem);
                         }
 

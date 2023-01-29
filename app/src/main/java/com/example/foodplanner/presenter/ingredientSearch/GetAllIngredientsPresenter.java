@@ -3,7 +3,6 @@ package com.example.foodplanner.presenter.ingredientSearch;
 import android.util.Log;
 
 import com.example.foodplanner.model.Repository;
-import com.example.foodplanner.model.pojos.area.AreaModel;
 import com.example.foodplanner.model.pojos.area.IngredientModel;
 import com.example.foodplanner.network.NetworkCallBack;
 
@@ -15,6 +14,7 @@ public class GetAllIngredientsPresenter implements GetAllIngredientsPresenterInt
     private final AllIngredientsViewInterface _view;
     private final Repository _repo;
     private static final String TAG = "GetAllIngredientsPresen";
+
     public GetAllIngredientsPresenter(AllIngredientsViewInterface view, Repository repo) {
         _view = view;
         _repo = repo;
@@ -38,6 +38,6 @@ public class GetAllIngredientsPresenter implements GetAllIngredientsPresenterInt
 
     @Override
     public List<IngredientModel> filteringIngredients(CharSequence s, List<IngredientModel> ingredientModels) {
-        return ingredientModels.stream().filter((e->e.getStrIngredient().toLowerCase().startsWith(s.toString().toLowerCase()))).collect(Collectors.toList());
+        return ingredientModels.stream().filter((e -> e.getStrIngredient().toLowerCase().startsWith(s.toString().toLowerCase()))).collect(Collectors.toList());
     }
 }

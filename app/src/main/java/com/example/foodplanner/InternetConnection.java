@@ -12,13 +12,13 @@ import androidx.lifecycle.LiveData;
 
 public class InternetConnection extends LiveData<Boolean> {
     private ConnectivityManager connectivityManager;
-    public InternetConnection(Context context){
-        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
+    public InternetConnection(Context context) {
+        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     private ConnectivityManager.NetworkCallback getNetworkCallback() {
-        return new ConnectivityManager.NetworkCallback(){
+        return new ConnectivityManager.NetworkCallback() {
 
             @Override
             public void onAvailable(@NonNull Network network) {
@@ -33,7 +33,6 @@ public class InternetConnection extends LiveData<Boolean> {
             }
         };
     }
-
 
 
     @Override
@@ -57,8 +56,8 @@ public class InternetConnection extends LiveData<Boolean> {
     }
 
 
-    private  NetworkRequest getNetworkRequest() {
-       return  new NetworkRequest.Builder()
+    private NetworkRequest getNetworkRequest() {
+        return new NetworkRequest.Builder()
                 .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                 .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
                 .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)

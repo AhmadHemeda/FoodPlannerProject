@@ -6,6 +6,6 @@ import com.example.foodplanner.network.NetworkCallBack;
 import java.util.List;
 
 public interface GetMealPresenterInterface extends NetworkCallBack<List<MealsItem>> {
-    public void getSingleMeal(String mealName);
+    void getSingleMeal(String mealName);
 
 }

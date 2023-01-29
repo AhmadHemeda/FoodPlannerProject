@@ -8,11 +8,11 @@ import java.util.List;
 
 public class RandomMeal {
 
-	@SerializedName("meals")
-	private List<MealsItem> meals;
+    @SerializedName("meals")
+    private List<MealsItem> meals;
 
-	public List<MealsItem> getMeals(){
-		Log.i("ApiClient", "Response: ");
-		return meals;
-	}
+    public List<MealsItem> getMeals() {
+        Log.i("ApiClient", "Response: ");
+        return meals;
+    }
 }

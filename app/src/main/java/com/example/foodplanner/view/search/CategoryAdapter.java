@@ -1,7 +1,6 @@
 package com.example.foodplanner.view.search;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +19,17 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>{
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private List<CategoryModel> modelArrayList = new ArrayList<>();
     Context context;
     ViewGroup frag;
-    private static final String TAG = "CategoryAdapter";
 
     public CategoryAdapter(Context context) {
         this.context = context;
     }
 
-    public void setList(List<CategoryModel> updatedItems){
+    public void setList(List<CategoryModel> updatedItems) {
         this.modelArrayList = updatedItems;
         notifyDataSetChanged();
     }
@@ -40,36 +38,34 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public CategoryAdapter.CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         frag = parent;
-        return new CategoryViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_image_item,parent,false));
+        return new CategoryViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.ingredient_image_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
         holder.areaTextView.setText(modelArrayList.get(position).getStrCategory());
-        Glide.with(context).load(String.format("https://www.themealdb.com/images/category/%s.png",modelArrayList.get(position).getStrCategory()).toLowerCase())
-                .placeholder(R.drawable.ic_launcher_foreground).into(holder.ingredientImage);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                Navigation.findNavController(frag)
-                        .navigate(SearchByCategoryFragmentDirections.actionSearchByCategoryFragmentToCategoryMealsFragment(holder.areaTextView.getText().toString()).setCategoryName(holder.areaTextView.getText().toString()));
-            }
-        });
+        Glide.with(context).load(String.format("https://www.themealdb.com/images/category/%s.png", modelArrayList.get(position).getStrCategory()).toLowerCase())
+                .placeholder(R.drawable.ic_launcher_foreground).into(holder.ingredientImage);
+
+        holder.itemView.setOnClickListener(view -> Navigation.findNavController(frag)
+                .navigate(SearchByCategoryFragmentDirections.actionSearchByCategoryFragmentToCategoryMealsFragment(holder.areaTextView.getText().toString()).setCategoryName(holder.areaTextView.getText().toString())));
     }
 
     @Override
     public int getItemCount() {
-        if (modelArrayList != null){
+        if (modelArrayList != null) {
             return modelArrayList.size();
-        }else {
+        } else {
             return 2;
         }
     }
 
-    public class CategoryViewHolder extends RecyclerView.ViewHolder{
+    public class CategoryViewHolder extends RecyclerView.ViewHolder {
         TextView areaTextView;
         CircleImageView ingredientImage;
+
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             areaTextView = itemView.findViewById(R.id.textViewIngredient);

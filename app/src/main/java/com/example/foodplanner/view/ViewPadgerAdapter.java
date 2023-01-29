@@ -15,19 +15,20 @@ import com.example.foodplanner.R;
 
 public class ViewPadgerAdapter extends PagerAdapter {
     Context context;
-    int images[] = {
+    int[] images = {
             R.drawable.onboarding1,
             R.drawable.onboarding2,
             R.drawable.onboarding3,
     };
-    int description[] = {
+    int[] description = {
             R.string.txt1, R.string.txt2, R.string.txt3
     };
+
     public ViewPadgerAdapter(Context context) {
 
         this.context = context;
-
     }
+
     @Override
     public int getCount() {
         return description.length;
@@ -53,12 +54,14 @@ public class ViewPadgerAdapter extends PagerAdapter {
         return view;
 
     }
+
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
 
         container.removeView((ConstraintLayout) object);
 
     }
+
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == object;

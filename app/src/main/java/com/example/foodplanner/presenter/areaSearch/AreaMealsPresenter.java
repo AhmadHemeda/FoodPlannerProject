@@ -13,10 +13,11 @@ public class AreaMealsPresenter implements AreaMealsPresenterInterface, NetworkC
     private final AreaMealsViewInterface _view;
     private final Repository _repo;
     private static final String TAG = "AreaMealsPresenter";
-    public AreaMealsPresenter(AreaMealsViewInterface view, Repository repo ,String area) {
+
+    public AreaMealsPresenter(AreaMealsViewInterface view, Repository repo, String area) {
         _view = view;
         _repo = repo;
-        _repo.getMealArea(area,this);
+        _repo.getMealArea(area, this);
     }
 
     @Override
@@ -32,12 +33,16 @@ public class AreaMealsPresenter implements AreaMealsPresenterInterface, NetworkC
 
     @Override
     public void getRandomMeal(String area) {
-        _repo.getMealArea(area , this);
+        _repo.getMealArea(area, this);
     }
 
     @Override
     public List<MealsItem> filteringArea(CharSequence s, List<MealsItem> mealsItem) {
         return mealsItem.stream()
-                .filter(response->response.getStrMeal().toLowerCase().startsWith(s.toString().toLowerCase())).collect(Collectors.toList());
+                .filter(response -> response
+                        .getStrMeal()
+                        .toLowerCase()
+                        .startsWith(s.toString().toLowerCase()))
+                .collect(Collectors.toList());
     }
 }

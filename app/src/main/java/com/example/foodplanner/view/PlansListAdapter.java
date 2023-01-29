@@ -38,6 +38,7 @@ public class PlansListAdapter extends RecyclerView.Adapter<PlansListAdapter.Meal
     ViewGroup frag;
     private static final String TAG = "PlansListAdapter";
     private MealDataBase mealDataBase;
+
     @NonNull
     @Override
     public PlansListAdapter.MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,31 +55,28 @@ public class PlansListAdapter extends RecyclerView.Adapter<PlansListAdapter.Meal
     @Override
     public void onBindViewHolder(@NonNull PlansListAdapter.MealViewHolder holder, int position) {
         PlanMeal planMeal = planMealList.get(position);
+
         holder.textViewMealName.setText(planMeal.getMealName());
+
         Glide.with(holder.itemView).load(planMeal.getMealImage()).into(holder.imageViewMeal);
-        holder.appCompatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deletePlanItem(planMeal,position);
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Single<RandomMeal> singleObservable = ApiClient.getInstance(view.getContext()).getMealByName(holder.textViewMealName.getText().toString());
-                singleObservable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe( response ->{
-                                    List<MealsItem> singleMeal =response.getMeals();
-                                    Navigation.findNavController(frag).navigate(PlansFragmentDirections.actionPlansFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
-                                    Log.i(TAG, "onClick: "+ singleMeal.get(0).getStrMeal());
-                                },
-                                error ->{error.printStackTrace();
-                                    Log.i(TAG, "onClick: "+ error.getMessage());
-                                }
-                        );
-            }
+
+        holder.appCompatButton.setOnClickListener(v -> deletePlanItem(planMeal, position));
+
+        holder.itemView.setOnClickListener(view -> {
+            Single<RandomMeal> singleObservable = ApiClient.getInstance(view.getContext()).getMealByName(holder.textViewMealName.getText().toString());
+            singleObservable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                                List<MealsItem> singleMeal = response.getMeals();
+                                Navigation.findNavController(frag).navigate(PlansFragmentDirections.actionPlansFragmentToMealFragment(singleMeal.get(0)).setSingleMealItem(singleMeal.get(0)));
+                                Log.i(TAG, "onClick: " + singleMeal.get(0).getStrMeal());
+                            },
+                            error -> {
+                                error.printStackTrace();
+                                Log.i(TAG, "onClick: " + error.getMessage());
+                            }
+                    );
         });
     }
 
@@ -106,7 +104,7 @@ public class PlansListAdapter extends RecyclerView.Adapter<PlansListAdapter.Meal
         }
     }
 
-    private void deletePlanItem(PlanMeal planMeal,int position) {
+    private void deletePlanItem(PlanMeal planMeal, int position) {
         mealDataBase.planMealDao().deletePlanMeal(planMeal)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
@@ -117,11 +115,11 @@ public class PlansListAdapter extends RecyclerView.Adapter<PlansListAdapter.Meal
 
                     @Override
                     public void onComplete() {
-                        if (auth.getCurrentUser() !=null)
+                        if (auth.getCurrentUser() != null)
                             db.collection(MealDataBase.FIRESTORE)
                                     .document(auth.getCurrentUser().getEmail())
                                     .collection(MealDataBase.PLAN)
-                                    .document(planMeal.getMealID()+"_"+planMeal.getMealDay())
+                                    .document(planMeal.getMealID() + "_" + planMeal.getMealDay())
                                     .delete();
                         planMealList.remove(planMeal);
                         notifyItemRemoved(position);
