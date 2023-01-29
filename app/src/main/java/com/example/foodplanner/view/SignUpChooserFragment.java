@@ -34,6 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,7 +54,8 @@ public class SignUpChooserFragment extends Fragment {
     Button googleSignUp;
     Button guestBtn;
     Button gotoSignup;
-    boolean isConnected = false;
+    AlertDialog alertDialog;
+    AlertDialog alertDialog2;
     private FirebaseAuth auth;
     private MealDataBase roomDb;
     private FirebaseFirestore db;
@@ -113,44 +115,57 @@ public class SignUpChooserFragment extends Fragment {
         gotoSignup = view.findViewById(R.id.buttonEmail);
         guestBtn = view.findViewById(R.id.buttonGuest);
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),R.style.a);
+        builder.setMessage("There is no internet connection");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
 
-        if (activeNetwork != null && activeNetwork.isConnected())
-            isConnected = true;
+            }
+        });
+        alertDialog = builder.create();
+
+
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         guestBtn.setOnClickListener(view1 -> {
             if(auth.getCurrentUser() == null){
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(requireContext());
-                builder1.setMessage("By Entering As a Guest You Will Loss Some Features.");
-                builder1.setCancelable(true);
+                MaterialAlertDialogBuilder builder2 = new MaterialAlertDialogBuilder(requireActivity(),R.style.a);
+                builder2.setMessage("You May Loss Many Features");
+                builder2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
+                    }
+                });
+                alertDialog2 = builder2.create();
+                alertDialog2.show();
 
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Navigation.findNavController(_view).navigate(SignUpChooserFragmentDirections.actionChooserFragmentToLoaderFragment());
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
             }
         });
-        gotoSignup.setOnClickListener(view12 -> Navigation.findNavController(view12).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToSignUp()));
-        logInBtn.setOnClickListener(view13 -> Navigation.findNavController(view13).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToLoginFragment()));
+        gotoSignup.setOnClickListener(view12 -> {
+            if (isConnected())
+                Navigation.findNavController(view12).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToSignUp());
+            else
+                alertDialog.show();
+
+        });
+        logInBtn.setOnClickListener(view13 -> {
+            if (isConnected())
+                Navigation.findNavController(view13).navigate(SignUpChooserFragmentDirections.actionSignUpFragmentToLoginFragment());
+            else
+                alertDialog.show();
+
+        });
     }
 
+    public boolean isConnected(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -159,7 +174,13 @@ public class SignUpChooserFragment extends Fragment {
         roomDb = MealDataBase.getInstance(requireContext());
         db = FirebaseFirestore.getInstance();
 
-        googleSignUp.setOnClickListener(view -> registration());
+        googleSignUp.setOnClickListener(view -> {
+            if (isConnected()){
+                registration();
+            }else{
+                alertDialog.show();
+            }
+        });
 
         return _view;
     }

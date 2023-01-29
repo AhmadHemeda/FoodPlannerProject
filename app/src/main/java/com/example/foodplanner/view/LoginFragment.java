@@ -1,7 +1,10 @@
 package com.example.foodplanner.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -21,6 +25,7 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.database.MealDataBase;
 import com.example.foodplanner.model.FavouriteMeal;
 import com.example.foodplanner.model.PlanMeal;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,6 +41,7 @@ public class LoginFragment extends Fragment {
     private MealDataBase roomDb;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
+    AlertDialog alertDialog;
     private View view;
     private EditText logInEmail, logInPassword;
     private AppCompatButton logInBtn;
@@ -49,14 +55,17 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_login, container, false);
-
         roomDb = MealDataBase.getInstance(getContext());
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
         return view;
     }
-
+    public boolean isConnected(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -64,7 +73,16 @@ public class LoginFragment extends Fragment {
         logInPassword = view.findViewById(R.id.et_password);
         logInBtn = view.findViewById(R.id.btn_login);
         signupBtn = view.findViewById(R.id.btn_goSignUp);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),R.style.a);
+        builder.setMessage("There is no internet connection");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
 
+            }
+        });
+        alertDialog = builder.create();
         SharedPreferences sharedPref = requireContext().getSharedPreferences(
                 "setting", Context.MODE_PRIVATE);
 
@@ -73,25 +91,30 @@ public class LoginFragment extends Fragment {
         logInBtn.setOnClickListener(view1 -> {
             String email = logInEmail.getText().toString();
             String password = logInPassword.getText().toString();
-            if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                if (!password.isEmpty()) {
-                    auth.signInWithEmailAndPassword(email, password)
-                            .addOnSuccessListener(authResult -> {
-                                        gatherAllFavoriteData();
-                                        gatherAllPlanData();
-                                        Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                                        Navigation.findNavController(view1)
-                                                .navigate(LoginFragmentDirections.actionLoginFragmentToLoaderFragment());
-                                    }
-                            ).addOnFailureListener(e -> Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_LONG).show());
+            if (isConnected()){
+                if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    if (!password.isEmpty()) {
+                        auth.signInWithEmailAndPassword(email, password)
+                                .addOnSuccessListener(authResult -> {
+                                            gatherAllFavoriteData();
+                                            gatherAllPlanData();
+                                            Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_LONG).show();
+                                            Navigation.findNavController(view1)
+                                                    .navigate(LoginFragmentDirections.actionLoginFragmentToLoaderFragment());
+                                        }
+                                ).addOnFailureListener(e -> Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_LONG).show());
+                    } else {
+                        logInPassword.setError("Password can't be empty");
+                    }
+                } else if (email.isEmpty()) {
+                    logInEmail.setError("email can't be empty");
                 } else {
-                    logInPassword.setError("Password can't be empty");
+                    logInEmail.setError("Please Enter Valid Email");
                 }
-            } else if (email.isEmpty()) {
-                logInEmail.setError("email can't be empty");
-            } else {
-                logInEmail.setError("Please Enter Valid Email");
+            }else{
+                alertDialog.show();
             }
+
         });
 
         signupBtn.setOnClickListener(v -> {
