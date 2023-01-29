@@ -5,6 +5,7 @@ import com.example.foodplanner.model.pojos.area.AreaListModel;
 import com.example.foodplanner.model.pojos.area.CategoryListModel;
 import com.example.foodplanner.model.pojos.area.IngredientListModel;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -34,4 +35,6 @@ public interface ApiServer {
 
     @GET("search.php")
     Single<RandomMeal> getMealByName(@Query("s")String mealName);
+    @GET("search.php")
+    Observable<RandomMeal> getRootMealsBySingleLetter(@Query("f") String firstLetterOfMeal);
 }

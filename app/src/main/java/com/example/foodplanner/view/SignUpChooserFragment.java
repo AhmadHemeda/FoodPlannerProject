@@ -176,13 +176,13 @@ public class SignUpChooserFragment extends Fragment {
                     .document(email)
                     .collection(MealDataBase.FAV)
                     .get()
-
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 favouriteMealArrayList.add(document.toObject(FavouriteMeal.class));
-                                Log.i(TAG, "onSuccess: Data");
+
                             }
                             insertAllFavouriteMeals(favouriteMealArrayList);
                         }

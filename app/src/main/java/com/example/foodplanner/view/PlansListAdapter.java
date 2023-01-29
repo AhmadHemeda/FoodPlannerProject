@@ -1,5 +1,7 @@
 package com.example.foodplanner.view;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -35,9 +38,15 @@ public class PlansListAdapter extends RecyclerView.Adapter<PlansListAdapter.Meal
     private List<PlanMeal> planMealList = new ArrayList<>();
     private FirebaseAuth auth;
     private FirebaseFirestore db;
+    Context context;
     ViewGroup frag;
     private static final String TAG = "PlansListAdapter";
     private MealDataBase mealDataBase;
+
+    public PlansListAdapter(Context context) {
+        this.context = context;
+    }
+
     @NonNull
     @Override
     public PlansListAdapter.MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -60,6 +69,20 @@ public class PlansListAdapter extends RecyclerView.Adapter<PlansListAdapter.Meal
             @Override
             public void onClick(View v) {
                 deletePlanItem(planMeal,position);
+            }
+        });
+        holder.appCompatButtonCalender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendarEvent = Calendar.getInstance();
+                Intent i = new Intent(Intent.ACTION_EDIT);
+                i.setType("vnd.android.cursor.item/event");
+                i.putExtra("beginTime", calendarEvent.getTimeInMillis());
+                i.putExtra("allDay", false);
+                i.putExtra("rule", "FREQ=YEARLY");
+                i.putExtra("endTime", calendarEvent.getTimeInMillis() + 60 * 60 * 1000);
+                i.putExtra("title", planMeal.getMealName());
+                context.startActivity(i);
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -96,13 +119,15 @@ public class PlansListAdapter extends RecyclerView.Adapter<PlansListAdapter.Meal
         ImageView imageViewMeal;
         TextView textViewMealName;
         AppCompatButton appCompatButton;
-
+        AppCompatButton appCompatButtonCalender;
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageViewMeal = itemView.findViewById(R.id.imageViewMealPlanImage);
             textViewMealName = itemView.findViewById(R.id.textViewMealPlanTitle);
             appCompatButton = itemView.findViewById(R.id.buttonRemoveFromPlan);
+            appCompatButtonCalender = itemView.findViewById(R.id.buttonAddToCalenderPlan);
+
         }
     }
 
