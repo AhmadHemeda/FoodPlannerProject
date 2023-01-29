@@ -49,7 +49,7 @@ public class PlansFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerViewPlanMeal.setLayoutManager(linearLayoutManager);
         recyclerViewPlanMeal.setHasFixedSize(true);
-        plansListAdapter = new PlansListAdapter();
+        plansListAdapter = new PlansListAdapter(requireContext());
         recyclerViewPlanMeal.setAdapter(plansListAdapter);
 
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);

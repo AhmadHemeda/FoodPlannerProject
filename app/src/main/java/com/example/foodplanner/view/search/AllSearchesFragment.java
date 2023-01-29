@@ -18,6 +18,7 @@ public class AllSearchesFragment extends Fragment {
     CardView areaCardView;
     CardView categoryCardView;
     CardView ingredientCardView;
+    CardView mealsCardView;
     View view;
 
     public AllSearchesFragment() {
@@ -46,6 +47,19 @@ public class AllSearchesFragment extends Fragment {
         areaCardView.setOnClickListener(view -> Navigation.findNavController(view)
                 .navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByAreaFragment()));
 
+        areaCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToSearchByAreaFragment());
+            }
+        });
+        mealsCardView = view.findViewById(R.id.meals_cardView);
+        mealsCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(AllSearchesFragmentDirections.actionAllSearchesFragmentToMealsSearchFragment());
+            }
+        });
         return view;
     }
 }
